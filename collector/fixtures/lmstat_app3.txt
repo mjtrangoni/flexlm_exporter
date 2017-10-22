@@ -1,0 +1,298 @@
+lmutil - Copyright (c) 1989-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+Flexible License Manager status on Fri 10/20/2017 17:02
+
+License server status: 1999@host1,1999@host2,1999@host3
+    License file(s) on host1: /usr/local/flexlm/licenses/license.dat.app3:
+
+host1: license server UP (MASTER) v11.14
+host2: license server UP v11.14
+host3: license server UP v11.14
+
+Vendor daemon status (on host1):
+
+   daemon1: UP v11.14
+   DAEMON2: UP v11.13
+
+Feature usage info:
+
+Users of feature1:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature2:  (Total of 25 licenses issued;  Total of 0 licenses in use)
+
+Users of feature3:  (Total of 5 licenses issued;  Total of 0 licenses in use)
+
+Users of feature4:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of feature5:  (Total of 1 license issued;  Total of 1 license in use)
+
+  "feature5" v2017.12, vendor: vendor1
+  floating license
+
+    USER1 SERVER60036 SERVER078011 (v2017.06) (host1/1999 27843), start Fri 10/20 14:12
+
+Users of feature6:  (Total of 2 licenses issued;  Total of 2 licenses in use)
+
+  "feature6" v2017.12, vendor: vendor1
+  floating license
+
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 11101), start Mon 10/16 15:04
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 14603), start Mon 10/16 15:52
+
+Users of feature7:  (Total of 600 licenses issued;  Total of 163 licenses in use)
+
+  "feature7" v2017.12, vendor: vendor1
+  floating license
+
+    USER2 SERVER60036 SERVER50935 (v2017.06) (host1/1999 17863), start Fri 10/20 16:47
+    USER1 SERVER60036 SERVER078011 (v2017.06) (host1/1999 20502), start Fri 10/20 14:12
+    user4 server4u398 /dev/tty (v2016.10) (host1/1999 5832), start Fri 10/20 16:40
+    user5 server1466 /dev/tty (v2017.02) (host1/1999 19288), start Thu 10/12 17:20
+    user5 server1517 /dev/tty (v2017.02) (host1/1999 4241), start Thu 10/12 17:22
+    user5 server1517 /dev/tty (v2017.02) (host1/1999 22903), start Fri 10/13 9:06
+    user5 server1517 /dev/tty (v2017.03) (host1/1999 9713), start Fri 10/13 10:37
+    user5 server1517 /dev/tty (v2017.02) (host1/1999 1367), start Thu 10/19 13:01
+    user5 server1517 /dev/tty (v2017.02) (host1/1999 10148), start Thu 10/19 13:02
+    user6 server5u018 /dev/tty (v2015.10) (host1/1999 24291), start Fri 10/20 14:25
+    user7 server12001 /dev/tty (v2016.02) (host1/1999 13435), start Fri 10/20 15:45
+    user7 server01065 /dev/tty (v2016.02) (host1/1999 10523), start Fri 10/20 16:23
+    user8 server0838 /dev/tty (v2017.06) (host1/1999 25282), start Fri 10/20 10:46
+    user9 SERVER50937 SERVER065767 (v2016.10) (host1/1999 22461), start Mon 10/16 9:40
+    user9 SERVER50937 SERVER065767 (v2016.10) (host1/1999 18467), start Tue 10/17 8:17
+    user9 SERVER50937 SERVER065767 (v2016.10) (host1/1999 7676), start Fri 10/20 16:52
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 15499), start Thu 10/12 9:27
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 10936), start Sat 10/14 12:43
+    user10 server23 /dev/tty (v2017.06) (host1/1999 21840), start Tue 10/17 17:09
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 12914), start Tue 10/17 22:18
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 15394), start Wed 10/18 6:56
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 21043), start Wed 10/18 7:52
+    user10 server1587 /dev/tty (v2017.06) (host1/1999 20603), start Wed 10/18 7:53
+    user10 server44 /dev/tty (v2017.06) (host1/1999 9424), start Wed 10/18 23:01
+    user10 server4 /dev/tty (v2017.06) (host1/1999 26340), start Thu 10/19 15:12
+    user10 server11 /dev/tty (v2017.06) (host1/1999 7784), start Thu 10/19 15:12
+    user10 server71 /dev/tty (v2017.06) (host1/1999 21703), start Thu 10/19 15:12
+    user11 server1240 /dev/tty (v2013.10) (host1/1999 8685), start Fri 10/6 17:19
+    user12 server5u037 /dev/tty (v2016.02) (host1/1999 3403), start Mon 9/25 9:58
+    user12 server1623 /dev/tty (v2016.02) (host1/1999 24726), start Tue 10/10 9:25
+    user12 server1623 /dev/tty (v2016.02) (host1/1999 6600), start Fri 10/20 8:05
+    user12 server1623 /dev/tty (v2016.02) (host1/1999 20017), start Fri 10/20 13:15
+    user13 server1243 /dev/tty (v2017.06) (host1/1999 10611), start Wed 10/18 8:22
+    user14 server1621 /dev/tty (v2015.10) (host1/1999 22837), start Wed 10/11 8:47
+    user14 server1621 /dev/tty (v2015.10) (host1/1999 11318), start Wed 10/11 8:48
+    user14 server1621 /dev/tty (v2015.10) (host1/1999 19597), start Wed 10/11 9:10
+    user14 server1621 /dev/tty (v2015.10) (host1/1999 21127), start Wed 10/11 9:19
+    user14 server1621 /dev/tty (v2015.10) (host1/1999 20957), start Wed 10/11 14:00
+    user15 server1457 /dev/tty (v2016.02) (host1/1999 19799), start Fri 10/20 15:50
+    user15 server1465 /dev/tty (v2016.02) (host1/1999 13968), start Fri 10/20 15:50
+    user15 server1459 /dev/tty (v2016.02) (host1/1999 370), start Fri 10/20 15:50
+    user15 server1464 /dev/tty (v2016.02) (host1/1999 198), start Fri 10/20 15:50
+    user15 server1459 /dev/tty (v2016.02) (host1/1999 11789), start Fri 10/20 15:50
+    user15 server1466 /dev/tty (v2016.02) (host1/1999 18827), start Fri 10/20 15:50
+    user15 server1464 /dev/tty (v2016.02) (host1/1999 12596), start Fri 10/20 15:50
+    user15 server1458 /dev/tty (v2016.02) (host1/1999 8739), start Fri 10/20 16:34
+    user15 server1251 /dev/tty (v2016.02) (host1/1999 17422), start Fri 10/20 16:55
+    user16 server16 /dev/tty (v2016.10) (host1/1999 27762), start Fri 10/20 9:02
+    user16 server28 /dev/tty (v2016.10) (host1/1999 9212), start Fri 10/20 9:34
+    user17 server1589 /dev/tty (v2014.06) (host1/1999 11876), start Thu 10/12 11:28
+    user18 server4u399 /dev/tty (v2016.02) (host1/1999 18089), start Thu 10/19 11:03
+    user19 server1243 /dev/tty (v2017.02) (host1/1999 25387), start Fri 10/20 15:52
+    user19 server1243 /dev/tty (v2017.02) (host1/1999 16238), start Fri 10/20 15:52
+    user19 server5u016 /dev/tty (v2017.02) (host1/1999 24846), start Fri 10/20 15:52
+    user19 server5u016 /dev/tty (v2017.02) (host1/1999 14979), start Fri 10/20 15:52
+    user19 server1243 /dev/tty (v2017.02) (host1/1999 19137), start Fri 10/20 15:52
+    user19 server1243 /dev/tty (v2017.02) (host1/1999 19624), start Fri 10/20 15:52
+    user19 server1240 /dev/tty (v2017.02) (host1/1999 16637), start Fri 10/20 15:52
+    user19 server1240 /dev/tty (v2017.02) (host1/1999 3929), start Fri 10/20 15:52
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 18145), start Fri 10/13 9:28
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 4602), start Fri 10/13 10:01
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 9509), start Fri 10/13 10:21
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 18570), start Fri 10/13 11:34
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 27060), start Fri 10/13 12:28
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 22306), start Fri 10/13 14:13
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 7911), start Wed 10/18 10:45
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 16349), start Wed 10/18 13:50
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 6420), start Thu 10/19 9:46
+    user20 server1587 /dev/tty (v2017.06) (host1/1999 15728), start Thu 10/19 20:46
+    user21 server50014 S019AC0022 (v2016.02) (host1/1999 15917), start Fri 10/20 13:20
+    user21 server50014 S019AC0022 (v2017.06) (host1/1999 20227), start Fri 10/20 13:35
+    user22 server2024 /dev/tty (v2016.02) (host1/1999 6078), start Thu 10/19 13:41
+    user22 server2024 /dev/tty (v2016.02) (host1/1999 15855), start Thu 10/19 14:47
+    user22 server2024 /dev/tty (v2016.02) (host1/1999 9308), start Thu 10/19 15:09
+    user22 server1561 /dev/tty (v2016.02) (host1/1999 22034), start Thu 10/19 15:15
+    user22 server7065 /dev/tty (v2016.02) (host1/1999 27409), start Thu 10/19 15:15
+    user22 server7068 /dev/tty (v2016.02) (host1/1999 18778), start Thu 10/19 15:17
+    user23 server1589 /dev/tty (v2017.06) (host1/1999 8848), start Tue 10/17 16:16
+    user23 server1589 /dev/tty (v2017.06) (host1/1999 6106), start Tue 10/17 16:57
+    user23 server1589 /dev/tty (v2017.06) (host1/1999 18390), start Fri 10/20 10:47
+    user23 server1589 /dev/tty (v2017.06) (host1/1999 21644), start Fri 10/20 10:49
+    user23 server90 /dev/tty (v2017.06) (host1/1999 19008), start Fri 10/20 12:46
+    user23 server30 /dev/tty (v2017.06) (host1/1999 10059), start Fri 10/20 12:46
+    user23 server96 /dev/tty (v2017.06) (host1/1999 21938), start Fri 10/20 12:46
+    user23 server93 /dev/tty (v2017.06) (host1/1999 1140), start Fri 10/20 12:46
+    user23 server99 /dev/tty (v2017.06) (host1/1999 3002), start Fri 10/20 12:47
+    user23 server108 /dev/tty (v2017.06) (host1/1999 17332), start Fri 10/20 12:47
+    user23 server102 /dev/tty (v2017.06) (host1/1999 10357), start Fri 10/20 12:47
+    user23 server105 /dev/tty (v2017.06) (host1/1999 23179), start Fri 10/20 12:48
+    user23 server63 /dev/tty (v2017.06) (host1/1999 1877), start Fri 10/20 13:17
+    user23 server60 /dev/tty (v2017.06) (host1/1999 14473), start Fri 10/20 13:18
+    user24 server79 /dev/tty (v2017.02) (host1/1999 17970), start Thu 10/19 15:34
+    user25 SERVER31242 SERVER41853 (v2016.02) (host1/1999 14735), start Fri 10/20 13:14
+    user26 server8054 /dev/tty (v2016.10) (host1/1999 3774), start Fri 10/20 7:40
+    user26 server8092 /dev/tty (v2016.10) (host1/1999 19871), start Fri 10/20 7:52
+    user26 server1240 /dev/tty (v2016.10) (host1/1999 12129), start Fri 10/20 12:32
+    user27 server1459 /dev/tty (v2014.10) (host1/1999 17196), start Fri 10/20 15:34
+    user28 server15042 /dev/tty (v2017.02) (host1/1999 9801), start Fri 10/20 12:59
+    user29 server0431 /dev/tty (v2017.02) (host1/1999 16537), start Wed 10/18 9:31
+    user30 server4u397 /dev/tty (v2015.10) (host1/1999 23851), start Thu 10/12 18:10
+    user30 server4u397 /dev/tty (v2015.10) (host1/1999 2812), start Mon 10/16 17:53
+    user30 server2025 /dev/tty (v2016.02) (host1/1999 4933), start Tue 10/17 13:30
+    user30 server2025 /dev/tty (v2016.02) (host1/1999 13051), start Thu 10/19 7:29
+    user30 server2025 /dev/tty (v2016.02) (host1/1999 20360), start Thu 10/19 9:58
+    user31 server1247 /dev/tty (v2014.10) (host1/1999 14025), start Thu 9/28 16:31
+    user31 server1247 /dev/tty (v2014.10) (host1/1999 2901), start Mon 9/25 7:16
+    user32 server0837 /dev/tty (v2017.06) (host1/1999 16459), start Tue 10/17 17:14
+    user32 server0837 /dev/tty (v2017.06) (host1/1999 507), start Tue 10/17 17:14
+    user32 server01288 /dev/tty (v2016.02) (host1/1999 2353), start Fri 10/20 16:29
+    user32 server1466 /dev/tty (v2016.02) (host1/1999 6954), start Fri 10/20 16:34
+    user32 server1458 /dev/tty (v2016.02) (host1/1999 1704), start Fri 10/20 16:35
+    user32 server1457 /dev/tty (v2016.02) (host1/1999 18673), start Fri 10/20 16:35
+    user32 server1466 /dev/tty (v2016.02) (host1/1999 3868), start Fri 10/20 16:36
+    user33 server1457 /dev/tty (v2016.02) (host1/1999 13559), start Fri 10/20 16:44
+    user33 server1464 /dev/tty (v2016.02) (host1/1999 777), start Fri 10/20 16:58
+    user34 server1249 /dev/tty (v2017.06) (host1/1999 20899), start Fri 10/20 16:50
+    user35 server0838 /dev/tty (v2017.02) (host1/1999 23464), start Thu 10/19 15:56
+    user35 server0838 /dev/tty (v2017.02) (host1/1999 28219), start Thu 10/19 16:14
+    user36 server13123 /dev/tty (v2017.02) (host1/1999 11230), start Thu 10/19 23:54
+    user36 server13159 /dev/tty (v2017.02) (host1/1999 9624), start Fri 10/20 7:08
+    user36 server01380 /dev/tty (v2017.02) (host1/1999 2270), start Fri 10/20 8:13
+    user36 server01128 /dev/tty (v2017.02) (host1/1999 11059), start Fri 10/20 8:22
+    user37 server1459 /dev/tty (v2016.10) (host1/1999 26174), start Fri 10/20 13:56
+    user37 server1519 /dev/tty (v2016.10) (host1/1999 949), start Fri 10/20 13:58
+    user37 server1519 /dev/tty (v2016.10) (host1/1999 23749), start Fri 10/20 14:06
+    user37 server1519 /dev/tty (v2016.10) (host1/1999 14517), start Fri 10/20 14:07
+    user37 server1519 /dev/tty (v2016.10) (host1/1999 6709), start Fri 10/20 14:08
+    user38 server5u043 /dev/tty (v2015.10) (host1/1999 1607), start Wed 10/4 8:14
+    user38 server5u043 /dev/tty (v2015.10) (host1/1999 8936), start Wed 10/18 6:44
+    user38 server1396 /dev/tty (v2016.02) (host1/1999 22783), start Fri 10/20 7:06
+    user39 server1246 /dev/tty (v2017.06) (host1/1999 12781), start Tue 10/10 12:39
+    user39 server1246 /dev/tty (v2017.06) (host1/1999 7201), start Tue 10/10 12:39
+    user39 server15206 /dev/tty (v2016.06) (host1/1999 271), start Tue 10/17 15:03
+    user39 server15041 /dev/tty (v2016.06) (host1/1999 13842), start Fri 10/20 6:59
+    user39 server15004 /dev/tty (v2016.06) (host1/1999 21452), start Fri 10/20 7:00
+    user39 server15001 /dev/tty (v2016.06) (host1/1999 20135), start Fri 10/20 16:59
+    user40 server1459 /dev/tty (v2016.02) (host1/1999 2553), start Fri 10/20 15:47
+    user40 server1457 /dev/tty (v2016.02) (host1/1999 23022), start Fri 10/20 15:48
+    user40 server1464 /dev/tty (v2016.02) (host1/1999 16134), start Fri 10/20 15:48
+    user40 server1464 /dev/tty (v2016.02) (host1/1999 25642), start Fri 10/20 15:48
+    user40 server1465 /dev/tty (v2016.02) (host1/1999 4796), start Fri 10/20 15:49
+    user41 server1563 /dev/tty (v2017.02) (host1/1999 23650), start Fri 10/20 10:15
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 14139), start Mon 10/16 15:04
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 17646), start Mon 10/16 15:52
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 18283), start Mon 10/16 16:25
+    user3 server6u065 /dev/tty (v2017.06) (host1/1999 26409), start Fri 10/20 16:11
+    user42 server1624 /dev/tty (v2016.02) (host1/1999 7418), start Wed 9/27 8:21
+    user42 server1624 /dev/tty (v2016.02) (host1/1999 8228), start Wed 9/27 8:56
+    user43 server1457 /dev/tty (v2016.02) (host1/1999 12369), start Fri 10/6 13:20
+    user43 server1465 /dev/tty (v2016.02) (host1/1999 24358), start Tue 10/17 7:27
+    user43 server1457 /dev/tty (v2016.02) (host1/1999 18930), start Wed 10/18 6:54
+    user43 server1457 /dev/tty (v2016.02) (host1/1999 25954), start Wed 10/18 6:54
+    user43 server1466 /dev/tty (v2014.10) (host1/1999 5061), start Fri 10/20 16:22
+    user44 server6u090 /dev/tty (v2017.06) (host1/1999 28303), start Tue 10/17 15:31
+    user45 server1465 /dev/tty (v2014.10) (host1/1999 22149), start Thu 10/5 8:57
+    user46 server1458 /dev/tty (v2014.10) (host1/1999 28480), start Fri 10/20 14:10
+    user46 server1458 /dev/tty (v2014.10) (host1/1999 25771), start Fri 10/20 14:14
+    user46 server1465 /dev/tty (v2014.10) (host1/1999 3268), start Fri 10/20 14:14
+    user46 server1465 /dev/tty (v2014.10) (host1/1999 28112), start Fri 10/20 14:15
+    user46 server1464 /dev/tty (v2014.10) (host1/1999 9058), start Fri 10/20 14:18
+    user46 server1459 /dev/tty (v2014.10) (host1/1999 26584), start Fri 10/20 14:19
+    user47 server1466 /dev/tty (v2016.02) (host1/1999 9963), start Fri 10/20 13:27
+    user47 server1459 /dev/tty (v2016.02) (host1/1999 3191), start Fri 10/20 14:37
+
+Users of feature8:  (Total of 100 licenses issued;  Total of 0 licenses in use)
+
+Users of feature9:  (Total of 100 licenses issued;  Total of 39 licenses in use)
+
+  "feature9" v2017.12, vendor: vendor1
+  floating license
+
+    user48 server1240 /dev/tty (v2016.10) (host1/1999 494), start Fri 10/20 16:32, 39 licenses
+
+Users of feature10:  (Total of 100 licenses issued;  Total of 0 licenses in use)
+
+Users of feature11:  (Total of 150 licenses issued;  Total of 0 licenses in use)
+
+Users of feature12:  (Total of 100 licenses issued;  Total of 1 license in use)
+
+  "feature12" v2017.12, vendor: vendor1
+  floating license
+
+    user49 server6u063 /dev/pts/21 (v2016.02) (host1/1999 26936), start Wed 10/18 11:22
+
+Users of feature13:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature14:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature15:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature16:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature17:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature18:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature19:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature20:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature21:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature22:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature23:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature24:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature25:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature26:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature27:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature28:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature29:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature30:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature31:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature32:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature33:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature34:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature35:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature36:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature37:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature38:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature39:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature40:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature41:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature42:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature43:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature44:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature45:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of feature46:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+

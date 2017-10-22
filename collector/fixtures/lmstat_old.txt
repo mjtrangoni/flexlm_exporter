@@ -1,0 +1,2 @@
+lmutil - Copyright (c) 1989-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+lmstat

@@ -1,0 +1,87 @@
+lmutil - Copyright (c) 1989-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+Flexible License Manager status on Fri 10/20/2017 17:02
+
+License server status: 28000@host1,28000@host2,28000@host3
+    License file(s) on host1: /usr/local/flexlm/licenses/license.dat.app2:
+
+host1: license server UP v11.13
+host2: license server UP (MASTER) v11.13
+host3: license server UP v11.13
+
+Vendor daemon status (on host2):
+
+    vendor1: UP v11.13
+
+Feature usage info:
+
+Users of feature1:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature2:  (Total of 144 licenses issued;  Total of 22 licenses in use)
+
+  "feature2" v31.0, vendor: vendor1
+  floating license
+
+    user1 server034 server0340 (v31.000000) (host1/28000 5226), start Fri 10/20 16:40
+    user1 server0331 server03310 (v31.000000) (host1/28000 8091), start Fri 10/20 16:50
+    user2 server028 server0280 (v31.000000) (host1/28000 10077), start Fri 10/20 11:29
+    user3 server0216 server02160 (v30.000000) (host1/28000 7595), start Thu 10/19 15:00
+    user4 server0313 server03130 (v30.000000) (host1/28000 12530), start Fri 10/20 16:35
+    user4 server0329 server03290 (v30.000000) (host1/28000 4916), start Fri 10/20 16:37
+    user5 server0316 server03160 (v31.000000) (host1/28000 3201), start Fri 10/20 14:21
+    user5 server037 server0370 (v31.000000) (host1/28000 361), start Fri 10/20 14:36
+    user5 server031 server0310 (v31.000000) (host1/28000 4489), start Fri 10/20 14:47
+    user5 server0323 server03230 (v31.000000) (host1/28000 7375), start Fri 10/20 14:50
+    user5 server032 server0320 (v31.000000) (host1/28000 8134), start Fri 10/20 15:22
+    user6 server0510 server05100 (v30.000000) (host1/28000 9850), start Fri 10/20 10:20
+    user6 server035 server0350 (v30.000000) (host1/28000 9604), start Fri 10/20 16:31
+    user7 server024 server0240 (v31.000000) (host1/28000 5683), start Fri 10/20 9:56
+    user8 server036 server0360 (v31.000000) (host1/28000 3449), start Fri 10/20 10:15
+    user9 server0319 server03190 (v31.000000) (host1/28000 3606), start Fri 10/20 16:52
+    user9 server0314 server03140 (v31.000000) (host1/28000 2853), start Fri 10/20 16:53
+    user10 server033 server0330 (v31.000000) (host1/28000 2219), start Fri 10/20 14:11
+    user11 server0324 server03240 (v31.000000) (host1/28000 6674), start Fri 10/20 16:31
+    user11 server0317 server03170 (v31.000000) (host1/28000 1575), start Fri 10/20 16:40
+    user12 server0312 server03120 (v30.000000) (host1/28000 5796), start Fri 10/20 15:49
+    user13 server011 server0110 (v30.000000) (host1/28000 1699), start Tue 10/17 14:59
+
+Users of feature3:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature4:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature5:  (Total of 144 licenses issued;  Total of 15 licenses in use)
+
+  "feature5" v31.0, vendor: vendor1
+  floating license
+
+    user3 server0216 server02160 (v30.000000) (host1/28000 9366), start Thu 10/19 15:45
+    user5 server0316 server03160 (v31.000000) (host1/28000 8810), start Fri 10/20 14:21
+    user5 server037 server0370 (v31.000000) (host1/28000 2998), start Fri 10/20 14:36
+    user5 server031 server0310 (v31.000000) (host1/28000 7014), start Fri 10/20 14:47
+    user5 server0323 server03230 (v31.000000) (host1/28000 3862), start Fri 10/20 14:50
+    user5 server032 server0320 (v31.000000) (host1/28000 6889), start Fri 10/20 15:22
+    user7 server024 server0240 (v31.000000) (host1/28000 2189), start Fri 10/20 9:56
+    user8 server036 server0360 (v31.000000) (host1/28000 7827), start Fri 10/20 10:15
+    user9 server0319 server03190 (v31.000000) (host1/28000 10287), start Fri 10/20 16:52
+    user9 server0314 server03140 (v31.000000) (host1/28000 9944), start Fri 10/20 16:53
+    user10 server033 server0330 (v31.000000) (host1/28000 2626), start Fri 10/20 14:11
+    user11 server0324 server03240 (v31.000000) (host1/28000 1192), start Fri 10/20 16:31
+    user11 server0317 server03170 (v31.000000) (host1/28000 8558), start Fri 10/20 16:40
+    user12 server0312 server03120 (v30.000000) (host1/28000 7946), start Fri 10/20 15:49
+    user13 server011 server0110 (v30.000000) (host1/28000 901), start Tue 10/17 14:59
+
+Users of feature6:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature7:  (Total of 144 licenses issued;  Total of 1 license in use)
+
+  "feature7" v31.0, vendor: vendor1
+  floating license
+
+    user3 server0216 server02160 (v30.000000) (host1/28000 5172), start Thu 10/19 16:25
+
+Users of feature8:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature9:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature10:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+

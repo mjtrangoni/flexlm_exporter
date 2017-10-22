@@ -1,0 +1,21 @@
+lmutil - Copyright (c) 1989-2016 Flexera Software LLC. All Rights Reserved.
+Flexible License Manager status on Thu 11/23/2017 15:08
+
+License server status: 28000@host1,28000@host2,28000@host3
+    License file(s) on host1: /usr/local/flexlm/licenses/license.dat.app1:
+
+host1: license server UP v11.13.0
+host2: license server UP (MASTER) v11.13.0
+host3: Cannot connect to license server system. (-15,570:115 "Operation now in progress")
+
+Vendor daemon status (on host2):
+
+    daemon: UP v11.13.1
+Feature usage info:
+
+Users of feature1:  (Total of 144 licenses issued;  Total of 0 licenses in use)
+
+Users of feature2:  (Total of 144 licenses issued;  Total of 39 licenses in use)
+
+  "feature2" v31.0, vendor: feature2, expiry: 1-jan-0
+  floating license

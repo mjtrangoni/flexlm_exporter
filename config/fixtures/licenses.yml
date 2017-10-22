@@ -1,0 +1,26 @@
+# vim: ft=yaml
+# FlexLM Licenses to be monitored.
+
+---
+
+licenses:
+  - name: app1
+    license_file: /usr/local/flexlm/licenses/license.dat.app1
+    features_to_exclude: feature1,feature2
+    monitor_users: True
+    monitor_reservations: True
+  - name: app2
+    license_server: 28000@host1,28000@host2,28000@host3
+    features_to_exclude: feature1,feature2
+    monitor_users: True
+    monitor_reservations: True
+  - name: app3_domain1
+    license_file: /usr/local/flexlm/licenses/license.dat.app3
+    features_to_exclude: feature1,feature2
+    monitor_users: False
+    monitor_reservations: True
+  - name: app3_domain2
+    license_file: /usr/local/flexlm/licenses/license.dat.app3
+    features_to_exclude: feature1,feature2
+    monitor_users: True
+    monitor_reservations: False
