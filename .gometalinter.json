@@ -4,7 +4,6 @@
   "Deadline": "6m",
   "EnableGC": true,
   "Exclude": ["Subprocess launching with variable."],
-  "Cyclo": 20,
   "Sort": ["linter", "severity", "path", "line"],
   "Vendor": true
 }
