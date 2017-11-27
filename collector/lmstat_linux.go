@@ -207,7 +207,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 				log.Errorf("could not convert %s to integer: %v", matches[1],
 					err)
 			}
-			reservGroupByFeature[featureName][matches[3]] = float64(groupReserv)
+			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
 		}
 	}
 	return features, licUsersByFeature, reservGroupByFeature
