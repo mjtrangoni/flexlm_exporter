@@ -25,6 +25,17 @@ const (
 	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
 )
 
+func TestContains(t *testing.T) {
+	containsOut := contains([]string{"a", "b"}, "b")
+	if containsOut != true {
+		t.Fatalf("contains = %t - expected true", containsOut)
+	}
+	containsOut = contains([]string{"a", "b"}, "c")
+	if containsOut != false {
+		t.Fatalf("contains = %t - expected false", containsOut)
+	}
+}
+
 func TestParseLmstatVersion(t *testing.T) {
 	dataByte, err := ioutil.ReadFile(testParseLmstatVersionNew)
 	if err != nil {
