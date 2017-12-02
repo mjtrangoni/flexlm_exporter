@@ -87,3 +87,27 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 		}
 	}
 }
+
+func TestParseLmstatLicenseInfoVendor(t *testing.T) {
+	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	vendors := parseLmstatLicenseInfoVendor(dataStr)
+	for name, info := range vendors {
+		if name == "VENDOR1" {
+			if info.status != true || info.version != "v11.6" {
+				t.Fatalf("Unexpected values for %s: %t, %s", name, info.status,
+					info.version)
+			}
+		} else {
+			t.Fatalf("Unexpected feature: %s", name)
+		}
+	}
+}
