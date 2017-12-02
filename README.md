@@ -54,7 +54,7 @@ licenses:
 
 ## Dashboards
 
-TODO
+ 1. [Grafana Dashboard](https://grafana.com/dashboards/3854)
 
 ## Contributing
 
