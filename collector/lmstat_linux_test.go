@@ -25,6 +25,17 @@ const (
 	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
 )
 
+func TestContains(t *testing.T) {
+	containsOut := contains([]string{"a", "b"}, "b")
+	if containsOut != true {
+		t.Fatalf("contains = %t - expected true", containsOut)
+	}
+	containsOut = contains([]string{"a", "b"}, "c")
+	if containsOut != false {
+		t.Fatalf("contains = %t - expected false", containsOut)
+	}
+}
+
 func TestParseLmstatVersion(t *testing.T) {
 	dataByte, err := ioutil.ReadFile(testParseLmstatVersionNew)
 	if err != nil {
@@ -85,5 +96,79 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 					info.fqdn, info.version, info.master, info.status)
 			}
 		}
+	}
+}
+
+func TestParseLmstatLicenseInfoVendor(t *testing.T) {
+	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	vendors := parseLmstatLicenseInfoVendor(dataStr)
+	for name, info := range vendors {
+		if name == "VENDOR1" {
+			if info.status != true || info.version != "v11.6" {
+				t.Fatalf("Unexpected values for %s: %t, %s", name, info.status,
+					info.version)
+			}
+		} else {
+			t.Fatalf("Unexpected feature: %s", name)
+		}
+	}
+}
+
+func TestParseLmstatLicenseInfoFeature(t *testing.T) {
+	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+	features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(dataStr)
+	for name, info := range features {
+		if name == "feature11" {
+			if info.issued != 16384 || info.used != 80 {
+				t.Fatalf("Unexpected values for %s: %v!=16384 %v!=80", name,
+					info.issued, info.used)
+			}
+		}
+	}
+	for username, licused := range licUsersByFeature["feature34"] {
+		if username == "user1" {
+			if licused != 16 {
+				t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
+					username, licused)
+			}
+		} else if username == "user17" {
+			if licused != 12 {
+				t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
+					username, licused)
+			}
+		}
+	}
+
+	if licUsersByFeature["feature12"] != nil {
+		t.Fatalf("Unexpected value for feature12: shouldn't match any user")
+	}
+
+	for group, licreserv := range reservGroupByFeature["feature38"] {
+		if group == "GROUP10" {
+			if licreserv != 8 {
+				t.Fatalf("Unexpected values for feature38[%s]: %v!=8", group,
+					licreserv)
+			}
+		}
+	}
+	if reservGroupByFeature["feature11"] != nil {
+		t.Fatalf("Unexpected value for feature11: shouldn't match any reservation")
 	}
 }
