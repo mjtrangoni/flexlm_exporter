@@ -20,9 +20,9 @@ import (
 )
 
 const (
-	testParseLmstatVersionNew = "fixtures/lmstat_new.txt"
-	testParseLmstatVersionOld = "fixtures/lmstat_old.txt"
-	//testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
+	testParseLmstatVersionNew   = "fixtures/lmstat_new.txt"
+	testParseLmstatVersionOld   = "fixtures/lmstat_old.txt"
+	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
 )
 
 func TestParseLmstatVersion(t *testing.T) {
@@ -52,24 +52,38 @@ func TestParseLmstatVersion(t *testing.T) {
 	}
 
 	lmstatInfo = parseLmstatVersion(dataStr)
-	if lmstatInfo.arch != notFound || lmstatInfo.build != notFound || lmstatInfo.version != notFound {
-		t.Fatalf("Unexpected values %s, %s, %s != %s", lmstatInfo.arch, lmstatInfo.build, lmstatInfo.version, notFound)
+	if lmstatInfo.arch != notFound || lmstatInfo.build != notFound ||
+		lmstatInfo.version != notFound {
+		t.Fatalf("Unexpected values %s, %s, %s != %s", lmstatInfo.arch,
+			lmstatInfo.build, lmstatInfo.version, notFound)
 	}
 }
 
-//func TestParseLmstatLicenseInfo(t *testing.T) {
-//	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
-//	if err != nil {
-//		t.Fatal(err)
-//	}
-//
-//	dataStr, err := splitOutput(dataByte)
-//	if err != nil {
-//		t.Fatal(err)
-//	}
-//
-//	//t.Fatal(dataStr)
-//	//lmstatLicenseInfo = parseLmstatLicenseInfo(dataStr)
-//	//t.Logf(lmstatLicenseInfo)
-//
-//}
+func TestParseLmstatLicenseInfoServer(t *testing.T) {
+	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	servers := parseLmstatLicenseInfoServer(dataStr)
+	for _, info := range servers {
+		if info.fqdn == "host1.domain.net" || info.fqdn == "host3.domain.net" {
+			if info.version != "v11.7" || info.master != false ||
+				info.status != true {
+				t.Fatalf("Unexpected values for %s: %s, %t, %t",
+					info.fqdn, info.version, info.master, info.status)
+			}
+		} else if info.fqdn == "host2.domain.net" {
+			if info.version != "v11.7" || info.master != true ||
+				info.status != true {
+				t.Fatalf("Unexpected values for %s: %s, %t, %t",
+					info.fqdn, info.version, info.master, info.status)
+			}
+		}
+	}
+}
