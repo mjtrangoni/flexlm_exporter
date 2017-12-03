@@ -11,15 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-GO              ?= GO15VENDOREXPERIMENT=1 go
-GOPATH          := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
-PROMU           ?= $(GOPATH)/bin/promu
-GOLINTER        ?= $(GOPATH)/bin/gometalinter
-pkgs            = $(shell $(GO) list ./... | grep -v /vendor/)
-TARGET          ?= flexlm_exporter
+GO                      ?= GO15VENDOREXPERIMENT=1 go
+GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
+PROMU                   ?= $(GOPATH)/bin/promu
+GOLINTER                ?= $(GOPATH)/bin/gometalinter
+pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
+TARGET                  ?= flexlm_exporter
+DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
+DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 
-PREFIX          ?= $(shell pwd)
-BIN_DIR         ?= $(shell pwd)
+PREFIX                  ?= $(shell pwd)
+BIN_DIR                 ?= $(shell pwd)
 
 all: format vet gometalinter build test
 
@@ -44,6 +46,10 @@ clean:
 	@echo ">> Cleaning up"
 	@$(RM) $(TARGET)
 
+docker:
+	@echo ">> building docker image"
+	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
+
 $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
@@ -54,4 +60,4 @@ $(GOPATH)/bin/gometalinter lint:
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/alecthomas/gometalinter
 
-.PHONY: all format vet build test promu clean $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint
+.PHONY: all format vet build test promu clean docker $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint
