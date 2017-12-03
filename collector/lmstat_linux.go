@@ -56,8 +56,15 @@ func contains(slice []string, item string) bool {
 func lmutilOutput(args ...string) ([]byte, error) {
 	out, err := exec.Command(*lmutilPath, args...).Output()
 	if err != nil {
-		log.Errorf("error while calling '%s %s': %v", *lmutilPath,
-			strings.Join(args, " "), err)
+		// convert error to strings
+		errorString := errorDescriptionString[err.Error()]
+		if errorString != "" {
+			log.Errorf("error while calling '%s %s': %v:'%s'", *lmutilPath,
+				strings.Join(args, " "), err, errorString)
+		} else {
+			log.Errorf("error while calling '%s %s': %v:'unknown error'",
+				*lmutilPath, strings.Join(args, " "), err)
+		}
 	}
 	return out, err
 }
@@ -241,14 +248,12 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 		if licenses.LicenseFile != "" {
 			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-a")
 			if err != nil {
-				log.Errorln(err)
-				return err
+				continue
 			}
 		} else if licenses.LicenseServer != "" {
 			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-a")
 			if err != nil {
-				log.Errorln(err)
-				return err
+				continue
 			}
 		} else {
 			log.Fatalln("couldn`t find `license_file` or `license_server` for %v",
