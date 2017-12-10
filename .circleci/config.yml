@@ -1,0 +1,60 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.9
+
+    working_directory: /go/src/github.com/mjtrangoni/flexlm_exporter
+
+    environment:
+     - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
+     - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
+    steps:
+      # checkout the project
+      - checkout
+      # Docker
+      - setup_remote_docker
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            ls -la /tmp/docker
+            sudo mv /tmp/docker/* /usr/bin/
+            docker info
+      # make and test
+      - run:
+          name: Binary Build
+          command: make
+      # quay build
+      - run:
+          name: Quay.io Build
+          command: docker build -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
+      - run:
+          name: Quay Login
+          command: docker login -u $QUAYLOGIN -p $QUAYPASSWORD quay.io
+      - run:
+          name: Quay Push
+          command: docker push $QUAY_IMAGE_NAME:$CIRCLE_BRANCH
+      - run:
+          name: Docker Build
+          command: make docker
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+      - run:
+          name: Docker Push
+          command : docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+
+workflows:
+  version: 2
+  my-workflow:
+    jobs:
+      - build:
+            context: org-global

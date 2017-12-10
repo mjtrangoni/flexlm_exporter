@@ -13,14 +13,14 @@
 ## Getting
 
 ```
-go get github.com/mjtrangoni/flexlm_exporter
+$ go get github.com/mjtrangoni/flexlm_exporter
 ```
 
 ## Building
 
 ```
-cd $GOPATH/src/github.com/mjtrangoni/flexlm_exporter
-make
+$ cd $GOPATH/src/github.com/mjtrangoni/flexlm_exporter
+$ make
 ```
 
 ## Configuration
@@ -46,8 +46,25 @@ licenses:
 ## Running
 
 ```
-./flexlm_exporter <flags>
+$ ./flexlm_exporter <flags>
 ```
+
+### Docker images
+
+Docker images are available on,
+
+ 1. [Quay.io](https://quay.io/repository/mjtrangoni/flexlm_exporter).
+    `$ docker pull quay.io/mjtrangoni/flexlm_exporter`
+ 1. [Docker](https://hub.docker.com/r/mjtrangoni/flexlm_exporter/).
+    `$ docker pull mjtrangoni/flexlm_exporter`
+
+You can launch a *flexlm_exporter* container with,
+
+```
+$ docker run --name flexlm_exporter -d -p 9319:9319 --volume $LMUTIL_LOCAL:/usr/bin/flexlm/ --volume $CONFIG_PATH_LOCAL:/config $DOCKER_REPOSITORY --path.lmutil="/usr/bin/flexlm/lmutil" --path.config="/config/licenses.yml"
+```
+
+Metrics will now be reachable at http://localhost:9319/metrics.
 
 ## What's exported?
 
