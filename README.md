@@ -1,6 +1,8 @@
 # FLEXlm Exporter [![Build Status](https://travis-ci.org/mjtrangoni/flexlm_exporter.svg)][travis]
 
 [![CircleCI](https://circleci.com/gh/mjtrangoni/flexlm_exporter.svg?style=svg)](https://circleci.com/gh/mjtrangoni/flexlm_exporter)
+[![Docker Repository on Quay](https://quay.io/repository/mjtrangoni/flexlm_exporter/status)][quay]
+[![Docker Pulls](https://img.shields.io/docker/pulls/mjtrangoni/flexlm_exporter.svg?maxAge=604800)][hub]
 [![GoDoc](https://godoc.org/github.com/mjtrangoni/flexlm_exporter?status.svg)](https://godoc.org/github.com/mjtrangoni/flexlm_exporter)
 [![Coverage Status](https://coveralls.io/repos/github/mjtrangoni/flexlm_exporter/badge.svg?branch=master)](https://coveralls.io/github/mjtrangoni/flexlm_exporter?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mjtrangoni/flexlm_exporter)](https://goreportcard.com/report/github.com/mjtrangoni/flexlm_exporter)
@@ -85,3 +87,5 @@ Refer to [CONTRIBUTING.md](https://github.com/mjtrangoni/flexlm_exporter/blob/ma
 Apache License 2.0, see [LICENSE](https://github.com/mjtrangoni/mjtrangoni/blob/master/LICENSE).
 
 [travis]: https://travis-ci.org/mjtrangoni/flexlm_exporter
+[hub]: https://hub.docker.com/r/mjtrangoni/flexlm_exporter/
+[quay]: https://quay.io/repository/mjtrangoni/flexlm_exporter
