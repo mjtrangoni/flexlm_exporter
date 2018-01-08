@@ -14,6 +14,7 @@
 GO                      ?= GO15VENDOREXPERIMENT=1 go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
+GODEP                   ?= $(GOPATH)/bin/dep
 GOLINTER                ?= $(GOPATH)/bin/gometalinter
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
@@ -23,7 +24,7 @@ DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 PREFIX                  ?= $(shell pwd)
 BIN_DIR                 ?= $(shell pwd)
 
-all: format vet gometalinter build test
+all: depcheck format vet gometalinter build test
 
 test:
 	@echo ">> running tests"
@@ -35,10 +36,10 @@ format:
 
 gometalinter: $(GOLINTER)
 	@echo ">> linting code"
-	@$(GOLINTER) --install --update > /dev/null
+	@$(GOLINTER) --install > /dev/null
 	@$(GOLINTER) --config=./.gometalinter.json ./...
 
-build: $(PROMU)
+build: $(PROMU) depcheck
 	@echo ">> building binaries"
 	@$(PROMU) build --prefix $(PREFIX)
 
@@ -50,6 +51,15 @@ docker:
 	@echo ">> building docker image"
 	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
 
+depcheck: $(GODEP)
+	@echo ">> ensure vendoring"
+	@$(GODEP) ensure
+
+$(GOPATH)/bin/dep dep:
+	@GOOS=$(shell uname -s | tr A-Z a-z) \
+		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
+		$(GO) get -u github.com/golang/dep/cmd/dep
+
 $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
@@ -60,4 +70,4 @@ $(GOPATH)/bin/gometalinter lint:
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/alecthomas/gometalinter
 
-.PHONY: all format vet build test promu clean docker $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint
+.PHONY: all format vet build test promu clean docker $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint $(GOPATH)/bin/dep dep depcheck

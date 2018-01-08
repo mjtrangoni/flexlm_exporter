@@ -4,5 +4,8 @@
 # Test binary, build with `go test -c`
 *.test
 
+# Exclude vendoring files
+vendor/*
+
 # Binaries
 flexlm_exporter
