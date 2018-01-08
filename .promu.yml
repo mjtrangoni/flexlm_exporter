@@ -1,5 +1,5 @@
 go:
-    cgo: true
+    cgo: false
 repository:
     path: github.com/mjtrangoni/flexlm_exporter
 build:
