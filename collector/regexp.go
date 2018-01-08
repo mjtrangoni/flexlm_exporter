@@ -7,9 +7,9 @@ var (
 	lmutilVersionRegex = regexp.MustCompile(
 		`^lmstat (?P<version>v[\d\.]+) build (?P<build>\d+) (?P<arch>[\w\_]+)`)
 	lmutilLicenseServersRegex = regexp.MustCompile(
-		`^License server status: (?P<servers>[\w\,\.\@]+)`)
+		`^License server status: (?P<servers>[\w\,\.\@\-]+)`)
 	lmutilLicenseServerStatusRegex = regexp.MustCompile(
-		`^(?P<fqdn>[\w\.]+): license server (?P<status>\w+)(?P<master>\s` +
+		`^(?P<fqdn>[\w\.\-]+): license server (?P<status>\w+)(?P<master>\s` +
 			`\(MASTER\))? (?P<version>v[\d\.]+)$`)
 	lmutilLicenseVendorStatusRegex = regexp.MustCompile(
 		`^\s+(?P<vendor>\w+): (?P<status>UP|DOWN) (?P<version>v[\d\.]+)$`)

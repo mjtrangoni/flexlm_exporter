@@ -83,7 +83,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 
 	servers := parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
-		if info.fqdn == "host1.domain.net" || info.fqdn == "host3.domain.net" {
+		if info.fqdn == "host-1.domain.net" || info.fqdn == "host3.domain.net" {
 			if info.version != "v11.7" || info.master != false ||
 				info.status != true {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",

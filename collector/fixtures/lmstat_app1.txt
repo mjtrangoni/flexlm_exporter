@@ -1,10 +1,10 @@
 lmutil - Copyright (c) 1989-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
 Flexible License Manager status on Fri 10/20/2017 17:02
 
-License server status: 27002@host1.domain.net,27002@host2.domain.net,27002@host3.domain.net
-    License file(s) on host1.domain.net: /usr/local/flexlm/licenses/license.dat.app1:
+License server status: 27002@host-1.domain.net,27002@host2.domain.net,27002@host3.domain.net
+    License file(s) on host-1.domain.net: /usr/local/flexlm/licenses/license.dat.app1:
 
-host1.domain.net: license server UP v11.7
+host-1.domain.net: license server UP v11.7
 host2.domain.net: license server UP (MASTER) v11.7
 host3.domain.net: license server UP v11.7
 
