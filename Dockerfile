@@ -1,4 +1,4 @@
-FROM        quay.io/prometheus/busybox:glibc
+FROM centos:latest
 MAINTAINER  Mario Trangoni <mjtrangoni@gmail.com>
 
 COPY flexlm_exporter /bin/flexlm_exporter
