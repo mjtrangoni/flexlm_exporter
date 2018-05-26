@@ -23,6 +23,8 @@ const (
 	testParseLmstatVersionNew   = "fixtures/lmstat_new.txt"
 	testParseLmstatVersionOld   = "fixtures/lmstat_old.txt"
 	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
+	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
+	testParseLmstatServerUpWin  = "fixtures/lmstat_server_up_win.txt"
 )
 
 func TestContains(t *testing.T) {
@@ -71,12 +73,18 @@ func TestParseLmstatVersion(t *testing.T) {
 }
 
 func TestParseLmstatLicenseInfoServer(t *testing.T) {
-	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	var (
+		err      error
+		dataByte []byte
+		dataStr  [][]string
+	)
+
+	dataByte, err = ioutil.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	dataStr, err := splitOutput(dataByte)
+	dataStr, err = splitOutput(dataByte)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,6 +105,59 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 			}
 		}
 	}
+
+	dataByte, err = ioutil.ReadFile(testParseLmstatServerDown)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err = splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	servers = parseLmstatLicenseInfoServer(dataStr)
+	for _, info := range servers {
+		if info.fqdn == "host1" {
+			if info.version != "v11.13.0" || info.master != false ||
+				info.status != true {
+				t.Fatalf("Unexpected values for %s: %s, %t, %t",
+					info.fqdn, info.version, info.master, info.status)
+			}
+		} else if info.fqdn == "host2" {
+			if info.version != "v11.13.0" || info.master != true ||
+				info.status != true {
+				t.Fatalf("Unexpected values for %s: %s, %t, %t",
+					info.fqdn, info.version, info.master, info.status)
+			}
+		} else if info.fqdn == "host3" {
+			if info.version != "" || info.master != false ||
+				info.status != false {
+				t.Fatalf("Unexpected values for %s: %s, %t, %t",
+					info.fqdn, info.version, info.master, info.status)
+			}
+		}
+	}
+
+	dataByte, err = ioutil.ReadFile(testParseLmstatServerUpWin)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err = splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	servers = parseLmstatLicenseInfoServer(dataStr)
+	for _, info := range servers {
+		if info.fqdn != "BVS15004" || info.version != "v11.12" ||
+			info.master != true || info.status != true {
+			t.Fatalf("Unexpected values for %s: %s, %t, %t",
+				info.fqdn, info.version, info.master, info.status)
+		}
+	}
+
 }
 
 func TestParseLmstatLicenseInfoVendor(t *testing.T) {

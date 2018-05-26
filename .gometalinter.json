@@ -1,5 +1,5 @@
 {
-  "Cyclo": 20,
+  "Cyclo": 40,
   "Disable": ["deadcode", "megacheck"],
   "Deadline": "6m",
   "EnableGC": true,

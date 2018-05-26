@@ -1,0 +1,11 @@
+lmutil - Copyright (c) 1989-2017 Flexera Software LLC. All Rights Reserved.
+Flexible License Manager status on Tue 5/15/2018 13:41
+
+License server status: 7788@BVS15004
+    License file(s) on BVS15004: licensing\license.dat:
+
+  BVS15004: license server UP (MASTER) v11.12
+
+Vendor daemon status (on BVS15004):
+
+     ptc_d: UP v11.14.0
