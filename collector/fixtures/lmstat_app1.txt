@@ -211,6 +211,7 @@ Users of feature31:  (Total of 1814 licenses issued;  Total of 299 licenses in u
     user31 server230 /dev/tty (v61.4) (host3.domain.net/27002 13843), start Wed 10/18 7:11, 21 licenses
     user32 server0110 /dev/tty (v61.4) (host3.domain.net/27002 16638), start Fri 10/20 7:20, 31 licenses
     user33 server8 /dev/tty (v61.6) (host3.domain.net/27002 3609), start Fri 10/20 15:53, 16 licenses
+    cmfy211 UFRTR1LT0087375 UFRTR1LT00873750.0 (v12.0) (host3.domain.net/27002 101), start Fri 5/18 2:00
 
 Users of feature32:  (Total of 1814 licenses issued;  Total of 169 licenses in use)
 
