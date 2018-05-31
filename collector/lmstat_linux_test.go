@@ -220,12 +220,17 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	for username, licused := range licUsersByFeature["feature31"] {
 		if username == "user33" {
 			if licused != 16 {
-				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
+				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 					username, licused)
 			}
 		} else if username == "cmfy211" {
 			if licused != 1 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
+					username, licused)
+			}
+		} else if username == "cmfy212" {
+			if licused != 16 {
+				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 					username, licused)
 			}
 		}
