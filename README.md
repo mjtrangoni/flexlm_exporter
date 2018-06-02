@@ -40,10 +40,18 @@ licenses:
     monitor_reservations: True
   - name: app2
     license_server: 28000@host1,28000@host2,28000@host3
-    features_to_exclude: feature1,feature2
+    features_to_include: feature5,feature30
     monitor_users: True
     monitor_reservations: True
 ```
+
+Notes:
+
+ 1. It is possible to define a license with a path in `license_file`, that has to
+ be readable from the exporter instance, **or** with `license_server` in a
+ `port@host` combination format.
+ 2. You can exclude some features from exporting with `features_to_exclude`,
+ **or** export some defined and exclude the rest with `feature_to_include`.
 
 ## Running
 
