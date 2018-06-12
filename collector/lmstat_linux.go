@@ -28,7 +28,7 @@ import (
 
 var (
 	lmstatInfo lmstatInformation
-	// LicenseConfig will be readed once in main an the used here.
+	// LicenseConfig is going to be read once in main, and then used here.
 	LicenseConfig        config.Configuration
 	servers              map[string]*server
 	vendors              map[string]*vendor
