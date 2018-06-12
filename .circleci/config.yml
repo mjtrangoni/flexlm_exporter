@@ -65,11 +65,11 @@ workflows:
   version: 2
   flexlm_exporter:
     jobs:
-    - build:
+    - codespell:
         filters:
           tags:
             only: /.*/
-    - codespell:
+    - build:
         filters:
           tags:
             only: /.*/
