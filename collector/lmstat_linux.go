@@ -256,7 +256,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 				continue
 			}
 		} else {
-			log.Fatalln("couldn`t find `license_file` or `license_server` for %v",
+			log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
 				licenses.Name)
 			return nil
 		}

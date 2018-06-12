@@ -102,7 +102,7 @@ func main() {
 	// Load LicenseConfig from a YAML file.
 	collector.LicenseConfig, err = config.Load(*configPath)
 	if err != nil {
-		log.Fatalln("couldn't load %s configuration file", *configPath)
+		log.Fatalf("couldn't load %v configuration file", *configPath)
 	}
 
 	//TODO(ts): Remove deprecated and problematic InstrumentHandlerFunc usage.
