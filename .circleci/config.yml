@@ -70,6 +70,8 @@ workflows:
           tags:
             only: /.*/
     - build:
+        # This enable the environment variables
+        context: org-global
         filters:
           tags:
             only: /.*/
