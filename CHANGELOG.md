@@ -1,3 +1,3 @@
-## v0.0.1 / not released
+## v0.0.1 / 2018-06-12
 
  * First working version.
