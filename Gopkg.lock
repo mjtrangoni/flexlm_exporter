@@ -70,7 +70,7 @@
     "nfs",
     "xfs"
   ]
-  revision = "61aaa706c6d4fda9365b6273c96839eb7e27f6e4"
+  revision = "94663424ae5ae9856b40a9f170762b4197024661"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -82,7 +82,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "ab813273cd59e1333f7ae7bff5d027d4aadf528c"
+  revision = "8ac0e0d97ce45cd83d1d7243c060cb8461dda5e9"
 
 [[projects]]
   branch = "master"
@@ -93,7 +93,7 @@
     "windows/registry",
     "windows/svc/eventlog"
   ]
-  revision = "c11f84a56e43e20a78cee75a7c034031ecf57d1f"
+  revision = "a9e25c09b96b8870693763211309e213c6ef299d"
 
 [[projects]]
   name = "gopkg.in/alecthomas/kingpin.v2"
