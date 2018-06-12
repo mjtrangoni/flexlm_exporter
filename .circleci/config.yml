@@ -3,6 +3,15 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
+  codespell:
+    docker:
+    - image: circleci/python
+
+    steps:
+    - checkout
+    - run: sudo pip install codespell
+    - run: codespell --skip=".git,./vendor"
+
   build:
     docker:
       # specify the version
@@ -54,7 +63,13 @@ jobs:
 
 workflows:
   version: 2
-  my-workflow:
+  flexlm_exporter:
     jobs:
-      - build:
-            context: org-global
+    - build:
+        filters:
+          tags:
+            only: /.*/
+    - codespell:
+        filters:
+          tags:
+            only: /.*/
