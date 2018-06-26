@@ -17,6 +17,7 @@ package collector
 import (
 	"bytes"
 	"encoding/csv"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -54,7 +55,10 @@ func contains(slice []string, item string) bool {
 
 // execute lmutil utility.
 func lmutilOutput(args ...string) ([]byte, error) {
-	out, err := exec.Command(*lmutilPath, args...).Output()
+	cmd := exec.Command(*lmutilPath, args...)
+	// Disable localization for parsing.
+	cmd.Env = append(os.Environ(), "LANG=C")
+	out, err := cmd.Output()
 	if err != nil {
 		// convert error to strings
 		errorString := errorDescriptionString[err.Error()]
