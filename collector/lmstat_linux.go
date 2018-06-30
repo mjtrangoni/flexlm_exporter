@@ -308,7 +308,9 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 		}
 		features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(outStr)
 		for name, info := range features {
-			if contains(featuresToExclude, name) ||
+			if contains(featuresToExclude, name) {
+				continue
+			} else if licenses.FeaturesToInclude != "" &&
 				!contains(featuresToInclude, name) {
 				continue
 			}
