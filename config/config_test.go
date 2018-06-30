@@ -39,5 +39,11 @@ func TestLoad(t *testing.T) {
 		if licenses.Name == "app2" && licenses.FeaturesToInclude != "feature5,feature30" {
 			t.Fatalf("'%s' not matching expected feature5,feature30", licenses.FeaturesToInclude)
 		}
+		if licenses.Name == "app3_domain1" && licenses.FeaturesToInclude != "" && licenses.FeaturesToExclude != "" {
+			t.Fatalf("'%s' and '%s' expected to be empty", licenses.FeaturesToInclude, licenses.FeaturesToExclude)
+		}
+		if licenses.Name == "app3_domain2" && licenses.FeaturesToInclude != "" && licenses.FeaturesToExclude != "" {
+			t.Fatalf("'%s' and '%s' expected to be empty", licenses.FeaturesToInclude, licenses.FeaturesToExclude)
+		}
 	}
 }
