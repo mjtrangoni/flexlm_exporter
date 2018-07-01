@@ -75,7 +75,10 @@ func lmutilOutput(args ...string) ([]byte, error) {
 
 func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	r := csv.NewReader(bytes.NewReader(lmutilOutput))
-	r.Comma = '|'
+	// It seems that some vendors used to encrypt the display, and contains
+	// pipes. That is why we have to use other special characters.
+	// r.Comma = '|'
+	r.Comma = 'Ž'
 	r.LazyQuotes = true
 	r.Comment = '#'
 	result, err := r.ReadAll()
