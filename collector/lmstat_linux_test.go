@@ -236,6 +236,22 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		}
 	}
 
+	var found = false
+	for username, licused := range licUsersByFeature["feature100"] {
+		if username == "user13" {
+			if licused != 1 {
+				t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
+					username, licused)
+			}
+		} else if username == "Administrator" {
+			// There is 2 users, and this should always enter here.
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("Couldn't parse user Administrator from feature100")
+	}
+
 	if licUsersByFeature["feature12"] != nil {
 		t.Fatalf("Unexpected value for feature12: shouldn't match any user")
 	}

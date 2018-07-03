@@ -84,12 +84,13 @@ Users of feature1:  (Total of 1814 licenses issued;  Total of 1206 licenses in u
     user27 server0170 /dev/tty (v61.9) (host3.domain.net/27002 22759), start Fri 10/20 15:56, 31 licenses
     user28 server1444 /dev/tty (v61.9) (host3.domain.net/27002 21366), start Wed 10/18 14:57, 31 licenses
 
-Users of feature1:  (Total of 10 licenses issued;  Total of 1 license in use)
+Users of feature100:  (Total of 10 licenses issued;  Total of 2 licenses in use)
 
-  "feature1" v61.9, vendor: VENDOR1
+  "feature100" v61.9, vendor: VENDOR1
   floating license
 
     user13 server0356 /dev/tty (v61.4) (host3.domain.net/27002 5621), start Fri 10/20 10:53
+    Administrator ServerS1 |)8<fZ)=Y[<7L$lY-p\<6nn^Y (v61.4) (host3.domain.net/27002 3201), start Mon 6/11 11:01
 
 Users of feature2:  (Total of 1814 licenses issued;  Total of 0 licenses in use)
 
