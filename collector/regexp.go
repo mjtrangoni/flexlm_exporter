@@ -17,7 +17,7 @@ var (
 		`^Users of (?P<name>.*):\s+\(Total of (?P<issued>\d+) \w+ issued\;\s+` +
 			`Total of (?P<used>\d+) \w+ in use\)$`)
 	lmutilLicenseFeatureUsageUserRegex = regexp.MustCompile(
-		`^\s+(?P<user>\w+) [\w\-]+ [[:graph:]]+ \(v[\w\.]+\) \([\w\-\.]+\/\d+ ` +
+		`^\s+(?P<user>[\w ]+) [\w\-]+ [[:graph:]]+ \(v[\w\.]+\) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\, start \w+ \d+\/\d+ \d+\:\d+(\,\s(?P<licenses>\d+)\s\w+|)` +
 			`(\s+\(linger\:\s\d+\s\/\s\d+\))?$`)
 	lmutilLicenseFeatureGroupReservRegex = regexp.MustCompile(
