@@ -237,6 +237,9 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	}
 
 	var found = false
+	var foundJohnDoe = false
+	var foundJaneDoe = false
+
 	for username, licused := range licUsersByFeature["feature100"] {
 		if username == "user13" {
 			if licused != 1 {
@@ -246,10 +249,21 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		} else if username == "Administrator" {
 			// There is 2 users, and this should always enter here.
 			found = true
+		} else if username == "John Doe" {
+			foundJohnDoe = true
+		} else if username == "Jane Doe Jr." {
+			foundJaneDoe = true
+
 		}
 	}
 	if !found {
 		t.Fatalf("Couldn't parse user Administrator from feature100")
+	}
+	if !foundJohnDoe {
+		t.Fatalf("Couldn't parse user \"John Doe\" from feature100")
+	}
+	if !foundJaneDoe {
+		t.Fatalf("Couldn't parse user \"Jane Doe Jr.\" from feature100")
 	}
 
 	if licUsersByFeature["feature12"] != nil {
