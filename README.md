@@ -82,7 +82,7 @@ Metrics will now be reachable at http://localhost:9319/metrics.
  * `lmutil lmstat -c license_file -a` or `lmutil lmstat -c license_server -a`
    license information.
  * `lmutil lmstat -c license_file -i` or `lmutil lmstat -c license_server -i`
-   license features expiraton date.
+   license features expiration date.
 
 ## Dashboards
 
