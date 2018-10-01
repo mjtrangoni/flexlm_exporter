@@ -1,0 +1,23 @@
+NOTE: lmstat -i does not give information from the server,
+      but only reads the license file.  For this reason,
+      lmstat -a is recommended instead.
+
+Feature                         Version     #licenses    Expires      Vendor
+_______                         _________   _________    __________   ______
+feature1                        2018.12      2           31-dec-2018  vendor1
+feature2                        2018.12      25          31-dec-2018  vendor1
+feature3                        2018.12      5           31-dec-2018  vendor1
+feature4                        2018.12      1           31-dec-2018  vendor1
+feature5                        2018.12      1           31-dec-2018  vendor1
+feature6                        2018.12      2           31-dec-2018  vendor1
+feature7                        2018.12      600         31-dec-2018  vendor1
+feature8                        2018.12      100         31-dec-2018  vendor1
+feature9                        2018.12      20          31-dec-2018  vendor1
+feature10                       2018.12      50          31-dec-2018  vendor1
+feature_11                      2018.12      150         31-dec-2018  vendor2
+feature12                       2018.12      50          31-dec-2018  vendor2
+feature12                       2018.09      2           30-sep-2018  vendor2
+feature13                       2018.09      2           30-sep-2018  vendor2
+feature14                       2018.09      2           30-sep-2018  vendor2
+feature15                       2018.09      2           1-jan-0      vendor2
+feature16                       0.1          1           01-jan-0000  vendor2
