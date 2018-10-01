@@ -16,6 +16,7 @@ package config
 
 import (
 	"io/ioutil"
+	"path/filepath"
 
 	"github.com/prometheus/common/log"
 	"gopkg.in/yaml.v2"
@@ -45,7 +46,7 @@ func Load(filename string) (Configuration, error) {
 	log.Infoln("Loading license config file:")
 	log.Infof(" - %s", filename)
 
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return Configuration{}, err
 	}

@@ -105,8 +105,7 @@ func main() {
 		log.Fatalf("couldn't load %v configuration file", *configPath)
 	}
 
-	//TODO(ts): Remove deprecated and problematic InstrumentHandlerFunc usage.
-	http.HandleFunc(*metricsPath, prometheus.InstrumentHandlerFunc("prometheus", handler))
+	http.HandleFunc(*metricsPath, handler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		num, err = w.Write([]byte(`<html>
 			<head><title>FLEXlm Exporter</title></head>

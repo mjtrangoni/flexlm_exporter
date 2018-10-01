@@ -1,9 +1,8 @@
 {
   "Cyclo": 40,
-  "Disable": ["deadcode", "gosec", "megacheck"],
   "Deadline": "6m",
   "EnableGC": true,
-  "Exclude": ["Subprocess launching with variable."],
+  "Exclude": ["Subprocess launching with variable.", "Subprocess launched with variable", "typedDesc is unused"],
   "Sort": ["linter", "severity", "path", "line"],
   "Vendor": true
 }
