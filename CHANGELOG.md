@@ -1,4 +1,4 @@
-## v0.0.2 / unreleased
+## v0.0.2 / 2018-10-01
 
 * [ENHANCEMENT] Add encrypted displays output support.
 * [ENHANCEMENT] Force `lmutil` to run with `LANG=C`.
