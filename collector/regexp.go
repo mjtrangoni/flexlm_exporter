@@ -23,4 +23,8 @@ var (
 	lmutilLicenseFeatureGroupReservRegex = regexp.MustCompile(
 		`^(\s+|)(?P<reservation>\d+)\s+\w+\s+for\s+(HOST_GROUP|GROUP)\s+` +
 			`(?P<group>\w+).*$`)
+	// lmutil lmstat -c port@hostname -i
+	lmutilLicenseFeatureExpRegex = regexp.MustCompile(
+		`^(?P<feature>[[:graph:]]+)\s+(?P<version>[\d\.]+)\s+` +
+			`(?P<licenses>\d+)\s+(?P<expires>[\w\-]+)\s+(?P<vendor>\w+)$`)
 )

@@ -37,3 +37,10 @@ type feature struct {
 	issued float64
 	used   float64
 }
+
+type featureExp struct {
+	expires  float64
+	licenses string
+	vendor   string
+	version  string
+}
