@@ -29,11 +29,11 @@ const (
 
 func TestContains(t *testing.T) {
 	containsOut := contains([]string{"a", "b"}, "b")
-	if containsOut != true {
+	if !containsOut {
 		t.Fatalf("contains = %t - expected true", containsOut)
 	}
 	containsOut = contains([]string{"a", "b"}, "c")
-	if containsOut != false {
+	if containsOut {
 		t.Fatalf("contains = %t - expected false", containsOut)
 	}
 }
@@ -92,14 +92,14 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 	servers := parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
 		if info.fqdn == "host-1.domain.net" || info.fqdn == "host3.domain.net" {
-			if info.version != "v11.7" || info.master != false ||
-				info.status != true {
+			if info.version != "v11.7" || info.master ||
+				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
 		} else if info.fqdn == "host2.domain.net" {
-			if info.version != "v11.7" || info.master != true ||
-				info.status != true {
+			if info.version != "v11.7" || !info.master ||
+				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
@@ -119,20 +119,19 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 	servers = parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
 		if info.fqdn == "host1" {
-			if info.version != "v11.13.0" || info.master != false ||
-				info.status != true {
+			if info.version != "v11.13.0" || info.master ||
+				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
 		} else if info.fqdn == "host2" {
-			if info.version != "v11.13.0" || info.master != true ||
-				info.status != true {
+			if info.version != "v11.13.0" || !info.master ||
+				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
 		} else if info.fqdn == "host3" {
-			if info.version != "" || info.master != false ||
-				info.status != false {
+			if info.version != "" || info.master || info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
@@ -152,7 +151,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 	servers = parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
 		if info.fqdn != "BVS15004" || info.version != "v11.12" ||
-			info.master != true || info.status != true {
+			!info.master || !info.status {
 			t.Fatalf("Unexpected values for %s: %s, %t, %t",
 				info.fqdn, info.version, info.master, info.status)
 		}
@@ -174,7 +173,7 @@ func TestParseLmstatLicenseInfoVendor(t *testing.T) {
 	vendors := parseLmstatLicenseInfoVendor(dataStr)
 	for name, info := range vendors {
 		if name == "VENDOR1" {
-			if info.status != true || info.version != "v11.6" {
+			if !info.status || info.version != "v11.6" {
 				t.Fatalf("Unexpected values for %s: %t, %s", name, info.status,
 					info.version)
 			}
