@@ -28,9 +28,9 @@ func TestLoad(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	appRegex := regexp.MustCompile(`^app\d`)
 	for _, licenses := range testLicenseConfig.Licenses {
-		matched, err := regexp.MatchString(`^app\d`, licenses.Name)
-		if !matched || err != nil {
+		if !appRegex.MatchString(licenses.Name) {
 			t.Fatalf("'%s' not matching expected app name.", licenses.Name)
 		}
 		if licenses.Name == "app1" && licenses.FeaturesToExclude != "feature1,feature2" {
