@@ -35,8 +35,8 @@ func init() {
 func NewLmstatFeatureExpCollector() (Collector, error) {
 	return &lmstatFeatureExpCollector{
 		lmstatFeatureExp: prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, "lmstat",
-				"feature_expiration_seconds"),
+			prometheus.BuildFQName(namespace, "feature",
+				"expiration_seconds"),
 			"License feature expiration date in seconds labeled by app, name, licenses, vendor, version.",
 			[]string{"app", "name", "licenses", "vendor",
 				"version"}, nil,
