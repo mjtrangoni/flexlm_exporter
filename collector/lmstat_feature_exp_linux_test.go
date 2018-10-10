@@ -37,42 +37,56 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 
 	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr)
 	found := false
-	for name, feature := range featuresExp {
-		if name == "feature_11" {
+	for index, feature := range featuresExp {
+		if feature.name == "feature_11" {
 			if feature.version != "2018.12" ||
 				feature.licenses != "150" ||
 				feature.expires != 1546214400 ||
 				feature.vendor != "vendor2" {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
-					name, feature.version, feature.licenses,
+					feature.name, feature.version,
+					feature.licenses, feature.vendor,
+					feature.expires)
+			}
+		} else if feature.name == "feature12" && index == 12 {
+			if feature.version != "2018.12" ||
+				feature.licenses != "50" ||
+				feature.expires != 1546214400 ||
+				feature.vendor != "vendor2" {
+				t.Fatalf("Unexpected values %s, %d, %s, %s, %s, != %f",
+					feature.name, index,
+					feature.version, feature.licenses,
 					feature.vendor, feature.expires)
 			}
-		} else if name == "feature12" {
+		} else if feature.name == "feature12" && index == 13 {
 			if feature.version != "2018.12" ||
-				feature.licenses != "52" ||
+				feature.licenses != "2" ||
 				feature.expires != 1538265600 ||
 				feature.vendor != "vendor2" {
-				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
-					name, feature.version, feature.licenses,
+				t.Fatalf("Unexpected values %s, %d, %s, %s, %s, != %f",
+					feature.name, index,
+					feature.version, feature.licenses,
 					feature.vendor, feature.expires)
 			}
-		} else if name == "feature15" {
+		} else if feature.name == "feature15" {
 			if feature.version != "2018.09" ||
 				feature.licenses != "2" ||
 				feature.expires != math.Inf(1) ||
 				feature.vendor != "vendor2" {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
-					name, feature.version, feature.licenses,
-					feature.vendor, feature.expires)
+					feature.name, feature.version,
+					feature.licenses, feature.vendor,
+					feature.expires)
 			}
-		} else if name == "feature16" {
+		} else if feature.name == "feature16" {
 			if feature.version != "0.1" ||
 				feature.licenses != "1" ||
 				feature.expires != math.Inf(1) ||
 				feature.vendor != "vendor2" {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
-					name, feature.version, feature.licenses,
-					feature.vendor, feature.expires)
+					feature.name, feature.version,
+					feature.licenses, feature.vendor,
+					feature.expires)
 			}
 			found = true
 		}

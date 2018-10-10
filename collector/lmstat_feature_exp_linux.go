@@ -25,10 +25,10 @@ import (
 	"github.com/prometheus/common/log"
 )
 
-func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[string]*featureExp {
-	featuresExp := make(map[string]*featureExp)
-	var featureName string
+func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
+	featuresExp := make(map[int]*featureExp)
 	var expires float64
+	var index int
 	// iterate over output lines
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -36,7 +36,6 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[string]*featureExp 
 			continue
 		}
 		matches := lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
-		featureName = matches[1]
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[4], "-")
 		day, month, year := slice[0], slice[1], slice[2]
@@ -59,29 +58,13 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[string]*featureExp 
 			expires = float64(expireDate.Unix())
 		}
 
-		if _, ok := featuresExp[featureName]; !ok {
-			featuresExp[featureName] = &featureExp{
-				expires:  expires,
-				licenses: matches[3],
-				vendor:   matches[5],
-				version:  matches[2],
-			}
-		} else {
-			log.Debugf("Feature %s exists already, sum lic counts and use the earliest exp date", featureName)
-			// We take the earliest expiration date
-			if featuresExp[featureName].expires > expires {
-				featuresExp[featureName].expires = expires
-			}
-			// We have to convert licenses to int to sum them
-			newLicCount, err := strconv.Atoi(matches[3])
-			if err != nil {
-				log.Errorf("could not convert %s to integer: %v", matches[3], err)
-			}
-			oldLicCount, err := strconv.Atoi(featuresExp[featureName].licenses)
-			if err != nil {
-				log.Errorf("could not convert %s to integer: %v", featuresExp[featureName].licenses, err)
-			}
-			featuresExp[featureName].licenses = strconv.Itoa(newLicCount + oldLicCount)
+		index++
+		featuresExp[index] = &featureExp{
+			name:     matches[1],
+			expires:  expires,
+			licenses: matches[3],
+			vendor:   matches[5],
+			version:  matches[2],
 		}
 	}
 	return featuresExp
@@ -132,18 +115,19 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 
 		featuresExp := parseLmstatLicenseFeatureExpDate(outStr)
 
-		for name, featureExp := range featuresExp {
-			if contains(featuresToExclude, name) {
+		for idx, feature := range featuresExp {
+			if contains(featuresToExclude, feature.name) {
 				continue
 			} else if licenses.FeaturesToInclude != "" &&
-				!contains(featuresToInclude, name) {
+				!contains(featuresToInclude, feature.name) {
 				continue
 			}
 
 			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureExp,
-				prometheus.GaugeValue, featureExp.expires,
-				licenses.Name, name, featureExp.licenses,
-				featureExp.vendor, featureExp.version)
+				prometheus.GaugeValue, feature.expires,
+				licenses.Name, feature.name, strconv.Itoa(idx),
+				feature.licenses, feature.vendor,
+				feature.version)
 		}
 	}
 	return nil

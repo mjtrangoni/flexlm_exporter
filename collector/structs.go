@@ -39,6 +39,7 @@ type feature struct {
 }
 
 type featureExp struct {
+	name     string
 	expires  float64
 	licenses string
 	vendor   string
