@@ -1,3 +1,9 @@
+## v0.0.3 / 2018-10-10
+
+* [ENHANCEMENT] Handle repeated feature expirations better.
+* [BUGFIX] rename `flexlm_lmstat_feature_expiration_seconds` to
+  `flexlm_feature_expiration_seconds`
+
 ## v0.0.2 / 2018-10-01
 
 * [ENHANCEMENT] Add encrypted displays output support.
