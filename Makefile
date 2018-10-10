@@ -45,6 +45,7 @@ build: $(PROMU) depcheck
 
 clean:
 	@echo ">> Cleaning up"
+	@find . -type f -name '*~' -exec rm -fv {} \;
 	@$(RM) $(TARGET)
 
 docker:
