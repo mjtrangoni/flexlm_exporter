@@ -2,10 +2,23 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
-jobs:
-  codespell:
+
+executors:
+  golang:
+    docker:
+    - image: circleci/golang:1.11
+    parameters:
+      working_dir:
+        type: string
+        default: ~/project
+    working_directory: /go/src/github.com/mjtrangoni/flexlm_exporter
+  python:
     docker:
     - image: circleci/python
+
+jobs:
+  codespell:
+    executor: python
 
     steps:
     - checkout
@@ -13,11 +26,7 @@ jobs:
     - run: codespell --skip=".git,./vendor"
 
   build:
-    docker:
-      # specify the version
-      - image: circleci/golang:1.11
-
-    working_directory: /go/src/github.com/mjtrangoni/flexlm_exporter
+    executor: golang
 
     environment:
      - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
