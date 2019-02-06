@@ -216,6 +216,8 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		}
 	}
 
+	var foundCmfy211 = false
+
 	for username, licused := range licUsersByFeature["feature31"] {
 		if username == "user33" {
 			if licused != 16 {
@@ -223,6 +225,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 					username, licused)
 			}
 		} else if username == "cmfy211" {
+			foundCmfy211 = true
 			if licused != 1 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
 					username, licused)
@@ -233,6 +236,10 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 					username, licused)
 			}
 		}
+	}
+
+	if !foundCmfy211 {
+		t.Fatalf("Couldn't parse user \"cmfy211\" from feature31")
 	}
 
 	var found = false
@@ -252,7 +259,6 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 			foundJohnDoe = true
 		} else if username == "Jane Doe Jr." {
 			foundJaneDoe = true
-
 		}
 	}
 	if !found {

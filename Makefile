@@ -28,7 +28,7 @@ all: depcheck format vet gometalinter build test
 
 test:
 	@echo ">> running tests"
-	@$(GO) test -short $(pkgs)
+	@$(GO) test -v $(pkgs)
 
 format:
 	@echo ">> formatting code"
