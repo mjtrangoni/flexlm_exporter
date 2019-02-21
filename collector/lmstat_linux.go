@@ -88,7 +88,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	}
 
 	keys := make(map[string]int)
-	var res [][]string
+	res := make([][]string, len(result))
 	for _, v := range result {
 		key := v[0]
 		if _, ok := keys[key]; ok {
