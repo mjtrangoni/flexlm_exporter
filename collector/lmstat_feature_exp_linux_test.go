@@ -21,6 +21,9 @@ import (
 )
 
 const (
+	feature12String                       = "feature12"
+	v201812String                         = "2018.12"
+	vendor2String                         = "vendor2"
 	testParseLmstatLicenseFeatureExpDate1 = "fixtures/lmstat_i_app1.txt"
 )
 
@@ -39,30 +42,30 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 	found := false
 	for index, feature := range featuresExp {
 		if feature.name == "feature_11" {
-			if feature.version != "2018.12" ||
+			if feature.version != v201812String ||
 				feature.licenses != "150" ||
 				feature.expires != 1546214400 ||
-				feature.vendor != "vendor2" {
+				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
 					feature.name, feature.version,
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
-		} else if feature.name == "feature12" && index == 12 {
-			if feature.version != "2018.12" ||
+		} else if feature.name == feature12String && index == 12 {
+			if feature.version != v201812String ||
 				feature.licenses != "50" ||
 				feature.expires != 1546214400 ||
-				feature.vendor != "vendor2" {
+				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %d, %s, %s, %s, != %f",
 					feature.name, index,
 					feature.version, feature.licenses,
 					feature.vendor, feature.expires)
 			}
-		} else if feature.name == "feature12" && index == 13 {
-			if feature.version != "2018.12" ||
+		} else if feature.name == feature12String && index == 13 {
+			if feature.version != v201812String ||
 				feature.licenses != "2" ||
 				feature.expires != 1538265600 ||
-				feature.vendor != "vendor2" {
+				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %d, %s, %s, %s, != %f",
 					feature.name, index,
 					feature.version, feature.licenses,
@@ -72,7 +75,7 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 			if feature.version != "2018.09" ||
 				feature.licenses != "2" ||
 				feature.expires != math.Inf(1) ||
-				feature.vendor != "vendor2" {
+				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
 					feature.name, feature.version,
 					feature.licenses, feature.vendor,
@@ -82,7 +85,7 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 			if feature.version != "0.1" ||
 				feature.licenses != "1" ||
 				feature.expires != math.Inf(1) ||
-				feature.vendor != "vendor2" {
+				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
 					feature.name, feature.version,
 					feature.licenses, feature.vendor,

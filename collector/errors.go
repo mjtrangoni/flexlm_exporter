@@ -11,14 +11,23 @@ var errorDescriptionString = map[string]string{
 	"exit status 251": "No such feature exists.",
 	"exit status 250": "No TCP/IP port number in license file and FLEXlm service does not exist. (pre-v6 only)",
 	"exit status 249": "No socket connection to license manager service.",
-	"exit status 248": "Invalid (inconsistent) license key or signature. The license key/signature and data for the feature do not match. This usually happens when a license file has been altered.",
-	"exit status 247": "Invalid host. The hostid of this system does not match the hostid specified in the license file.",
+	"exit status 248": "Invalid (inconsistent) license key or signature. " +
+		"The license key/signature and data for the feature do not match. " +
+		"This usually happens when a license file has been altered.",
+	"exit status 247": "Invalid host. The hostid of this system does not " +
+		"match the hostid specified in the license file.",
 	"exit status 246": "Feature has expired.",
 	"exit status 245": "Invalid date format in license file.",
 	"exit status 244": "Invalid returned data from license server.",
 	"exit status 243": "No SERVER lines in license file.",
-	"exit status 242": "Cannot find SERVER host name in network database. The lookup for the host name on the SERVER line in the license file failed. This often happens when NIS or DNS or the hosts file is incorrect. Workaround: Use IP address (e.g., 123.456.789.123) instead of host name.",
-	"exit status 241": "Cannot connect to license server. The server (lmgrd) has not been started yet, or the wrong port@host or license file is being used, or the TCP/IP port or host name in the license file has been changed.",
+	"exit status 242": "Cannot find SERVER host name in network database. " +
+		"The lookup for the host name on the SERVER line in the license " +
+		"file failed. This often happens when NIS or DNS or the hosts " +
+		"file is incorrect. Workaround: Use IP address " +
+		"(e.g., 123.456.789.123) instead of host name.",
+	"exit status 241": "Cannot connect to license server. The server (lmgrd) " +
+		"has not been started yet, or the wrong port@host or license file is" +
+		" being used, or the TCP/IP port or host name in the license file has been changed.",
 	"exit status 240": "Cannot read data from license server.",
 	"exit status 239": "Cannot write data to license server.",
 	"exit status 238": "License server does not support this feature.",
@@ -72,26 +81,41 @@ var errorDescriptionString = map[string]string{
 	"exit status 169": "Checkout exceeds MAX specified in options file.",
 	"exit status 168": "System clock has been set back.",
 	"exit status 167": "This platform not authorized by license.",
-	"exit status 166": "Future license file format or misspelling in license file. The file was issued for a later version of FLEXlm than this program understands.",
+	"exit status 166": "Future license file format or misspelling in license file. " +
+		"The file was issued for a later version of FLEXlm than this program understands.",
 	"exit status 165": "ENCRYPTION_SEEDS are non-unique.",
 	"exit status 164": "Feature removed during lmreread, or wrong SERVER line hostid.",
-	"exit status 163": "This feature is available in a different license pool. This is a warning condition. The server has pooled one or more INCREMENT lines into a single pool, and the request was made on an INCREMENT line that has been pooled.",
+	"exit status 163": "This feature is available in a different license pool. This is a " +
+		"warning condition. The server has pooled one or more INCREMENT lines into a " +
+		"single pool, and the request was made on an INCREMENT line that has been pooled.",
 	"exit status 162": "Attempt to generate license with incompatible attributes.",
-	"exit status 161": "Network connect to this_host failed. Change this_host on the SERVER line in the license file to the actual host name.",
-	"exit status 160": "Server machine is down or not responding. See the system administrator about starting the server, or make sure that you’re referring to the right host (see LM_LICENSE_FILE environment variable).",
+	"exit status 161": "Network connect to this_host failed. Change this_host on the SERVER " +
+		"line in the license file to the actual host name.",
+	"exit status 160": "Server machine is down or not responding. See the system administrator " +
+		"about starting the server, or make sure that you’re referring to the right host " +
+		"(see LM_LICENSE_FILE environment variable).",
 	"exit status 159": "The desired vendor daemon is down. 1) Check the lmgrd log file, or 2) Try lmreread.",
 	"exit status 158": "This FEATURE line can’t be converted to decimal format.",
 	"exit status 157": "The decimal format license is typed incorrectly.",
 	"exit status 156": "Cannot remove a linger license.",
-	"exit status 155": "All licenses are reserved for others. The system administrator has reserved all the licenses for others. Reservations are made in the options file. The server must be restarted for options file changes to take effect.",
+	"exit status 155": "All licenses are reserved for others. The system administrator " +
+		"has reserved all the licenses for others. Reservations are made in the " +
+		"options file. The server must be restarted for options file changes to take effect.",
 	"exit status 154": "A FLEXid borrow error occurred.",
 	"exit status 153": "Terminal Server remote client not allowed.",
 	"exit status 152": "Cannot borrow that long.",
-	"exit status 150": "License server out of network connections. The vendor daemon can't handle any more users. See the debug log for further information.",
-	"exit status 146": "Dongle not attached, or can’t read dongle. Either the hardware dongle is unattached, or the necessary software driver for this dongle type is not installed.",
-	"exit status 144": "Missing dongle driver. In order to read the dongle hostid, the correct driver must be installed. These drivers are available at www.macrovision.com or from your software vendor.",
-	"exit status 143": "Two FLEXlock checkouts attempted. Only one checkout is allowed with FLEXlock-enabled applications.",
-	"exit status 142": "SIGN= keyword required, but missing from license. This is probably because the license is older than the application. You need to obtain a SIGN= version of this license from your vendor.",
+	"exit status 150": "License server out of network connections. The vendor daemon " +
+		"can't handle any more users. See the debug log for further information.",
+	"exit status 146": "Dongle not attached, or can’t read dongle. Either the hardware dongle " +
+		"is unattached, or the necessary software driver for this dongle type is not installed.",
+	"exit status 144": "Missing dongle driver. In order to read the dongle hostid, the " +
+		"correct driver must be installed. These drivers are available at www.macrovision.com " +
+		"or from your software vendor.",
+	"exit status 143": "Two FLEXlock checkouts attempted. Only one checkout is allowed with " +
+		"FLEXlock-enabled applications.",
+	"exit status 142": "SIGN= keyword required, but missing from license. This is probably " +
+		"because the license is older than the application. You need to obtain a SIGN= " +
+		"version of this license from your vendor.",
 	"exit status 141": "Error in Public Key package.",
 	"exit status 140": "CRO not supported for this platform.",
 	"exit status 139": "BORROW failed.",
@@ -100,7 +124,8 @@ var errorDescriptionString = map[string]string{
 	"exit status 136": "Cannot lmdown the server when licenses are borrowed.",
 	"exit status 135": "FLOAT_OK license must have exactly one dongle hostid.",
 	"exit status 134": "Unable to delete local borrow info.",
-	"exit status 133": "Support for returning a borrowed license early is not enabled. The vendor must have enabled support for this feature in the vendor daemon. Contact the vendor for further details.",
+	"exit status 133": "Support for returning a borrowed license early is not enabled. The vendor " +
+		"must have enabled support for this feature in the vendor daemon. Contact the vendor for further details.",
 	"exit status 132": "An error occurred while returning a borrowed license to the server.",
 	"exit status 131": "Attempt to checkout just a PACKAGE. Need to also checkout a feature.",
 	"exit status 130": "Error initializing a composite hostid.",

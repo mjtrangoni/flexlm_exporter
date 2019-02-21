@@ -138,7 +138,7 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 		} else if lmutilLicenseServerStatusRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseServerStatusRegex.FindStringSubmatch(lineJoined)
 			servers[strings.Split(matches[1], ".")[0]].version = matches[4]
-			if matches[2] == "UP" {
+			if matches[2] == upString {
 				servers[strings.Split(matches[1], ".")[0]].status = true
 			}
 			if matches[3] == " (MASTER)" {
@@ -155,7 +155,7 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseVendorStatusRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseVendorStatusRegex.FindStringSubmatch(lineJoined)
-			if matches[2] == "UP" {
+			if matches[2] == upString {
 				vendors[matches[1]] = &vendor{
 					status: true, version: matches[3],
 				}

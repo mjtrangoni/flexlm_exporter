@@ -45,7 +45,7 @@ var (
 
 const (
 	defaultEnabled = true
-	//defaultDisabled = false
+	upString       = "UP"
 )
 
 var (
