@@ -15,7 +15,7 @@ GO                      ?= GO15VENDOREXPERIMENT=1 go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
 GODEP                   ?= $(GOPATH)/bin/dep
-GOLINTER                ?= $(GOPATH)/bin/gometalinter
+GOLINTER                ?= $(GOPATH)/bin/golangci-lint
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
 DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
@@ -24,51 +24,64 @@ DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 PREFIX                  ?= $(shell pwd)
 BIN_DIR                 ?= $(shell pwd)
 
-all: depcheck format vet gometalinter build test
+.PHONY: all
+all: clean depcheck format vet golangci build test
 
+.PHONY: test
 test:
 	@echo ">> running tests"
 	@$(GO) test -v $(pkgs)
 
+.PHONY: format
 format:
 	@echo ">> formatting code"
 	@$(GO) fmt $(pkgs)
 
-gometalinter: $(GOLINTER)
-	@echo ">> linting code"
-	@$(GOLINTER) --install > /dev/null
-	@$(GOLINTER) --config=./.gometalinter.json ./...
+.PHONY: vet
+vet:
+	@echo ">> vetting code"
+	@$(GO) vet $(pkgs)
 
+.PHONY: golangci $(GOLINTER)
+golangci: $(GOLINTER)
+	@echo ">> linting code"
+	@$(GOLINTER) run --config ./.golanci.yml
+
+.PHONY: build
 build: $(PROMU) depcheck
 	@echo ">> building binaries"
 	@$(PROMU) build --prefix $(PREFIX)
 
+.PHONY: clean
 clean:
 	@echo ">> Cleaning up"
 	@find . -type f -name '*~' -exec rm -fv {} \;
 	@$(RM) $(TARGET)
 
+.PHONY: docker
 docker:
 	@echo ">> building docker image"
 	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
 
+.PHONY: depcheck
 depcheck: $(GODEP)
 	@echo ">> ensure vendoring"
 	@$(GODEP) ensure
 
+.PHONY: dep
 $(GOPATH)/bin/dep dep:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/golang/dep/cmd/dep
 
+.PHONY: promu
 $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/prometheus/promu
 
-$(GOPATH)/bin/gometalinter lint:
+.PHONY: golangci-lint lint
+$(GOPATH)/bin/golangci-lint lint:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get -u github.com/alecthomas/gometalinter
-
-.PHONY: all format vet build test promu clean docker $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint $(GOPATH)/bin/dep dep depcheck
+		$(GO) get -u github.com/golangci/golangci-lint/cmd/golangci-lint
