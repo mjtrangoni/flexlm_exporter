@@ -6,7 +6,7 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: circleci/golang:1.11
+    - image: circleci/golang:1.12
     parameters:
       working_dir:
         type: string
@@ -70,6 +70,12 @@ jobs:
           name: Docker Push
           command : docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
 
+  release:
+    executor: golang
+    steps:
+      - checkout
+      - run: curl -sL https://git.io/goreleaser | bash
+
 workflows:
   version: 2
   flexlm_exporter:
@@ -84,3 +90,9 @@ workflows:
         filters:
           tags:
             only: /.*/
+    - release:
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /v[0-9]+(\.[0-9]+)*(-.*)*/
