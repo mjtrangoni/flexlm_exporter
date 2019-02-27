@@ -1,3 +1,9 @@
+## v0.0.4 / 2019-02-27
+
+ * [ENHANCEMENT] Changed Regex to include FQDNs.
+ * [ENHANCEMENT] Handle the case where no terminal devices are present in
+   `lmstat` output.
+
 ## v0.0.3 / 2018-10-10
 
 * [ENHANCEMENT] Handle repeated feature expirations better.
