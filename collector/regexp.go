@@ -20,6 +20,10 @@ var (
 		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ [[:print:]]+ ?\(v[\w\.]+\) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\, start \w+ \d+\/\d+ \d+\:\d+(\,\s(?P<licenses>\d+)\s\w+|)` +
 			`(\s+\(linger\:\s\d+\s\/\s\d+\))?$`)
+	lmutilLicenseFeatureUsageUser2Regex = regexp.MustCompile(
+		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ ?\(v[\w\.]+\) \([\w\-\.]+\/\d+ ` +
+			`\d+\)\, start \w+ \d+\/\d+ \d+\:\d+(\,\s(?P<licenses>\d+)\s\w+|)` +
+			`(\s+\(linger\:\s\d+\s\/\s\d+\))?$`)
 	lmutilLicenseFeatureGroupReservRegex = regexp.MustCompile(
 		`^(\s+|)(?P<reservation>\d+)\s+\w+\s+for\s+(HOST_GROUP|GROUP)\s+` +
 			`(?P<group>\w+).*$`)

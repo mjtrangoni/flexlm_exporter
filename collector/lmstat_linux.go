@@ -201,6 +201,12 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			}
 			matches := lmutilLicenseFeatureUsageUserRegex.FindStringSubmatch(lineJoined)
 			username := matches[1]
+			if strings.TrimSpace(username) == "" {
+				log.Debugln("username couldn't be found for '" + lineJoined +
+					"', using lmutilLicenseFeatureUsageUser2Regex.")
+				matches = lmutilLicenseFeatureUsageUser2Regex.FindStringSubmatch(lineJoined)
+				username = matches[1]
+			}
 			if matches[3] != "" {
 				licUsed, err := strconv.Atoi(matches[3])
 				if err != nil {

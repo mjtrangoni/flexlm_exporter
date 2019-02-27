@@ -290,7 +290,8 @@ Users of feature34:  (Total of 1814 licenses issued;  Total of 1076 licenses in 
     user10 server0752 /dev/tty (v61.4) (host3.domain.net/27002 12155), start Fri 10/20 16:51, 14 licenses
     user10 server0751 /dev/tty (v61.4) (host3.domain.net/27002 23280), start Fri 10/20 16:52, 14 licenses
     user10 server1269 /dev/tty (v61.4) (host3.domain.net/27002 8163), start Fri 10/20 16:52, 14 licenses
-    user11 server19 /dev/pts/1 (v61.4) (host3.domain.net/27002 16549), start Fri 10/20 8:33, 12 licenses
+    user11 server19 (v61.3) (host3.domain.net/27002 6707), start Tue 2/26 22:21, 13 licenses
+    user11 server19 (v61.3) (host3.domain.net/27002 22303), start Tue 2/26 22:46, 13 licenses
     user12 server224 /dev/tty (v61.4) (host3.domain.net/27002 10321), start Thu 10/19 16:34, 28 licenses
     user12 server227 /dev/tty (v61.4) (host3.domain.net/27002 19770), start Thu 10/19 16:34, 28 licenses
     user13 server1953 /dev/tty (v61.4) (host3.domain.net/27002 21604), start Wed 10/18 18:27, 16 licenses
