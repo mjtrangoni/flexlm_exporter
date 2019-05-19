@@ -62,10 +62,10 @@ func lmutilOutput(args ...string) ([]byte, error) {
 	out, err := cmd.Output()
 	if err != nil {
 		// convert error to strings
-		errorString := errorDescriptionString[err.Error()]
-		if errorString != "" {
+		errorToString := errorDescriptionString[err.Error()]
+		if errorToString != "" {
 			log.Errorf("error while calling '%s %s': %v:'%s'", *lmutilPath,
-				strings.Join(args, " "), err, errorString)
+				strings.Join(args, " "), err, errorToString)
 		} else {
 			log.Errorf("error while calling '%s %s': %v:'unknown error'",
 				*lmutilPath, strings.Join(args, " "), err)

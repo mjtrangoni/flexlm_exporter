@@ -58,6 +58,7 @@ clean:
 	@echo ">> Cleaning up"
 	@find . -type f -name '*~' -exec rm -fv {} \;
 	@$(RM) $(TARGET)
+	@$(RM) -rv ./.build
 
 .PHONY: docker
 docker:
