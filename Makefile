@@ -16,6 +16,7 @@ GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
 GODEP                   ?= $(GOPATH)/bin/dep
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
+GO_VERSION              ?= 1.12
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
 DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
@@ -79,6 +80,16 @@ $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/prometheus/promu
+
+.PHONY: tarball
+tarball: promu
+	@echo ">> building release tarball"
+	$(PROMU) tarball --prefix $(PREFIX) $(BIN_DIR)
+
+.PHONY: crossbuild
+crossbuild: promu
+	@echo ">> crossbuilding"
+	$(PROMU) crossbuild --go=$(GO_VERSION) $(BIN_DIR)
 
 .PHONY: golangci-lint lint
 $(GOPATH)/bin/golangci-lint lint:
