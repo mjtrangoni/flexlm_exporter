@@ -21,20 +21,20 @@
   revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
 
 [[projects]]
-  branch = "master"
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   pruneopts = "UT"
-  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+  revision = "4b2b341e8d7715fae06375aa633dbb6e91b3fb46"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   pruneopts = "UT"
-  revision = "c823c79ea1570fb5ff454033735a8e68575d1d0f"
-  version = "v1.3.0"
+  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
+  version = "v1.3.1"
 
 [[projects]]
   digest = "1:31e761d97c76151dde79e9d28964a812c46efc5baee4085b86f68f0c654450de"
@@ -73,7 +73,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9fa0d109922b9e3a004d2cf85022579759c4be33626cb0bf1de617aca6180a38"
+  digest = "1:ab21487dba9163ed8ef65bec1794163ec8409dbbb5b8c09a21deae17b8cc4e96"
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
@@ -83,41 +83,30 @@
     "version",
   ]
   pruneopts = "UT"
-  revision = "7a3416fd1f41341905f138746c51a5092e7ddf7a"
+  revision = "17f5ca1748182ddf24fc33a5a7caaaf790a52fcc"
 
 [[projects]]
   branch = "master"
-  digest = "1:ca30ee2c96d195cef49b546d10825d3e13b50c63da4df23c80e77c51e07bad0d"
+  digest = "1:b4e48c7af197047d85fad1874951a927084c5be9ef686911258f78f52101d93a"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
-    "internal/util",
-    "iostats",
-    "nfs",
-    "xfs",
+    "internal/fs",
   ]
   pruneopts = "UT"
-  revision = "6ed1f7e1041181781dd2826d3001075d011a80cc"
+  revision = "9935e8e0588d26307d1d4a07bed7bd47271b6bbd"
 
 [[projects]]
-  digest = "1:87c2e02fb01c27060ccc5ba7c5a407cc91147726f8f40b70cceeedbc52b1f3a8"
+  digest = "1:04457f9f6f3ffc5fea48e71d62f2ca256637dee0a04d710288e27e05c8b41976"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e1e72e9de974bd926e5c56f83753fba2df402ce5"
-  version = "v1.3.0"
+  revision = "839c75faf7f98a33d445d181f3018b5c3409a45e"
+  version = "v1.4.2"
 
 [[projects]]
   branch = "master"
-  digest = "1:fde12c4da6237363bf36b81b59aa36a43d28061167ec4acb0d41fc49464e28b9"
-  name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
-  pruneopts = "UT"
-  revision = "7f87c0fbb88b590338857bcb720678c2583d4dea"
-
-[[projects]]
-  branch = "master"
-  digest = "1:1c9b644c038615d1c427fe5502d60b3795dba86b3653294ec946a2a70115eccd"
+  digest = "1:51d8cfc1a424c4db70f1d975b3762699e80de9d9ab8abf03798730218d5ffa89"
   name = "golang.org/x/sys"
   packages = [
     "unix",
@@ -126,7 +115,7 @@
     "windows/svc/eventlog",
   ]
   pruneopts = "UT"
-  revision = "775f8194d0f9e65c46913c7be783d3d95a29333c"
+  revision = "61b9204099cb1bebc803c9ffb9b2d3acd9d457d9"
 
 [[projects]]
   digest = "1:c06d9e11d955af78ac3bbb26bd02e01d2f61f689e1a3bce2ef6fb683ef8a7f2d"
