@@ -8,6 +8,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/mjtrangoni/flexlm_exporter)](https://goreportcard.com/report/github.com/mjtrangoni/flexlm_exporter)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00e03e600d5744d1a2cc21d98e2f8273)](https://www.codacy.com/app/mjtrangoni/flexlm_exporter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mjtrangoni/flexlm_exporter&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/mjtrangoni/flexlm_exporter/master/LICENSE)
+[![StyleCI](https://github.styleci.io/repos/107779392/shield?branch=master)](https://github.styleci.io/repos/107779392)
 
 [Prometheus](https://prometheus.io/) exporter for FLEXlm License Manager
 `lmstat` license information.
