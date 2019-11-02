@@ -124,10 +124,13 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func execute(name string, c Collector, ch chan<- prometheus.Metric) {
+	var (
+		success float64
+	)
+
 	begin := time.Now()
 	err := c.Update(ch)
 	duration := time.Since(begin)
-	var success float64
 
 	if err != nil {
 		log.Errorf("ERROR: %s collector failed after %fs: %s", name, duration.Seconds(), err)

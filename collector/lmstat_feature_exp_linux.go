@@ -26,9 +26,12 @@ import (
 )
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
+	var (
+		expires float64
+		index   int
+	)
+
 	featuresExp := make(map[int]*featureExp)
-	var expires float64
-	var index int
 	// iterate over output lines
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -72,8 +75,10 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 
 // getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
 func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus.Metric) error {
-	var outBytes []byte
-	var err error
+	var (
+		outBytes []byte
+		err      error
+	)
 
 	for _, licenses := range LicenseConfig.Licenses {
 		// Call lmstat with -i (lmstat -i does not give information from the server,
@@ -101,8 +106,11 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 		}
 
 		// features
-		var featuresToExclude = []string{}
-		var featuresToInclude = []string{}
+		var (
+			featuresToExclude = []string{}
+			featuresToInclude = []string{}
+		)
+
 		if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
 			log.Fatalln("%v: can not define `features_to_include` and "+
 				"`features_to_exclude` at the same time", licenses.Name)

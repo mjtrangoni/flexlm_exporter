@@ -256,9 +256,11 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatalf("Couldn't parse user \"cmfy211\" from feature31")
 	}
 
-	var found = false
-	var foundJohnDoe = false
-	var foundJaneDoe = false
+	var (
+		found        = false
+		foundJohnDoe = false
+		foundJaneDoe = false
+	)
 
 	for username, licused := range licUsersByFeature["feature100"] {
 		if username == "user13" {

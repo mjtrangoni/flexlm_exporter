@@ -253,8 +253,10 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 
 // getLmstatLicensesInfo returns lmstat active licenses information
 func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) error {
-	var outBytes []byte
-	var err error
+	var (
+		outBytes []byte
+		err      error
+	)
 
 	for _, licenses := range LicenseConfig.Licenses {
 		// Call lmstat with -a (display everything)
@@ -304,8 +306,11 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 			}
 		}
 		// features
-		var featuresToExclude = []string{}
-		var featuresToInclude = []string{}
+		var (
+			featuresToExclude = []string{}
+			featuresToInclude = []string{}
+		)
+
 		if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
 			log.Fatalln("%v: can not define `features_to_include` and "+
 				"`features_to_exclude` at the same time", licenses.Name)
