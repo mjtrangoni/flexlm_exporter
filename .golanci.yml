@@ -31,6 +31,9 @@ linters-settings:
       - experimental
     disabled-checks:
       - wrapperFunc
+  funlen:
+    lines: 100
+    statements: 50
 
 linters:
   enable-all: true
