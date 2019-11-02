@@ -58,6 +58,7 @@ func lmutilOutput(args ...string) ([]byte, error) {
 	cmd := exec.Command(*lmutilPath, args...)
 	// Disable localization for parsing.
 	cmd.Env = append(os.Environ(), "LANG=C")
+
 	out, err := cmd.Output()
 	if err != nil {
 		// convert error to strings
@@ -81,6 +82,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	r.Comma = 'Ž'
 	r.LazyQuotes = true
 	r.Comment = '#'
+
 	result, err := r.ReadAll()
 	if err != nil {
 		log.Errorf("could not parse lmutil output: %v", err)
@@ -88,6 +90,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	}
 
 	keys := make(map[string]int)
+
 	res := make([][]string, len(result))
 	for _, v := range result {
 		key := v[0]
@@ -109,6 +112,7 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 		if lmutilVersionRegex.MatchString(lineJoined) {
 			names := lmutilVersionRegex.SubexpNames()
 			matches := lmutilVersionRegex.FindAllStringSubmatch(lineJoined, -1)[0]
+
 			md := map[string]string{}
 			for i, n := range matches {
 				md[names[i]] = n
@@ -180,12 +184,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseFeatureUsageRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseFeatureUsageRegex.FindStringSubmatch(lineJoined)
+
 			issued, err := strconv.Atoi(matches[2])
 			if err != nil {
 				log.Errorf("could not convert %s to integer: %v", matches[2],
 					err)
 			}
 			featureName = matches[1]
+
 			used, err := strconv.Atoi(matches[3])
 			if err != nil {
 				log.Errorf("could not convert %s to integer: %v", matches[3],
@@ -240,6 +246,7 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 		log.Errorln(err)
 		return err
 	}
+
 	outStr, err := splitOutput(outBytes)
 	if err != nil {
 		log.Errorln(err)
@@ -294,6 +301,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 					strconv.FormatBool(info.master), info.port, info.version)
 			}
 		}
+
 		vendors = parseLmstatLicenseInfoVendor(outStr)
 		for name, info := range vendors {
 			if info.status {
@@ -320,6 +328,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 		} else if licenses.FeaturesToInclude != "" {
 			featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 		}
+
 		features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(outStr)
 		for name, info := range features {
 			if contains(featuresToExclude, name) {

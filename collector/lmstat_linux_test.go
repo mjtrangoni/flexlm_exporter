@@ -34,6 +34,7 @@ func TestContains(t *testing.T) {
 	if !containsOut {
 		t.Fatalf("contains = %t - expected true", containsOut)
 	}
+
 	containsOut = contains([]string{"a", "b"}, "c")
 	if containsOut {
 		t.Fatalf("contains = %t - expected false", containsOut)
@@ -194,6 +195,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(dataStr)
 	for name, info := range features {
 		if name == "feature11" {

@@ -28,6 +28,7 @@ func TestLoad(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	appRegex := regexp.MustCompile(`^app\d`)
 	for _, licenses := range testLicenseConfig.Licenses {
 		if !appRegex.MatchString(licenses.Name) {

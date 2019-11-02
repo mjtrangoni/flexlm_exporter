@@ -41,6 +41,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		matches := lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[4], "-")
+
 		day, month, year := slice[0], slice[1], slice[2]
 		if len(day) == 1 {
 			day = "0" + day
@@ -48,6 +49,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		if len(year) == 1 {
 			year = "000" + year
 		}
+
 		expireDate, err := time.Parse("02-Jan-2006",
 			fmt.Sprintf("%s-%s-%s", day,
 				strings.Title(month), year))

@@ -39,6 +39,7 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 	}
 
 	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr)
+
 	found := false
 	for index, feature := range featuresExp {
 		if feature.name == "feature_11" {

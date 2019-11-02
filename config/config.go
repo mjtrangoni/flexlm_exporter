@@ -51,6 +51,7 @@ func Load(filename string) (Configuration, error) {
 	}
 
 	var c Configuration
+
 	err = yaml.Unmarshal(bytes, &c)
 	if err != nil {
 		log.Fatalf("Couldn't load config file: %s", err)

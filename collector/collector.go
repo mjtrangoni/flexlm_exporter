@@ -89,6 +89,7 @@ func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 		}
 		f[filter] = true
 	}
+
 	collectors := make(map[string]Collector)
 	for key, enabled := range collectorState {
 		if *enabled {
@@ -113,6 +114,7 @@ func (n FlexlmCollector) Describe(ch chan<- *prometheus.Desc) {
 // Collect implements the prometheus.Collector interface.
 func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 	wg := sync.WaitGroup{}
+
 	wg.Add(len(n.Collectors))
 	for name, c := range n.Collectors {
 		go func(name string, c Collector) {

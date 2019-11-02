@@ -41,6 +41,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Warnln("Couldn't create", err)
 		w.WriteHeader(http.StatusBadRequest)
+
 		num, err = w.Write([]byte(fmt.Sprintf("Couldn't create %s", err)))
 		if err != nil {
 			log.Fatal(num, err)
@@ -49,10 +50,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	registry := prometheus.NewRegistry()
+
 	err = registry.Register(nc)
 	if err != nil {
 		log.Errorln("Couldn't register collector:", err)
 		w.WriteHeader(http.StatusInternalServerError)
+
 		num, err = w.Write([]byte(fmt.Sprintf("Couldn't register collector: %s", err)))
 		if err != nil {
 			log.Fatal(num, err)
@@ -94,6 +97,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Couldn't create collector: %s", err)
 	}
+
 	log.Infof("Enabled collectors:")
 	for n := range nc.Collectors {
 		log.Infof(" - %s", n)
@@ -120,6 +124,7 @@ func main() {
 	})
 
 	log.Infoln("Listening on", *listenAddress)
+
 	err = http.ListenAndServe(*listenAddress, nil)
 	if err != nil {
 		log.Fatal(err)
