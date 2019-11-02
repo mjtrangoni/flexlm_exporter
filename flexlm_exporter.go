@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	_ "net/http/pprof"
 
 	"github.com/mjtrangoni/flexlm_exporter/collector"
 	"github.com/mjtrangoni/flexlm_exporter/config"

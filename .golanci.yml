@@ -34,6 +34,19 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
+  wsl:
+    # If true append is only allowed to be cuddled if appending value is
+    # matching variables, fields or types on line above. Default is true.
+    strict-append: false
+    # Allow calls and assignments to be cuddled as long as the lines have any
+    # matching variables, fields or types. Default is true.
+    allow-assign-and-call: false
+    # Allow multiline assignments to be cuddled. Default is true.
+    allow-multiline-assign: false
+    # Allow case blocks to end with a whitespace.
+    allow-case-traling-whitespace: false
+    # Allow declarations (var) to be cuddled.
+    allow-cuddle-declarations: false
 
 linters:
   enable-all: true
@@ -58,6 +71,12 @@ issues:
     - text: "consider giving a name to these results"
       linters:
         - gocritic
+    - text: "Subprocess launched with function call as argument or cmd arguments"
+      linters:
+        - gosec
+    - text: "if statements should only be cuddled with assignments"
+      linters:
+        - wsl
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
