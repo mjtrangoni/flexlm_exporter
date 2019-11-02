@@ -42,7 +42,6 @@ type Configuration struct {
 
 // Load parses the YAML file.
 func Load(filename string) (Configuration, error) {
-
 	log.Infoln("Loading license config file:")
 	log.Infof(" - %s", filename)
 

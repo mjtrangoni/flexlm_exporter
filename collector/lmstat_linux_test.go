@@ -158,7 +158,6 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 				info.fqdn, info.version, info.master, info.status)
 		}
 	}
-
 }
 
 func TestParseLmstatLicenseInfoVendor(t *testing.T) {
