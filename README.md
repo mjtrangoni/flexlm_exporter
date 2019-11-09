@@ -88,6 +88,35 @@ Metrics will now be reachable at http://localhost:9319/metrics.
 
  1. [Grafana Dashboard](https://grafana.com/dashboards/3854)
 
+## Alerting
+
+### Prometheus rules
+
+Prometheus rules for alerting with [Prometheus Alertmanager](https://prometheus.io/docs/alerting/alertmanager/).
+
+```yaml
+
+groups:
+- name: FlexLM
+  rules:
+  - alert: FlexLmServerDown
+    expr: flexlm_server_status == 0
+    for: 5m
+    labels:
+      severity: error
+    annotations:
+      summary: "Flexlm Error (instance {{ $labels.instance }})"
+      description: "FlexLm {{ $labels.collector }} was not successful\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  - alert: LicenceAvailable
+    expr: 100*(flexlm_feature_used / flexlm_feature_issued) > 95
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Licence Available Status (instance {{ $labels.instance }})"
+      description: "Licence fully used \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+```
+
 ## Contributing
 
 Refer to [CONTRIBUTING.md](https://github.com/mjtrangoni/flexlm_exporter/blob/master/CONTRIBUTING.md)
