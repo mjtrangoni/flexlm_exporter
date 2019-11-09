@@ -30,6 +30,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	appRegex := regexp.MustCompile(`^app\d`)
+
 	for _, licenses := range testLicenseConfig.Licenses {
 		if !appRegex.MatchString(licenses.Name) {
 			t.Fatalf("'%s' not matching expected app name.", licenses.Name)

@@ -51,5 +51,6 @@ func (c *lmstatFeatureExpCollector) Update(ch chan<- prometheus.Metric) error {
 	if err != nil {
 		return fmt.Errorf("couldn't get licenses feature expiration date: %s", err)
 	}
+
 	return nil
 }

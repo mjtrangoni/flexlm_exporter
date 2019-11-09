@@ -79,6 +79,7 @@ type FlexlmCollector struct {
 // NewFlexlmCollector creates a new FlexlmCollector
 func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 	f := make(map[string]bool)
+
 	for _, filter := range filters {
 		enabled, exist := collectorState[filter]
 		if !exist {
@@ -87,10 +88,12 @@ func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 		if !*enabled {
 			return nil, fmt.Errorf("disabled collector: %s", filter)
 		}
+
 		f[filter] = true
 	}
 
 	collectors := make(map[string]Collector)
+
 	for key, enabled := range collectorState {
 		if *enabled {
 			collector, err := factories[key]()
@@ -102,6 +105,7 @@ func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 			}
 		}
 	}
+
 	return &FlexlmCollector{Collectors: collectors}, nil
 }
 
@@ -116,12 +120,14 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 	wg := sync.WaitGroup{}
 
 	wg.Add(len(n.Collectors))
+
 	for name, c := range n.Collectors {
 		go func(name string, c Collector) {
 			execute(name, c, ch)
 			wg.Done()
 		}(name, c)
 	}
+
 	wg.Wait()
 }
 
@@ -136,6 +142,7 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric) {
 
 	if err != nil {
 		log.Errorf("ERROR: %s collector failed after %fs: %s", name, duration.Seconds(), err)
+
 		success = 0
 	} else {
 		log.Debugf("OK: %s collector succeeded after %fs.", name, duration.Seconds())

@@ -33,6 +33,7 @@ func init() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	var num int
+
 	filters := r.URL.Query()["collect[]"]
 	log.Debugln("collect query:", filters)
 
@@ -45,6 +46,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(num, err)
 		}
+
 		return
 	}
 
@@ -98,6 +100,7 @@ func main() {
 	}
 
 	log.Infof("Enabled collectors:")
+
 	for n := range nc.Collectors {
 		log.Infof(" - %s", n)
 	}

@@ -50,6 +50,7 @@ func contains(slice []string, item string) bool {
 	}
 
 	_, ok := set[item]
+
 	return ok
 }
 
@@ -71,6 +72,7 @@ func lmutilOutput(args ...string) ([]byte, error) {
 				*lmutilPath, strings.Join(args, " "), err)
 		}
 	}
+
 	return out, err
 }
 
@@ -92,21 +94,25 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	keys := make(map[string]int)
 
 	res := make([][]string, len(result))
+
 	for _, v := range result {
 		key := v[0]
 		if _, ok := keys[key]; ok {
 			keys[key]++
+
 			v[0] = strings.TrimSpace(v[0]) + strconv.Itoa(keys[key])
 		} else {
 			keys[key] = 1
 		}
 		res = append(res, v)
 	}
+
 	return res, err
 }
 
 func parseLmstatVersion(outStr [][]string) lmstatInformation {
 	lmstatInfo = lmstatInformation{arch: notFound, build: notFound, version: notFound}
+
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
 		if lmutilVersionRegex.MatchString(lineJoined) {
@@ -117,6 +123,7 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 			for i, n := range matches {
 				md[names[i]] = n
 			}
+
 			lmstatInfo = lmstatInformation{
 				arch:    md["arch"],
 				build:   md["build"],
@@ -124,11 +131,13 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 			}
 		}
 	}
+
 	return lmstatInfo
 }
 
 func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 	servers = make(map[string]*server)
+
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseServersRegex.MatchString(lineJoined) {
@@ -150,11 +159,13 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 			}
 		}
 	}
+
 	return servers
 }
 
 func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 	vendors = make(map[string]*vendor)
+
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseVendorStatusRegex.MatchString(lineJoined) {
@@ -170,6 +181,7 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 			}
 		}
 	}
+
 	return vendors
 }
 
@@ -180,6 +192,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 	reservGroupByFeature = make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
+
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseFeatureUsageRegex.MatchString(lineJoined) {
@@ -190,6 +203,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 				log.Errorf("could not convert %s to integer: %v", matches[2],
 					err)
 			}
+
 			featureName = matches[1]
 
 			used, err := strconv.Atoi(matches[3])
@@ -197,6 +211,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 				log.Errorf("could not convert %s to integer: %v", matches[3],
 					err)
 			}
+
 			features[featureName] = &feature{
 				issued: float64(issued),
 				used:   float64(used),
@@ -236,6 +251,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
 		}
 	}
+
 	return features, licUsersByFeature, reservGroupByFeature
 }
 
@@ -252,9 +268,11 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 		log.Errorln(err)
 		return err
 	}
+
 	lmstatInfo = parseLmstatVersion(outStr)
 
 	ch <- prometheus.MustNewConstMetric(c.lmstatInfo, prometheus.GaugeValue, 1.0, lmstatInfo.arch, lmstatInfo.build, lmstatInfo.version)
+
 	return nil
 }
 
@@ -357,5 +375,6 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 			}
 		}
 	}
+
 	return nil
 }

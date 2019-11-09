@@ -38,6 +38,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
 			continue
 		}
+
 		matches := lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[4], "-")
@@ -64,6 +65,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		}
 
 		index++
+
 		featuresExp[index] = &featureExp{
 			name:     matches[1],
 			expires:  expires,
@@ -72,6 +74,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 			version:  matches[2],
 		}
 	}
+
 	return featuresExp
 }
 
@@ -140,5 +143,6 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 				feature.version)
 		}
 	}
+
 	return nil
 }
