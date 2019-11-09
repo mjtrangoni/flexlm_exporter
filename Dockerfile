@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:7
 LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
 
 # Install dependencies
