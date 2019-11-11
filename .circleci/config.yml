@@ -6,7 +6,7 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: circleci/golang:1.12
+    - image: circleci/golang:1.13
     parameters:
       working_dir:
         type: string
@@ -88,8 +88,8 @@ workflows:
         # This enable the environment variables
         context: org-global
         filters:
-          tags:
-            only: /.*/
+          branches:
+            only: master
     - release:
         filters:
           branches:
