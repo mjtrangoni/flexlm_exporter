@@ -75,7 +75,7 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 		} else if feature.name == "feature15" {
 			if feature.version != "2018.09" ||
 				feature.licenses != "2" ||
-				feature.expires != math.Inf(1) ||
+				feature.expires != math.Inf(posInfinity) ||
 				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
 					feature.name, feature.version,
@@ -85,7 +85,7 @@ func TestParseLmstatLicenseFeatureExpDate(t *testing.T) {
 		} else if feature.name == "feature16" {
 			if feature.version != "0.1" ||
 				feature.licenses != "1" ||
-				feature.expires != math.Inf(1) ||
+				feature.expires != math.Inf(posInfinity) ||
 				feature.vendor != vendor2String {
 				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
 					feature.name, feature.version,

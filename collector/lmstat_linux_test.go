@@ -208,20 +208,28 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	var foundUser11 = false
 
+	const (
+		licUsed1  = 1
+		licUsed8  = 8
+		licUsed12 = 12
+		licUsed16 = 16
+		licUsed26 = 26
+	)
+
 	for username, licused := range licUsersByFeature["feature34"] {
 		if username == "user1" {
-			if licused != 16 {
+			if licused != licUsed16 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
 					username, licused)
 			}
 		} else if username == "user11" {
 			foundUser11 = true
-			if licused != 26 {
+			if licused != licUsed26 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
 					username, licused)
 			}
 		} else if username == "user17" {
-			if licused != 12 {
+			if licused != licUsed12 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
 					username, licused)
 			}
@@ -236,18 +244,18 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature31"] {
 		if username == "user33" {
-			if licused != 16 {
+			if licused != licUsed16 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 					username, licused)
 			}
 		} else if username == "cmfy211" {
 			foundCmfy211 = true
-			if licused != 1 {
+			if licused != licUsed1 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
 					username, licused)
 			}
 		} else if username == "cmfy212" {
-			if licused != 16 {
+			if licused != licUsed16 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 					username, licused)
 			}
@@ -266,7 +274,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature100"] {
 		if username == "user13" {
-			if licused != 1 {
+			if licused != licUsed1 {
 				t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
 					username, licused)
 			}
@@ -295,7 +303,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for group, licreserv := range reservGroupByFeature["feature38"] {
 		if group == "GROUP10" {
-			if licreserv != 8 {
+			if licreserv != licUsed8 {
 				t.Fatalf("Unexpected values for feature38[%s]: %v!=8", group,
 					licreserv)
 			}

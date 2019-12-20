@@ -25,6 +25,11 @@ import (
 	"github.com/prometheus/common/log"
 )
 
+const (
+	lenghtOne   = 1
+	posInfinity = 1
+)
+
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 	var (
 		expires float64
@@ -44,10 +49,10 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		slice := strings.Split(matches[4], "-")
 
 		day, month, year := slice[0], slice[1], slice[2]
-		if len(day) == 1 {
+		if len(day) == lenghtOne {
 			day = "0" + day
 		}
-		if len(year) == 1 {
+		if len(year) == lenghtOne {
 			year = "000" + year
 		}
 
@@ -59,7 +64,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		}
 
 		if expireDate.Unix() <= 0 {
-			expires = math.Inf(1)
+			expires = math.Inf(posInfinity)
 		} else {
 			expires = float64(expireDate.Unix())
 		}
