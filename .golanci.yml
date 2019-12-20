@@ -6,7 +6,7 @@ linters-settings:
   gocyclo:
     min-complexity: 40
   gocognit:
-    min-complexity: 60
+    min-complexity: 70
   maligned:
     suggest-new: true
   dupl:
@@ -34,7 +34,7 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
   funlen:
-    lines: 120
+    lines: 140
     statements: 50
   wsl:
     # If true append is only allowed to be cuddled if appending value is
