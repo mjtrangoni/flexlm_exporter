@@ -45,7 +45,7 @@ vet:
 .PHONY: golangci $(GOLINTER)
 golangci: $(GOLINTER)
 	@echo ">> linting code"
-	@$(GOLINTER) run --config ./.golanci.yml
+	@$(GOLINTER) run --config ./.golangci.yml
 
 .PHONY: build
 build: $(PROMU)
