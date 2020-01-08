@@ -52,7 +52,7 @@ func TestParseLmstatVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	lmstatInfo = parseLmstatVersion(dataStr)
+	lmstatInfo := parseLmstatVersion(dataStr)
 	if lmstatInfo.arch != "x64_lsb" || lmstatInfo.build != "188735" || lmstatInfo.version != "v11.14.0.1" {
 		t.Fatalf("Unexpected values %s, %s, %s != x64_lsb, 188735, v11.14.0.1", lmstatInfo.arch, lmstatInfo.build, lmstatInfo.version)
 	}
@@ -196,7 +196,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(dataStr)
+	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(dataStr)
 	for name, info := range features {
 		if name == "feature11" {
 			if info.issued != 16384 || info.used != 80 {

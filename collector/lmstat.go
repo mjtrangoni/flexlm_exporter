@@ -19,6 +19,8 @@ import (
 	"fmt"
 
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/mjtrangoni/flexlm_exporter/config"
 )
 
 type lmstatCollector struct {
@@ -30,6 +32,15 @@ type lmstatCollector struct {
 	lmstatFeatureReservGroups *prometheus.Desc
 	lmstatFeatureIssued       *prometheus.Desc
 }
+
+var (
+	// LicenseConfig is going to be read once in main, and then used here.
+	LicenseConfig config.Configuration
+)
+
+const (
+	notFound = "not found"
+)
 
 func init() {
 	registerCollector("lmstat", defaultEnabled, NewLmstatCollector)

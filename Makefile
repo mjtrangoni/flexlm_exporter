@@ -11,12 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-GO                      ?= GO15VENDOREXPERIMENT=1 go
+GO                      ?= GO111MODULE=on go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
-GODEP                   ?= $(GOPATH)/bin/dep
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
-GO_VERSION              ?= 1.12
+GO_VERSION              ?= 1.13
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
 DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
@@ -26,7 +25,7 @@ PREFIX                  ?= $(shell pwd)
 BIN_DIR                 ?= $(shell pwd)
 
 .PHONY: all
-all: clean depcheck format vet golangci build test
+all: clean format vet golangci build test
 
 .PHONY: test
 test:
@@ -46,10 +45,10 @@ vet:
 .PHONY: golangci $(GOLINTER)
 golangci: $(GOLINTER)
 	@echo ">> linting code"
-	@$(GOLINTER) run --config ./.golanci.yml
+	@$(GOLINTER) run --config ./.golangci.yml
 
 .PHONY: build
-build: $(PROMU) depcheck
+build: $(PROMU)
 	@echo ">> building binaries"
 	@$(PROMU) build --prefix $(PREFIX)
 
@@ -64,17 +63,6 @@ clean:
 docker:
 	@echo ">> building docker image"
 	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
-
-.PHONY: depcheck
-depcheck: $(GODEP)
-	@echo ">> ensure vendoring"
-	@$(GODEP) ensure
-
-.PHONY: dep
-$(GOPATH)/bin/dep dep:
-	@GOOS=$(shell uname -s | tr A-Z a-z) \
-		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get -u github.com/golang/dep/cmd/dep
 
 .PHONY: promu
 $(GOPATH)/bin/promu promu:
