@@ -19,7 +19,7 @@ import (
 	"path/filepath"
 
 	"github.com/prometheus/common/log"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // YAML Type definitions
