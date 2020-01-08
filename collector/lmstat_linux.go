@@ -22,24 +22,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
-)
-
-var (
-	lmstatInfo lmstatInformation
-	// LicenseConfig is going to be read once in main, and then used here.
-	LicenseConfig        config.Configuration
-	servers              map[string]*server
-	vendors              map[string]*vendor
-	features             map[string]*feature
-	licUsersByFeature    map[string]map[string]float64
-	reservGroupByFeature map[string]map[string]float64
-)
-
-const (
-	notFound = "not found"
 )
 
 // contains check if an array contains a string.
@@ -111,8 +95,6 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 }
 
 func parseLmstatVersion(outStr [][]string) lmstatInformation {
-	lmstatInfo = lmstatInformation{arch: notFound, build: notFound, version: notFound}
-
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
 		if lmutilVersionRegex.MatchString(lineJoined) {
@@ -124,7 +106,7 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 				md[names[i]] = n
 			}
 
-			lmstatInfo = lmstatInformation{
+			return lmstatInformation{
 				arch:    md["arch"],
 				build:   md["build"],
 				version: md["version"],
@@ -132,11 +114,11 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 		}
 	}
 
-	return lmstatInfo
+	return lmstatInformation{arch: notFound, build: notFound, version: notFound}
 }
 
 func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
-	servers = make(map[string]*server)
+	servers := make(map[string]*server)
 
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -164,7 +146,7 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 }
 
 func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
-	vendors = make(map[string]*vendor)
+	vendors := make(map[string]*vendor)
 
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -187,9 +169,9 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 
 func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 	map[string]map[string]float64, map[string]map[string]float64) {
-	features = make(map[string]*feature)
-	licUsersByFeature = make(map[string]map[string]float64)
-	reservGroupByFeature = make(map[string]map[string]float64)
+	features := make(map[string]*feature)
+	licUsersByFeature := make(map[string]map[string]float64)
+	reservGroupByFeature := make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
 
@@ -269,7 +251,7 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 		return err
 	}
 
-	lmstatInfo = parseLmstatVersion(outStr)
+	lmstatInfo := parseLmstatVersion(outStr)
 
 	ch <- prometheus.MustNewConstMetric(c.lmstatInfo, prometheus.GaugeValue, 1.0, lmstatInfo.arch, lmstatInfo.build, lmstatInfo.version)
 
@@ -307,7 +289,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 			return err
 		}
 
-		servers = parseLmstatLicenseInfoServer(outStr)
+		servers := parseLmstatLicenseInfoServer(outStr)
 		for _, info := range servers {
 			if info.status {
 				ch <- prometheus.MustNewConstMetric(c.lmstatServerStatus,
@@ -320,7 +302,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 			}
 		}
 
-		vendors = parseLmstatLicenseInfoVendor(outStr)
+		vendors := parseLmstatLicenseInfoVendor(outStr)
 		for name, info := range vendors {
 			if info.status {
 				ch <- prometheus.MustNewConstMetric(c.lmstatVendorStatus,
@@ -347,7 +329,7 @@ func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) err
 			featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 		}
 
-		features, licUsersByFeature, reservGroupByFeature = parseLmstatLicenseInfoFeature(outStr)
+		features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr)
 		for name, info := range features {
 			if contains(featuresToExclude, name) {
 				continue
