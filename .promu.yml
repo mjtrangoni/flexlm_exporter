@@ -1,4 +1,7 @@
 go:
+    # Whenever the Go version is updated here, .travis.yml and
+    # .circle/config.yml should also be updated.
+    version: 1.13
     cgo: false
 repository:
     path: github.com/mjtrangoni/flexlm_exporter
