@@ -75,11 +75,12 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
 	for _, licenses := range LicenseConfig.Licenses {
-		wg.Add(1)
+		wg.Add(lenghtOne)
+
 		go func(licenses config.License) {
 			defer wg.Done()
-			err := c.collect(licenses, ch)
-			if err == nil {
+
+			if err := c.collect(&licenses, ch); err == nil {
 				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat_feature_exp", licenses.Name)
 			} else {
 				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat_feature_exp", licenses.Name)
@@ -91,7 +92,7 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 }
 
 // getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
-func (c *lmstatFeatureExpCollector) collect(licenses config.License, ch chan<- prometheus.Metric) error {
+func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
 	var outBytes []byte
 	var err error
 
@@ -145,14 +146,12 @@ func (c *lmstatFeatureExpCollector) collect(licenses config.License, ch chan<- p
 
 		licenseCount, _ := strconv.Atoi(feature.licenses)
 		if val, ok := aggrFeaturesExpMap[feature.expires]; ok {
-			//expFeat := val
+			val.licenses += licenseCount
 			val.features++
-			val.licenses = val.licenses + licenseCount
-			//expFeaturesMap[feature.expires] = expFeat
 		} else {
 			aggrFeaturesExpMap[feature.expires] = &aggrFeaturesExp{
 				app:      licenses.Name,
-				features: 1,
+				features: lenghtOne,
 				licenses: licenseCount,
 			}
 		}
