@@ -264,22 +264,25 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
+
 	for _, licenses := range LicenseConfig.Licenses {
-		wg.Add(1)
+		wg.Add(lenghtOne)
+
 		go func(licenses config.License) {
 			defer wg.Done()
-			err := c.collect(licenses, ch)
-			if err == nil {
+
+			if err := c.collect(&licenses, ch); err == nil {
 				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat", licenses.Name)
 			} else {
 				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat", licenses.Name)
 			}
 		}(licenses)
 	}
+
 	return nil
 }
 
-func (c *lmstatCollector) collect(licenses config.License, ch chan<- prometheus.Metric) error {
+func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
 	var (
 		outBytes []byte
 		err      error
