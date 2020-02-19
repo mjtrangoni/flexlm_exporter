@@ -45,3 +45,9 @@ type featureExp struct {
 	vendor   string
 	version  string
 }
+
+type aggrFeaturesExp struct {
+	app      string
+	features int
+	licenses int
+}

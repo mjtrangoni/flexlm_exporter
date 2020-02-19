@@ -151,6 +151,7 @@ func (c *lmstatFeatureExpCollector) collect(licenses config.License, ch chan<- p
 	}
 
 	featuresExp := parseLmstatLicenseFeatureExpDate(outStr)
+	aggrFeaturesExpMap := make(map[float64]*aggrFeaturesExp)
 
 	for idx, feature := range featuresExp {
 		if contains(featuresToExclude, feature.name) {
@@ -160,11 +161,32 @@ func (c *lmstatFeatureExpCollector) collect(licenses config.License, ch chan<- p
 			continue
 		}
 
+		licenseCount, _ := strconv.Atoi(feature.licenses)
+		if val, ok := aggrFeaturesExpMap[feature.expires]; ok {
+			//expFeat := val
+			val.features++
+			val.licenses = val.licenses + licenseCount
+			//expFeaturesMap[feature.expires] = expFeat
+		} else {
+			aggrFeaturesExpMap[feature.expires] = &aggrFeaturesExp{
+				app:      licenses.Name,
+				features: 1,
+				licenses: licenseCount,
+			}
+		}
+
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureExp,
 			prometheus.GaugeValue, feature.expires,
 			licenses.Name, feature.name, strconv.Itoa(idx),
 			feature.licenses, feature.vendor,
 			feature.version)
 	}
+
+	for exp, val := range aggrFeaturesExpMap {
+		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureAggrExp,
+			prometheus.GaugeValue, exp,
+			val.app, strconv.Itoa(val.licenses), strconv.Itoa(val.features))
+	}
+
 	return nil
 }
