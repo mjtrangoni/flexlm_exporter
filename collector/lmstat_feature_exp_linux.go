@@ -182,10 +182,13 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			feature.version)
 	}
 
+	index := 0
+
 	for exp, val := range aggrFeaturesExpMap {
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureAggrExp,
 			prometheus.GaugeValue, exp,
-			val.app, strconv.Itoa(val.licenses), strconv.Itoa(val.features))
+			val.app, strconv.Itoa(index), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
+		index++
 	}
 
 	return nil
