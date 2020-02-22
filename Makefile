@@ -62,7 +62,7 @@ clean:
 .PHONY: docker
 docker:
 	@echo ">> building docker image"
-	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
+	@podman build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
 
 .PHONY: promu
 $(GOPATH)/bin/promu promu:
