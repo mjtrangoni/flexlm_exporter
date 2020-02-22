@@ -1,11 +1,11 @@
-FROM centos:7
+FROM centos:8
 LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
 
 # Install dependencies
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
-    yum -y install bash-completion redhat-lsb-core strace &&\
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial && \
+    dnf -y install bash-completion redhat-lsb-core strace && \
     # Clean cache
-    yum -y clean all
+    dnf -y clean all
 
 COPY flexlm_exporter /bin/flexlm_exporter
 
