@@ -17,6 +17,7 @@ package collector
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -182,13 +183,19 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			feature.version)
 	}
 
-	index := 0
+	aggrFeaturesKeys := make([]float64, 0, len(aggrFeaturesExpMap))
 
-	for exp, val := range aggrFeaturesExpMap {
+	for exp := range aggrFeaturesExpMap {
+		aggrFeaturesKeys = append(aggrFeaturesKeys, exp)
+	}
+
+	sort.Float64s(aggrFeaturesKeys)
+
+	for idx, exp := range aggrFeaturesKeys {
+		val := aggrFeaturesExpMap[exp]
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureAggrExp,
 			prometheus.GaugeValue, exp,
-			val.app, strconv.Itoa(index), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
-		index++
+			val.app, strconv.Itoa(idx), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
 	}
 
 	return nil
