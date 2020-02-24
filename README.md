@@ -115,6 +115,14 @@ groups:
     annotations:
       summary: "Licence Available Status (instance {{ $labels.instance }})"
       description: "Licence fully used \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  - alert: LicenseExpiring
+    expr: ((flexlm_feature_expiration_seconds - time()) / 86400) < 14
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      summary: License {{ $labels.app }} expiring soon on {{ $labels.instance }}
+      description: License {{ $labels.app }} on {{ $labels.instance }} has {{ $labels.features }} features ({{ $labels.licenses }} licenses) expiring in {{ $value }} days
 ```
 
 ## Contributing
