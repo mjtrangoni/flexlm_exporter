@@ -236,93 +236,111 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 
 // getLmstatLicensesInfo returns lmstat active licenses information
 func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) error {
+	wg := &sync.WaitGroup{}
+	defer wg.Wait()
+	for _, licenses := range LicenseConfig.Licenses {
+		wg.Add(lenghtOne)
+
+		go func(licenses config.License) {
+			defer wg.Done()
+
+			if err := c.collect(&licenses, ch); err == nil {
+				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat", licenses.Name)
+			} else {
+				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat", licenses.Name)
+			}
+		}(licenses)
+	}
+
+	return nil
+}
+
+func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
 	var outBytes []byte
 	var err error
 
-	for _, licenses := range LicenseConfig.Licenses {
-		// Call lmstat with -a (display everything)
-		if licenses.LicenseFile != "" {
-			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-a")
-			if err != nil {
-				continue
-			}
-		} else if licenses.LicenseServer != "" {
-			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-a")
-			if err != nil {
-				continue
-			}
-		} else {
-			log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
-				licenses.Name)
-			return nil
-		}
-
-		outStr, err := splitOutput(outBytes)
+	// Call lmstat with -a (display everything)
+	if licenses.LicenseFile != "" {
+		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-a")
 		if err != nil {
-			log.Errorln(err)
 			return err
 		}
+	} else if licenses.LicenseServer != "" {
+		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-a")
+		if err != nil {
+			return err
+		}
+	} else {
+		log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
+			licenses.Name)
+		return nil
+	}
 
-		servers := parseLmstatLicenseInfoServer(outStr)
-		for _, info := range servers {
-			if info.status {
-				ch <- prometheus.MustNewConstMetric(c.lmstatServerStatus,
-					prometheus.GaugeValue, 1.0, licenses.Name, info.fqdn,
-					strconv.FormatBool(info.master), info.port, info.version)
-			} else {
-				ch <- prometheus.MustNewConstMetric(c.lmstatServerStatus,
-					prometheus.GaugeValue, 0, licenses.Name, info.fqdn,
-					strconv.FormatBool(info.master), info.port, info.version)
+	outStr, err := splitOutput(outBytes)
+	if err != nil {
+		log.Errorln(err)
+		return err
+	}
+
+	servers := parseLmstatLicenseInfoServer(outStr)
+	for _, info := range servers {
+		if info.status {
+			ch <- prometheus.MustNewConstMetric(c.lmstatServerStatus,
+				prometheus.GaugeValue, 1.0, licenses.Name, info.fqdn,
+				strconv.FormatBool(info.master), info.port, info.version)
+		} else {
+			ch <- prometheus.MustNewConstMetric(c.lmstatServerStatus,
+				prometheus.GaugeValue, 0, licenses.Name, info.fqdn,
+				strconv.FormatBool(info.master), info.port, info.version)
+		}
+	}
+	vendors := parseLmstatLicenseInfoVendor(outStr)
+	for name, info := range vendors {
+		if info.status {
+			ch <- prometheus.MustNewConstMetric(c.lmstatVendorStatus,
+				prometheus.GaugeValue, 1.0, licenses.Name, name,
+				info.version)
+		} else {
+			ch <- prometheus.MustNewConstMetric(c.lmstatVendorStatus,
+				prometheus.GaugeValue, 0, licenses.Name, name, info.version)
+		}
+	}
+	// features
+	var featuresToExclude = []string{}
+	var featuresToInclude = []string{}
+	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
+		log.Fatalln("%v: can not define `features_to_include` and "+
+			"`features_to_exclude` at the same time", licenses.Name)
+		return nil
+	} else if licenses.FeaturesToExclude != "" {
+		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
+	} else if licenses.FeaturesToInclude != "" {
+		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
+	}
+	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr)
+	for name, info := range features {
+		if contains(featuresToExclude, name) {
+			continue
+		} else if licenses.FeaturesToInclude != "" &&
+			!contains(featuresToInclude, name) {
+			continue
+		}
+		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
+			prometheus.GaugeValue, info.used, licenses.Name, name)
+		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
+			prometheus.GaugeValue, info.issued, licenses.Name, name)
+		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
+			for username, licused := range licUsersByFeature[name] {
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
+					licused, licenses.Name, name, username)
 			}
 		}
-		vendors := parseLmstatLicenseInfoVendor(outStr)
-		for name, info := range vendors {
-			if info.status {
-				ch <- prometheus.MustNewConstMetric(c.lmstatVendorStatus,
-					prometheus.GaugeValue, 1.0, licenses.Name, name,
-					info.version)
-			} else {
-				ch <- prometheus.MustNewConstMetric(c.lmstatVendorStatus,
-					prometheus.GaugeValue, 0, licenses.Name, name, info.version)
-			}
-		}
-		// features
-		var featuresToExclude = []string{}
-		var featuresToInclude = []string{}
-		if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
-			log.Fatalln("%v: can not define `features_to_include` and "+
-				"`features_to_exclude` at the same time", licenses.Name)
-			return nil
-		} else if licenses.FeaturesToExclude != "" {
-			featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
-		} else if licenses.FeaturesToInclude != "" {
-			featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
-		}
-		features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr)
-		for name, info := range features {
-			if contains(featuresToExclude, name) {
-				continue
-			} else if licenses.FeaturesToInclude != "" &&
-				!contains(featuresToInclude, name) {
-				continue
-			}
-			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
-				prometheus.GaugeValue, info.used, licenses.Name, name)
-			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
-				prometheus.GaugeValue, info.issued, licenses.Name, name)
-			if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
-				for username, licused := range licUsersByFeature[name] {
-					ch <- prometheus.MustNewConstMetric(
-						c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
-						licused, licenses.Name, name, username)
-				}
-			}
-			if licenses.MonitorReservations && (reservGroupByFeature[name] != nil) {
-				for group, licreserv := range reservGroupByFeature[name] {
-					ch <- prometheus.MustNewConstMetric(
-						c.lmstatFeatureReservGroups, prometheus.GaugeValue,
-						licreserv, licenses.Name, name, group)
-				}
+		if licenses.MonitorReservations && (reservGroupByFeature[name] != nil) {
+			for group, licreserv := range reservGroupByFeature[name] {
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureReservGroups, prometheus.GaugeValue,
+					licreserv, licenses.Name, name, group)
 			}
 		}
 	}

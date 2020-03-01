@@ -17,6 +17,7 @@ package collector
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -72,63 +73,110 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 
 // getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
 func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus.Metric) error {
+	wg := &sync.WaitGroup{}
+	defer wg.Wait()
+	for _, licenses := range LicenseConfig.Licenses {
+		wg.Add(lenghtOne)
+
+		go func(licenses config.License) {
+			defer wg.Done()
+
+			if err := c.collect(&licenses, ch); err == nil {
+				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat_feature_exp", licenses.Name)
+			} else {
+				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat_feature_exp", licenses.Name)
+			}
+		}(licenses)
+	}
+
+	return nil
+}
+
+// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
+func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
 	var outBytes []byte
 	var err error
 
-	for _, licenses := range LicenseConfig.Licenses {
-		// Call lmstat with -i (lmstat -i does not give information from the server,
-		// but only reads the license file)
-		if licenses.LicenseFile != "" {
-			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-i")
-			if err != nil {
-				continue
-			}
-		} else if licenses.LicenseServer != "" {
-			outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-i")
-			if err != nil {
-				continue
-			}
-		} else {
-			log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
-				licenses.Name)
-			return nil
-		}
-
-		outStr, err := splitOutput(outBytes)
+	// Call lmstat with -i (lmstat -i does not give information from the server,
+	// but only reads the license file)
+	if licenses.LicenseFile != "" {
+		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-i")
 		if err != nil {
-			log.Errorln(err)
 			return err
 		}
+	} else if licenses.LicenseServer != "" {
+		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-i")
+		if err != nil {
+			return err
+		}
+	} else {
+		log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
+			licenses.Name)
+		return nil
+	}
 
-		// features
-		var featuresToExclude = []string{}
-		var featuresToInclude = []string{}
-		if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
-			log.Fatalln("%v: can not define `features_to_include` and "+
-				"`features_to_exclude` at the same time", licenses.Name)
-			return nil
-		} else if licenses.FeaturesToExclude != "" {
-			featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
-		} else if licenses.FeaturesToInclude != "" {
-			featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
+	outStr, err := splitOutput(outBytes)
+	if err != nil {
+		log.Errorln(err)
+		return err
+	}
+
+	// features
+	var featuresToExclude = []string{}
+	var featuresToInclude = []string{}
+	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
+		log.Fatalln("%v: can not define `features_to_include` and "+
+			"`features_to_exclude` at the same time", licenses.Name)
+		return nil
+	} else if licenses.FeaturesToExclude != "" {
+		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
+	} else if licenses.FeaturesToInclude != "" {
+		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
+	}
+
+	featuresExp := parseLmstatLicenseFeatureExpDate(outStr)
+	aggrFeaturesExpMap := make(map[float64]*aggrFeaturesExp)
+
+	for idx, feature := range featuresExp {
+		if contains(featuresToExclude, feature.name) {
+			continue
+		} else if licenses.FeaturesToInclude != "" &&
+			!contains(featuresToInclude, feature.name) {
+			continue
 		}
 
-		featuresExp := parseLmstatLicenseFeatureExpDate(outStr)
-
-		for idx, feature := range featuresExp {
-			if contains(featuresToExclude, feature.name) {
-				continue
-			} else if licenses.FeaturesToInclude != "" &&
-				!contains(featuresToInclude, feature.name) {
-				continue
+		licenseCount, _ := strconv.Atoi(feature.licenses)
+		if val, ok := aggrFeaturesExpMap[feature.expires]; ok {
+			val.licenses += licenseCount
+			val.features++
+		} else {
+			aggrFeaturesExpMap[feature.expires] = &aggrFeaturesExp{
+				app:      licenses.Name,
+				features: lenghtOne,
+				licenses: licenseCount,
 			}
-
-			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureExp,
-				prometheus.GaugeValue, feature.expires,
-				licenses.Name, feature.name, strconv.Itoa(idx),
-				feature.licenses, feature.vendor,
-				feature.version)
 		}
+
+		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureExp,
+			prometheus.GaugeValue, feature.expires,
+			licenses.Name, feature.name, strconv.Itoa(idx),
+			feature.licenses, feature.vendor,
+			feature.version)
+	}
+
+	aggrFeaturesKeys := make([]float64, 0, len(aggrFeaturesExpMap))
+
+	for exp := range aggrFeaturesExpMap {
+		aggrFeaturesKeys = append(aggrFeaturesKeys, exp)
+	}
+
+	sort.Float64s(aggrFeaturesKeys)
+
+	for idx, exp := range aggrFeaturesKeys {
+		val := aggrFeaturesExpMap[exp]
+		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureAggrExp,
+			prometheus.GaugeValue, exp,
+			val.app, strconv.Itoa(idx), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
 	}
 	return nil
 }

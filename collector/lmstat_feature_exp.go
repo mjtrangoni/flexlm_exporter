@@ -22,7 +22,8 @@ import (
 )
 
 type lmstatFeatureExpCollector struct {
-	lmstatFeatureExp *prometheus.Desc
+	lmstatFeatureExp     *prometheus.Desc
+	lmstatFeatureAggrExp *prometheus.Desc
 }
 
 func init() {
@@ -40,6 +41,11 @@ func NewLmstatFeatureExpCollector() (Collector, error) {
 			"License feature expiration date in seconds labeled by app, name, index, licenses, vendor, version.",
 			[]string{"app", "name", "index", "licenses", "vendor",
 				"version"}, nil,
+		),
+		lmstatFeatureAggrExp: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "aggregate_expiration_seconds"),
+			"Aggregate by license features expiration day in seconds. Labeled by app, licenses, features.",
+			[]string{"app", "index", "licenses", "features"}, nil,
 		),
 	}, nil
 }

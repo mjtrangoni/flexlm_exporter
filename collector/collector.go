@@ -41,6 +41,12 @@ var (
 		[]string{"collector"},
 		nil,
 	)
+	scrapeErrorDesc = prometheus.NewDesc(
+		prometheus.BuildFQName(namespace, "scrape", "error"),
+		"flexlm_exporter: Whether a license scrape had an error.",
+		[]string{"collector", "name"},
+		nil,
+	)
 )
 
 const (
@@ -113,6 +119,7 @@ func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 func (n FlexlmCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- scrapeDurationDesc
 	ch <- scrapeSuccessDesc
+	ch <- scrapeErrorDesc
 }
 
 // Collect implements the prometheus.Collector interface.
