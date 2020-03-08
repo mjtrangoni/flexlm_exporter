@@ -1,3 +1,12 @@
+## v0.0.5 / unreleased
+
+ * [ENHANCEMENT] Handle case for switched columns on expirations output.
+ * [ENHANCEMENT] Build Docker image on CentOS8.
+ * [ENHANCEMENT] Use goroutines for each license and add features aggregate
+   expiration. Thanks @treydock.
+ * [ENHANCEMENT] Switch to go modules and yaml.v3. Thanks @knweiss.
+ * [ENHANCEMENT] First crossbuild support.
+
 ## v0.0.4 / 2019-02-27
 
  * [ENHANCEMENT] Changed Regex to include FQDNs.
