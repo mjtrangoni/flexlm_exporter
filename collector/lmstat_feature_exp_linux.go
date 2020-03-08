@@ -35,50 +35,65 @@ const (
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 	var (
-		expires float64
-		index   int
+		expires     float64
+		index       int
+		expIndex    int
+		vendorIndex int
+		matches     []string
 	)
 
 	featuresExp := make(map[int]*featureExp)
 	// iterate over output lines
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
-		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
+		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) &&
+			!lmutilLicenseFeatureExpRegex2.MatchString(lineJoined) {
 			continue
-		}
-
-		matches := lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
-		// Parse date, month has to be capitalized.
-		slice := strings.Split(matches[4], "-")
-
-		day, month, year := slice[0], slice[1], slice[2]
-		if len(day) == lenghtOne {
-			day = "0" + day
-		}
-		if len(year) == lenghtOne {
-			year = "000" + year
-		}
-
-		expireDate, err := time.Parse("02-Jan-2006",
-			fmt.Sprintf("%s-%s-%s", day,
-				strings.Title(month), year))
-		if err != nil {
-			log.Errorf("could not convert to date: %v", err)
-		}
-
-		if expireDate.Unix() <= 0 {
-			expires = math.Inf(posInfinity)
+		} else if lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
+			matches = lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
+			expIndex = 4
+			vendorIndex = 5
 		} else {
-			expires = float64(expireDate.Unix())
+			matches = lmutilLicenseFeatureExpRegex2.FindStringSubmatch(lineJoined)
+			expIndex = 5
+			vendorIndex = 4
 		}
 
+		// Parse date, month has to be capitalized.
+		slice := strings.Split(matches[expIndex], "-")
+		if len(slice) > lenghtOne {
+			day, month, year := slice[0], slice[1], slice[2]
+			if len(day) == lenghtOne {
+				day = "0" + day
+			}
+			if len(year) == lenghtOne {
+				year = "000" + year
+			}
+
+			expireDate, err := time.Parse("02-Jan-2006",
+				fmt.Sprintf("%s-%s-%s", day,
+					strings.Title(month), year))
+			if err != nil {
+				log.Errorf("could not convert to date: %v", err)
+			}
+
+			if expireDate.Unix() <= 0 {
+				expires = math.Inf(posInfinity)
+			} else {
+				expires = float64(expireDate.Unix())
+			}
+		} else {
+			// every string matching the expiration position will be considered
+			// as permanent
+			expires = math.Inf(posInfinity)
+		}
 		index++
 
 		featuresExp[index] = &featureExp{
 			name:     matches[1],
 			expires:  expires,
 			licenses: matches[3],
-			vendor:   matches[5],
+			vendor:   matches[vendorIndex],
 			version:  matches[2],
 		}
 	}

@@ -31,4 +31,9 @@ var (
 	lmutilLicenseFeatureExpRegex = regexp.MustCompile(
 		`^(?P<feature>[[:graph:]]+)\s+(?P<version>[\d\.]+)\s+` +
 			`(?P<licenses>\d+)\s+(?P<expires>[\w\-]+)\s+(?P<vendor>\w+)$`)
+	// lmutil lmstat -c port@hostname -i case with columns expired and vendors
+	// switched #28
+	lmutilLicenseFeatureExpRegex2 = regexp.MustCompile(
+		`^(?P<feature>[[:graph:]]+)\s+(?P<version>[\d\.]+)\s+` +
+			`(?P<licenses>\d+)\s+(?P<vendor>\w+)\s+(?P<expires>[\w\-\s\(\)]+)$`)
 )
