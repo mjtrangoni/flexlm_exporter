@@ -59,6 +59,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 			vendorIndex = 4
 		}
 
+		log.Debugln(matches)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[expIndex], "-")
 		if len(slice) > lenghtOne {
