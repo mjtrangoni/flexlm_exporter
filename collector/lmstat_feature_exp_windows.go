@@ -20,10 +20,16 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
+	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
+)
+
+const (
+	lenghtOne = 1
 )
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
