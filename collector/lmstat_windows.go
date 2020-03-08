@@ -21,7 +21,9 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync"
 
+	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 )
