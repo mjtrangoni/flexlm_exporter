@@ -87,11 +87,7 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 		go func(licenses config.License) {
 			defer wg.Done()
 
-			if err := c.collect(&licenses, ch); err == nil {
-				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat_feature_exp", licenses.Name)
-			} else {
-				ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat_feature_exp", licenses.Name)
-			}
+			c.collect(&licenses, ch)
 		}(licenses)
 	}
 
@@ -99,32 +95,56 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 }
 
 // getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
-func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
-	var outBytes []byte
-	var err error
-
+func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) {
+	var (
+		outBytes []byte
+		outStr   [][]string
+		err      error
+	)
 	// Call lmstat with -i (lmstat -i does not give information from the server,
 	// but only reads the license file)
 	if licenses.LicenseFile != "" {
 		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-i")
 		if err != nil {
-			return err
+			if *expUseCache {
+				lmstatExpCacheMutex.RLock()
+				outBytes = lmstatExpCache[licenses.Name]
+				lmstatExpCacheMutex.RUnlock()
+			}
 		}
 	} else if licenses.LicenseServer != "" {
 		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-i")
 		if err != nil {
-			return err
+			if *expUseCache {
+				lmstatExpCacheMutex.RLock()
+				outBytes = lmstatExpCache[licenses.Name]
+				lmstatExpCacheMutex.RUnlock()
+			}
 		}
 	} else {
 		log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
 			licenses.Name)
-		return nil
+		return
 	}
 
-	outStr, err := splitOutput(outBytes)
+	if *expUseCache && err == nil {
+		lmstatExpCacheMutex.Lock()
+		lmstatExpCache[licenses.Name] = outBytes
+		lmstatExpCacheMutex.Unlock()
+	}
+
+	outStr, err = splitOutput(outBytes)
 	if err != nil {
 		log.Errorln(err)
-		return err
+		if *expUseCache {
+			expPreParseCacheMutex.RLock()
+			outStr = expPreParseCache[licenses.Name]
+			expPreParseCacheMutex.RUnlock()
+		}
+	} else {
+		expPreParseCacheMutex.Lock()
+		expPreParseCache[licenses.Name] = outStr
+		expPreParseCacheMutex.Unlock()
 	}
 
 	// features
@@ -133,7 +153,7 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
 		log.Fatalln("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-		return nil
+		return
 	} else if licenses.FeaturesToExclude != "" {
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
 	} else if licenses.FeaturesToInclude != "" {
@@ -184,5 +204,10 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			prometheus.GaugeValue, exp,
 			val.app, strconv.Itoa(idx), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
 	}
-	return nil
+
+	if err == nil {
+		ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 0, "lmstat_feature_exp", licenses.Name)
+	} else {
+		ch <- prometheus.MustNewConstMetric(scrapeErrorDesc, prometheus.GaugeValue, 1, "lmstat_feature_exp", licenses.Name)
+	}
 }

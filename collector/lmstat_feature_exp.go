@@ -17,8 +17,19 @@ package collector
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"gopkg.in/alecthomas/kingpin.v2"
+)
+
+var (
+	expUseCache = kingpin.Flag("collector.lmstat_feature_exp.use-cache",
+		"Use cached metrics if lmutil execution fails").Default("false").Bool()
+	lmstatExpCache        = map[string][]byte{}
+	lmstatExpCacheMutex   = sync.RWMutex{}
+	expPreParseCache      = map[string][][]string{}
+	expPreParseCacheMutex = sync.RWMutex{}
 )
 
 type lmstatFeatureExpCollector struct {
