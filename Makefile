@@ -15,7 +15,7 @@ GO                      ?= GO111MODULE=on go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
-GO_VERSION              ?= 1.14
+GO_VERSION              ?= 1.14.2
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
 DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
