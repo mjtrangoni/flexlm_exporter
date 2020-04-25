@@ -64,9 +64,9 @@ $ ./flexlm_exporter <flags>
 Docker images are available on,
 
  1. [Quay.io](https://quay.io/repository/mjtrangoni/flexlm_exporter).
-    `$ docker pull quay.io/mjtrangoni/flexlm_exporter`
+    `$ docker pull quay.io/mjtrangoni/flexlm_exporter:master`
  1. [Docker](https://hub.docker.com/r/mjtrangoni/flexlm_exporter/).
-    `$ docker pull mjtrangoni/flexlm_exporter`
+    `$ docker pull mjtrangoni/flexlm_exporter:master`
 
 You can launch a *flexlm_exporter* container with,
 
