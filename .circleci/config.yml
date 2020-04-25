@@ -53,7 +53,7 @@ jobs:
       # quay build
       - run:
           name: Quay.io Build
-          command: docker build -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH -t $QUAY_IMAGE_NAME:latest .
+          command: docker build -t $QUAY_IMAGE_NAME -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
       - run:
           name: Quay Login
           command: docker login -u $QUAYLOGIN -p $QUAYPASSWORD quay.io
