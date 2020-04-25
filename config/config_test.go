@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package config_test
 
 import (
 	"regexp"
 	"testing"
+
+	"github.com/mjtrangoni/flexlm_exporter/config"
 )
 
 const (
@@ -24,7 +26,7 @@ const (
 )
 
 func TestLoad(t *testing.T) {
-	testLicenseConfig, err := Load(testLoadYml)
+	testLicenseConfig, err := config.Load(testLoadYml)
 	if err != nil {
 		t.Fatal(err)
 	}

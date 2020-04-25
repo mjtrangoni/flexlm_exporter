@@ -102,7 +102,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 	return featuresExp
 }
 
-// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
+// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date.
 func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()

@@ -82,7 +82,7 @@ type FlexlmCollector struct {
 	Collectors map[string]Collector
 }
 
-// NewFlexlmCollector creates a new FlexlmCollector
+// NewFlexlmCollector creates a new FlexlmCollector.
 func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 	f := make(map[string]bool)
 

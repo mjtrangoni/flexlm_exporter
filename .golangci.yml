@@ -49,6 +49,11 @@ linters-settings:
     allow-case-traling-whitespace: false
     # Allow declarations (var) to be cuddled.
     allow-cuddle-declarations: false
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 13
+  testpackage:
+        skip-regexp: collector\/(lmstat_feature_exp_linux|lmstat_linux)_test\.go
 
 linters:
   enable-all: true

@@ -239,7 +239,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 	return features, licUsersByFeature, reservGroupByFeature
 }
 
-// getLmstatInfo returns lmstat binary information
+// getLmstatInfo returns lmstat binary information.
 func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 	outBytes, err := lmutilOutput("lmstat", "-v")
 	if err != nil {
@@ -260,7 +260,7 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
-// getLmstatLicensesInfo returns lmstat active licenses information
+// getLmstatLicensesInfo returns lmstat active licenses information.
 func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
