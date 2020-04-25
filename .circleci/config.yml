@@ -45,6 +45,7 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             ls -la /tmp/docker
             sudo mv /tmp/docker/* /usr/bin/
+            docker --version
             docker info
       # make and test
       - run:
