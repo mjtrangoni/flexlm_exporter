@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
-	github.com/golangci/golangci-lint v1.25.0 // indirect
+	github.com/golangci/golangci-lint v1.27.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect

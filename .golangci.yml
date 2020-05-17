@@ -61,6 +61,7 @@ linters:
     - gochecknoinits
     - gochecknoglobals
     - goimports
+    - goerr113
     - unparam
 
 run:
