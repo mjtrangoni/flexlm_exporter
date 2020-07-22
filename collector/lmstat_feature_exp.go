@@ -39,8 +39,10 @@ func NewLmstatFeatureExpCollector() (Collector, error) {
 			prometheus.BuildFQName(namespace, "feature",
 				"expiration_seconds"),
 			"License feature expiration date in seconds labeled by app, name, index, licenses, vendor, version.",
-			[]string{"app", "name", "index", "licenses", "vendor",
-				"version"}, nil,
+			[]string{
+				"app", "name", "index", "licenses", "vendor",
+				"version",
+			}, nil,
 		),
 		lmstatFeatureAggrExp: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "aggregate_expiration_seconds"),

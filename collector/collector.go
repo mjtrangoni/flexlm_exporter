@@ -139,9 +139,7 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func execute(name string, c Collector, ch chan<- prometheus.Metric) {
-	var (
-		success float64
-	)
+	var success float64
 
 	begin := time.Now()
 	err := c.Update(ch)
