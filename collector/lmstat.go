@@ -33,10 +33,8 @@ type lmstatCollector struct {
 	lmstatFeatureIssued       *prometheus.Desc
 }
 
-var (
-	// LicenseConfig is going to be read once in main, and then used here.
-	LicenseConfig config.Configuration
-)
+// LicenseConfig is going to be read once in main, and then used here.
+var LicenseConfig config.Configuration
 
 const (
 	notFound = "not found"

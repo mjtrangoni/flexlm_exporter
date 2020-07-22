@@ -18,7 +18,5 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-var (
-	// The path of the Flexlm binaries.
-	lmutilPath = kingpin.Flag("path.lmutil", "FLEXlm `lmutil` path.").Default("./flexnet/bin/lmutil").String()
-)
+// The path of the Flexlm binaries.
+var lmutilPath = kingpin.Flag("path.lmutil", "FLEXlm `lmutil` path.").Default("./flexnet/bin/lmutil").String()
