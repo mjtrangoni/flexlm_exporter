@@ -1,4 +1,4 @@
-## v0.0.5 / unreleased
+## v0.0.5 / 2020-10-15
 
  * [ENHANCEMENT] Handle case for switched columns on expirations output.
  * [ENHANCEMENT] Build Docker image on CentOS8.

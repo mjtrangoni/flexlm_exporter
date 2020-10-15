@@ -63,6 +63,7 @@ linters:
     - goimports
     - goerr113
     - unparam
+    - nlreturn
 
 run:
   skip-dirs:
