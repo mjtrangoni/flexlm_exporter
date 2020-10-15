@@ -18,14 +18,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mjtrangoni/flexlm_exporter/collector"
+	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
 	"gopkg.in/alecthomas/kingpin.v2"
-
-	"github.com/mjtrangoni/flexlm_exporter/collector"
-	"github.com/mjtrangoni/flexlm_exporter/config"
 )
 
 func init() {

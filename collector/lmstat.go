@@ -18,9 +18,8 @@ package collector
 import (
 	"fmt"
 
-	"github.com/prometheus/client_golang/prometheus"
-
 	"github.com/mjtrangoni/flexlm_exporter/config"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type lmstatCollector struct {

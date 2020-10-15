@@ -162,6 +162,7 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
 		log.Fatalln("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
+
 		return nil
 	} else if licenses.FeaturesToExclude != "" {
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
