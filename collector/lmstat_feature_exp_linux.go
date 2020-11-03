@@ -31,6 +31,7 @@ import (
 const (
 	lenghtOne   = 1
 	posInfinity = 1
+	yearLength = 4
 )
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
@@ -64,6 +65,10 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 		slice := strings.Split(matches[expIndex], "-")
 		if len(slice) > lenghtOne {
 			day, month, year := slice[0], slice[1], slice[2]
+			if len(year) > yearLength {
+				lenToRemove := len(year) - yearLength
+				year = year[:len(year)-lenToRemove]
+			}
 			if len(day) == lenghtOne {
 				day = "0" + day
 			}
