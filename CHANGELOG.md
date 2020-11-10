@@ -1,3 +1,7 @@
+## v0.0.6 / unreleased
+
+ * [BUGFIX] Fix #33 "Error during parsing expiration date". Thanks @99rgosse.
+
 ## v0.0.5 / 2020-10-15
 
  * [ENHANCEMENT] Handle case for switched columns on expirations output.
