@@ -31,7 +31,7 @@ import (
 const (
 	lenghtOne   = 1
 	posInfinity = 1
-	yearLength = 4
+	yearLength  = 4
 )
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {

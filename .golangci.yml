@@ -58,12 +58,13 @@ linters-settings:
 linters:
   enable-all: true
   disable:
+    - exhaustivestruct
     - gochecknoinits
     - gochecknoglobals
     - goimports
     - goerr113
-    - unparam
     - nlreturn
+    - unparam
 
 run:
   skip-dirs:

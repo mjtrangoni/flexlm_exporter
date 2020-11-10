@@ -17,6 +17,7 @@ package collector
 import (
 	"bytes"
 	"encoding/csv"
+	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -59,7 +60,7 @@ func lmutilOutput(args ...string) ([]byte, error) {
 		}
 	}
 
-	return out, err
+	return out, nil
 }
 
 func splitOutput(lmutilOutput []byte) ([][]string, error) {
@@ -74,7 +75,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	result, err := r.ReadAll()
 	if err != nil {
 		log.Errorf("could not parse lmutil output: %v", err)
-		return result, err
+		return result, fmt.Errorf("could not parse lmutil output: %w", err)
 	}
 
 	keys := make(map[string]int)
@@ -93,7 +94,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 		res = append(res, v)
 	}
 
-	return res, err
+	return res, nil
 }
 
 func parseLmstatVersion(outStr [][]string) lmstatInformation {

@@ -15,6 +15,7 @@
 package config
 
 import (
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -47,7 +48,7 @@ func Load(filename string) (Configuration, error) {
 
 	bytes, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
-		return Configuration{}, err
+		return Configuration{}, fmt.Errorf("failed to read %s: %w", filename, err)
 	}
 
 	var c Configuration

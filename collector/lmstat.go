@@ -90,12 +90,12 @@ func NewLmstatCollector() (Collector, error) {
 func (c *lmstatCollector) Update(ch chan<- prometheus.Metric) error {
 	err := c.getLmstatInfo(ch)
 	if err != nil {
-		return fmt.Errorf("couldn't get lmstat version information: %s", err)
+		return fmt.Errorf("couldn't get lmstat version information: %w", err)
 	}
 
 	err = c.getLmstatLicensesInfo(ch)
 	if err != nil {
-		return fmt.Errorf("couldn't get licenses information: %s", err)
+		return fmt.Errorf("couldn't get licenses information: %w", err)
 	}
 
 	return nil
