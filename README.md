@@ -1,4 +1,4 @@
-# FLEXlm Exporter [![Build Status](https://travis-ci.org/mjtrangoni/flexlm_exporter.svg)][travis]
+# FLEXlm Exporter [![Build Status](https://travis-ci.com/mjtrangoni/flexlm_exporter.svg)][travis]
 
 [![CircleCI](https://circleci.com/gh/mjtrangoni/flexlm_exporter.svg?style=svg)](https://circleci.com/gh/mjtrangoni/flexlm_exporter)
 [![Docker Repository on Quay](https://quay.io/repository/mjtrangoni/flexlm_exporter/status)][quay]
