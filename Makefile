@@ -68,7 +68,7 @@ docker:
 $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get -u github.com/prometheus/promu
+		$(GO) install -u github.com/prometheus/promu
 
 .PHONY: tarball
 tarball: promu
@@ -84,4 +84,4 @@ crossbuild: promu
 $(GOPATH)/bin/golangci-lint lint:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.32.2
+		$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint
