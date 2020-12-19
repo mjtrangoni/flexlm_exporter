@@ -1,7 +1,7 @@
 package collector
 
 // The original error codes are converted to unsigned integers,
-// e.g. -15 = 241 (-15 + 256)
+// e.g. -15 = 241 (-15 + 256).
 // Reference: http://www.opendtect.org/lic/doc/endusermanual/chap13.htm
 var errorDescriptionString = map[string]string{
 	"exit status 255": "Cannot find license file.",

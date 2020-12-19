@@ -30,6 +30,8 @@ const (
 )
 
 func TestContains(t *testing.T) {
+	t.Parallel()
+
 	containsOut := contains([]string{"a", "b"}, "b")
 	if !containsOut {
 		t.Fatalf("contains = %t - expected true", containsOut)
@@ -42,6 +44,8 @@ func TestContains(t *testing.T) {
 }
 
 func TestParseLmstatVersion(t *testing.T) {
+	t.Parallel()
+
 	dataByte, err := ioutil.ReadFile(testParseLmstatVersionNew)
 	if err != nil {
 		t.Fatal(err)
@@ -81,6 +85,8 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 		dataByte []byte
 		dataStr  [][]string
 	)
+
+	t.Parallel()
 
 	dataByte, err = ioutil.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
@@ -162,6 +168,8 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 }
 
 func TestParseLmstatLicenseInfoVendor(t *testing.T) {
+	t.Parallel()
+
 	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)
@@ -186,6 +194,8 @@ func TestParseLmstatLicenseInfoVendor(t *testing.T) {
 }
 
 func TestParseLmstatLicenseInfoFeature(t *testing.T) {
+	t.Parallel()
+
 	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)

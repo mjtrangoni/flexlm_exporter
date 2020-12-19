@@ -26,6 +26,8 @@ const (
 )
 
 func TestLoad(t *testing.T) {
+	t.Parallel()
+
 	testLicenseConfig, err := config.Load(testLoadYml)
 	if err != nil {
 		t.Fatal(err)

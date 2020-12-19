@@ -29,6 +29,8 @@ const (
 )
 
 func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
+	t.Parallel()
+
 	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseFeatureExpDate1)
 	if err != nil {
 		t.Fatal(err)
@@ -102,6 +104,8 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 }
 
 func TestParseLmstatLicenseFeatureExpDate2(t *testing.T) {
+	t.Parallel()
+
 	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseFeatureExpDate2)
 	if err != nil {
 		t.Fatal(err)
