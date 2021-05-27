@@ -38,6 +38,11 @@ type feature struct {
 	used   float64
 }
 
+type featureUserUsed struct {
+	num     float64
+	version string
+}
+
 type featureExp struct {
 	name     string
 	expires  float64

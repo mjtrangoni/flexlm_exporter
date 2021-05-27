@@ -23,13 +23,14 @@ import (
 )
 
 type lmstatCollector struct {
-	lmstatInfo                *prometheus.Desc
-	lmstatServerStatus        *prometheus.Desc
-	lmstatVendorStatus        *prometheus.Desc
-	lmstatFeatureUsed         *prometheus.Desc
-	lmstatFeatureUsedUsers    *prometheus.Desc
-	lmstatFeatureReservGroups *prometheus.Desc
-	lmstatFeatureIssued       *prometheus.Desc
+	lmstatInfo                     *prometheus.Desc
+	lmstatServerStatus             *prometheus.Desc
+	lmstatVendorStatus             *prometheus.Desc
+	lmstatFeatureUsed              *prometheus.Desc
+	lmstatFeatureUsedUsers         *prometheus.Desc
+	lmstatFeatureUsedUsersVersions *prometheus.Desc
+	lmstatFeatureReservGroups      *prometheus.Desc
+	lmstatFeatureIssued            *prometheus.Desc
 }
 
 // LicenseConfig is going to be read once in main, and then used here.
@@ -70,6 +71,11 @@ func NewLmstatCollector() (Collector, error) {
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
 			"License feature used by user labeled by app, feature name and "+
 				"username of the license.", []string{"app", "name", "user"}, nil,
+		),
+		lmstatFeatureUsedUsersVersions: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "used_users"),
+			"License feature used by user labeled by app, feature name, "+
+				"username of the license and version.", []string{"app", "name", "user", "version"}, nil,
 		),
 		lmstatFeatureReservGroups: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "reserved_groups"),
