@@ -38,11 +38,13 @@ licenses:
     features_to_exclude: feature1,feature2
     monitor_users: True
     monitor_reservations: True
+    monitor_versions: False
   - name: app2
     license_server: 28000@host1,28000@host2,28000@host3
     features_to_include: feature5,feature30
     monitor_users: True
     monitor_reservations: True
+    monitor_versions: False
 ```
 
 Notes:

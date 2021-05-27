@@ -228,20 +228,20 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature34"] {
 		if username == "user1" {
-			if licused != licUsed16 {
+			if licused.num != licUsed16 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
-					username, licused)
+					username, licused.num)
 			}
 		} else if username == "user11" {
 			foundUser11 = true
-			if licused != licUsed26 {
+			if licused.num != licUsed26 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
-					username, licused)
+					username, licused.num)
 			}
 		} else if username == "user17" {
-			if licused != licUsed12 {
+			if licused.num != licUsed12 {
 				t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
-					username, licused)
+					username, licused.num)
 			}
 		}
 	}
@@ -254,20 +254,20 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature31"] {
 		if username == "user33" {
-			if licused != licUsed16 {
+			if licused.num != licUsed16 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
-					username, licused)
+					username, licused.num)
 			}
 		} else if username == "cmfy211" {
 			foundCmfy211 = true
-			if licused != licUsed1 {
+			if licused.num != licUsed1 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
-					username, licused)
+					username, licused.num)
 			}
 		} else if username == "cmfy212" {
-			if licused != licUsed16 {
+			if licused.num != licUsed16 {
 				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
-					username, licused)
+					username, licused.num)
 			}
 		}
 	}
@@ -284,9 +284,9 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature100"] {
 		if username == "user13" {
-			if licused != licUsed1 {
+			if licused.num != licUsed1 {
 				t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
-					username, licused)
+					username, licused.num)
 			}
 		} else if username == "Administrator" {
 			// There is 2 users, and this should always enter here.
