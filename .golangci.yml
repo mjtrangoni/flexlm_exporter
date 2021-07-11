@@ -1,19 +1,14 @@
+# options for analysis running
+run:
+  modules-download-mode: mod
 linters-settings:
-  govet:
-    check-shadowing: true
-  golint:
-    min-confidence: 0
+  funlen:
+    lines: 300
+    statements: 300
   gocyclo:
     min-complexity: 40
-  gocognit:
-    min-complexity: 70
-  maligned:
-    suggest-new: true
   dupl:
-    threshold: 200
-  goconst:
-    min-len: 2
-    min-occurrences: 2
+    threshold: 150
   depguard:
     list-type: blacklist
     packages:
@@ -33,64 +28,62 @@ linters-settings:
       - experimental
     disabled-checks:
       - wrapperFunc
-  funlen:
-    lines: 140
-    statements: 50
-  wsl:
-    # If true append is only allowed to be cuddled if appending value is
-    # matching variables, fields or types on line above. Default is true.
-    strict-append: false
-    # Allow calls and assignments to be cuddled as long as the lines have any
-    # matching variables, fields or types. Default is true.
-    allow-assign-and-call: false
-    # Allow multiline assignments to be cuddled. Default is true.
-    allow-multiline-assign: false
-    # Allow case blocks to end with a whitespace.
-    allow-case-traling-whitespace: false
-    # Allow declarations (var) to be cuddled.
-    allow-cuddle-declarations: false
-  nestif:
-    # minimal complexity of if statements to report, 5 by default
-    min-complexity: 13
-  testpackage:
-        skip-regexp: collector\/(lmstat_feature_exp_linux|lmstat_linux)_test\.go
 
 linters:
-  enable-all: true
-  disable:
-    - exhaustivestruct
-    - gochecknoinits
-    - gochecknoglobals
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - exportloopref
+    - exhaustive
+    - funlen
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
     - goimports
-    - goerr113
-    - nlreturn
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - noctx
+    - nolintlint
+    - revive
+    - rowserrcheck
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
     - unparam
-
-run:
-  skip-dirs:
-    - test/testdata_etc
+    - unused
+    - varcheck
+    - whitespace
+    - wsl
 
 issues:
-  exclude-rules:
-    - text: "type `typedDesc` is unused"
-      linters:
-        - unused
-    - text: "rewrite if-else to switch statement"
-      linters:
-        - gocritic
-    - text: "consider giving a name to these results"
-      linters:
-        - gocritic
-    - text: "Subprocess launched with function call as argument or cmd arguments"
-      linters:
-        - gosec
-    - text: "if statements should only be cuddled with assignments"
-      linters:
-        - wsl
-
-# golangci.com configuration
-# https://github.com/golangci/golangci/wiki/Configuration
-service:
-  golangci-lint-version: 1.22.2 # use the fixed version to not introduce new linters unexpectedly
-  prepare:
-    - echo "here I can run custom commands, but no preparation needed for this repo"
+   exclude-rules:
+     - text: "type `typedDesc` is unused"
+       linters:
+         - unused
+     - text: "rewrite if-else to switch statement"
+       linters:
+         - gocritic
+     - text: "consider giving a name to these results"
+       linters:
+         - gocritic
+     - text: "Subprocess launched with function call as argument or cmd arguments"
+       linters:
+         - gosec
+     - text: "if statements should only be cuddled with assignments"
+       linters:
+         - wsl
