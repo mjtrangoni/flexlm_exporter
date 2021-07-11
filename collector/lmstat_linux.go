@@ -91,6 +91,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 		} else {
 			keys[key] = 1
 		}
+
 		res = append(res, v)
 	}
 
