@@ -1,5 +1,7 @@
-## v0.0.6 / unreleased
+## v0.0.6 / 2021-07-14
 
+ * [ENHANCEMENT] Add version flag to "flexlm_feature_used_users". Thanks @TobiasKadelka.
+ * [ENHANCEMENT] CI: Move from TravisCI to GitHub Actions.
  * [BUGFIX] Fix #33 "Error during parsing expiration date". Thanks @99rgosse.
 
 ## v0.0.5 / 2020-10-15
