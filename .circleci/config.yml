@@ -40,7 +40,7 @@ jobs:
           name: Install Docker client
           command: |
             set -x
-            VER="20.10.1"
+            VER="20.10.7"
             curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             ls -la /tmp/docker
@@ -75,7 +75,11 @@ jobs:
     executor: golang
     steps:
       - checkout
-      - run: curl -sL https://git.io/goreleaser | bash
+      - run:
+          name: Release binaries
+          command: |
+            go install github.com/prometheus/promu
+            curl -sL https://git.io/goreleaser | bash
 
 workflows:
   version: 2
