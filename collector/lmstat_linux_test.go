@@ -227,21 +227,23 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	)
 
 	for username, licused := range licUsersByFeature["feature34"] {
-		if username == "user1" {
-			if licused.num != licUsed16 {
-				t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
-					username, licused.num)
-			}
-		} else if username == "user11" {
-			foundUser11 = true
-			if licused.num != licUsed26 {
-				t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
-					username, licused.num)
-			}
-		} else if username == "user17" {
-			if licused.num != licUsed12 {
-				t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
-					username, licused.num)
+		for i := range licused {
+			if username == "user1" {
+				if licused[i].num != licUsed16 {
+					t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
+						username, licused[i].num)
+				}
+			} else if username == "user11" {
+				foundUser11 = true
+				if licused[i].num != licUsed26 {
+					t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
+						username, licused[i].num)
+				}
+			} else if username == "user17" {
+				if licused[i].num != licUsed12 {
+					t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
+						username, licused[i].num)
+				}
 			}
 		}
 	}
@@ -253,21 +255,23 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	foundCmfy211 := false
 
 	for username, licused := range licUsersByFeature["feature31"] {
-		if username == "user33" {
-			if licused.num != licUsed16 {
-				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
-					username, licused.num)
-			}
-		} else if username == "cmfy211" {
-			foundCmfy211 = true
-			if licused.num != licUsed1 {
-				t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
-					username, licused.num)
-			}
-		} else if username == "cmfy212" {
-			if licused.num != licUsed16 {
-				t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
-					username, licused.num)
+		for i := range licused {
+			if username == "user33" {
+				if licused[i].num != licUsed16 {
+					t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
+						username, licused[i].num)
+				}
+			} else if username == "cmfy211" {
+				foundCmfy211 = true
+				if licused[i].num != licUsed1 {
+					t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
+						username, licused[i].num)
+				}
+			} else if username == "cmfy212" {
+				if licused[i].num != licUsed16 {
+					t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
+						username, licused[i].num)
+				}
 			}
 		}
 	}
@@ -283,18 +287,20 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	)
 
 	for username, licused := range licUsersByFeature["feature100"] {
-		if username == "user13" {
-			if licused.num != licUsed1 {
-				t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
-					username, licused.num)
+		for i := range licused {
+			if username == "user13" {
+				if licused[i].num != licUsed1 {
+					t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
+						username, licused[i].num)
+				}
+			} else if username == "Administrator" {
+				// There is 2 users, and this should always enter here.
+				found = true
+			} else if username == "John Doe" {
+				foundJohnDoe = true
+			} else if username == "Jane Doe Jr." {
+				foundJaneDoe = true
 			}
-		} else if username == "Administrator" {
-			// There is 2 users, and this should always enter here.
-			found = true
-		} else if username == "John Doe" {
-			foundJohnDoe = true
-		} else if username == "Jane Doe Jr." {
-			foundJaneDoe = true
 		}
 	}
 	if !found {
