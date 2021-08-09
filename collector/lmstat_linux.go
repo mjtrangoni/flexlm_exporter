@@ -172,9 +172,9 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 }
 
 func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
-	map[string]map[string]*featureUserUsed, map[string]map[string]float64) {
+	map[string]map[string][]*featureUserUsed, map[string]map[string]float64) {
 	features := make(map[string]*feature)
-	licUsersByFeature := make(map[string]map[string]*featureUserUsed)
+	licUsersByFeature := make(map[string]map[string][]*featureUserUsed)
 	reservGroupByFeature := make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
@@ -204,7 +204,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			}
 		} else if lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined) {
 			if licUsersByFeature[featureName] == nil {
-				licUsersByFeature[featureName] = map[string]*featureUserUsed{}
+				licUsersByFeature[featureName] = map[string][]*featureUserUsed{}
 			}
 			matches := lmutilLicenseFeatureUsageUserRegex.FindStringSubmatch(lineJoined)
 			username := matches[1]
@@ -215,10 +215,15 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 				username = matches[1]
 			}
 			if matches[2] != "" {
-				if exists, ok := licUsersByFeature[featureName][username]; ok {
-					licUsersByFeature[featureName][username] = &featureUserUsed{num: exists.num, version: matches[2]}
-				} else {
-					licUsersByFeature[featureName][username] = &featureUserUsed{num: 0, version: matches[2]}
+				var found = -1
+				for i := range licUsersByFeature[featureName][username] {
+					if licUsersByFeature[featureName][username][i].version == matches[2] {
+						found = i
+					}
+				}
+				if found < 0 {
+					licUsersByFeature[featureName][username] = append(licUsersByFeature[featureName][username],
+						&featureUserUsed{num: 0, version: matches[2]})
 				}
 			}
 			if matches[4] != "" {
@@ -227,9 +232,17 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 					log.Errorf("could not convert %s to integer: %v",
 						matches[4], err)
 				}
-				licUsersByFeature[featureName][username].num += float64(licUsed)
+				for i := range licUsersByFeature[featureName][username] {
+					if licUsersByFeature[featureName][username][i].version == matches[2] {
+						licUsersByFeature[featureName][username][i].num += float64(licUsed)
+					}
+				}
 			} else {
-				licUsersByFeature[featureName][username].num += 1.0
+				for i := range licUsersByFeature[featureName][username] {
+					if licUsersByFeature[featureName][username][i].version == matches[2] {
+						licUsersByFeature[featureName][username][i].num += 1.0
+					}
+				}
 			}
 		} else if lmutilLicenseFeatureGroupReservRegex.MatchString(lineJoined) {
 			if reservGroupByFeature[featureName] == nil {
@@ -375,15 +388,19 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
 			if licenses.MonitorVersions {
 				for username, licused := range licUsersByFeature[name] {
-					ch <- prometheus.MustNewConstMetric(
-						c.lmstatFeatureUsedUsersVersions, prometheus.GaugeValue,
-						licused.num, licenses.Name, name, username, licused.version)
+					for i := range licused {
+						ch <- prometheus.MustNewConstMetric(
+							c.lmstatFeatureUsedUsersVersions, prometheus.GaugeValue,
+							licused[i].num, licenses.Name, name, username, licused[i].version)
+					}
 				}
 			} else {
 				for username, licused := range licUsersByFeature[name] {
-					ch <- prometheus.MustNewConstMetric(
-						c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
-						licused.num, licenses.Name, name, username)
+					for i := range licused {
+						ch <- prometheus.MustNewConstMetric(
+							c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
+							licused[i].num, licenses.Name, name, username)
+					}
 				}
 			}
 		}
