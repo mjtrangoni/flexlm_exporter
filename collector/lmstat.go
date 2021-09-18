@@ -18,6 +18,7 @@ package collector
 import (
 	"fmt"
 
+	"github.com/go-kit/log"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -31,6 +32,7 @@ type lmstatCollector struct {
 	lmstatFeatureUsedUsersVersions *prometheus.Desc
 	lmstatFeatureReservGroups      *prometheus.Desc
 	lmstatFeatureIssued            *prometheus.Desc
+	logger                         log.Logger
 }
 
 // LicenseConfig is going to be read once in main, and then used here.
@@ -45,7 +47,7 @@ func init() {
 }
 
 // NewLmstatCollector returns a new Collector exposing lmstat license stats.
-func NewLmstatCollector() (Collector, error) {
+func NewLmstatCollector(logger log.Logger) (Collector, error) {
 	return &lmstatCollector{
 		lmstatInfo: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "lmstat", "info"),
@@ -88,6 +90,7 @@ func NewLmstatCollector() (Collector, error) {
 			"License feature issued labeled by app and feature name of the license.",
 			[]string{"app", "name"}, nil,
 		),
+		logger: logger,
 	}, nil
 }
 

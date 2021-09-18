@@ -27,6 +27,7 @@ linters-settings:
       - style
       - experimental
     disabled-checks:
+      - whyNoLint
       - wrapperFunc
 
 linters:
@@ -87,3 +88,6 @@ issues:
      - text: "if statements should only be cuddled with assignments"
        linters:
          - wsl
+     - text: "Error return value of `` is not checked"
+       linters:
+         errcheck

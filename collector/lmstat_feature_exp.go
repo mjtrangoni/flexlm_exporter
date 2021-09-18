@@ -18,12 +18,14 @@ package collector
 import (
 	"fmt"
 
+	"github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type lmstatFeatureExpCollector struct {
 	lmstatFeatureExp     *prometheus.Desc
 	lmstatFeatureAggrExp *prometheus.Desc
+	logger               log.Logger
 }
 
 func init() {
@@ -33,7 +35,7 @@ func init() {
 
 // NewLmstatFeatureExpCollector returns a new Collector exposing lmstat license
 // feature expiration date.
-func NewLmstatFeatureExpCollector() (Collector, error) {
+func NewLmstatFeatureExpCollector(logger log.Logger) (Collector, error) {
 	return &lmstatFeatureExpCollector{
 		lmstatFeatureExp: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature",
@@ -49,6 +51,7 @@ func NewLmstatFeatureExpCollector() (Collector, error) {
 			"Aggregate by license features expiration day in seconds. Labeled by app, licenses, features.",
 			[]string{"app", "index", "licenses", "features"}, nil,
 		),
+		logger: logger,
 	}, nil
 }
 

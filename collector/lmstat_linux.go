@@ -24,9 +24,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 )
 
 // contains check if an array contains a string.
@@ -42,7 +43,13 @@ func contains(slice []string, item string) bool {
 }
 
 // execute lmutil utility.
-func lmutilOutput(args ...string) ([]byte, error) {
+func lmutilOutput(logger log.Logger, args ...string) ([]byte, error) {
+	_, err := os.Stat(*lmutilPath)
+	if os.IsNotExist(err) {
+		level.Error(logger).Log("err", *lmutilPath, "missing")
+		os.Exit(1)
+	}
+
 	cmd := exec.Command(*lmutilPath, args...)
 	// Disable localization for parsing.
 	cmd.Env = append(os.Environ(), "LANG=C")
@@ -52,12 +59,12 @@ func lmutilOutput(args ...string) ([]byte, error) {
 		// convert error to strings
 		errorToString := errorDescriptionString[err.Error()]
 		if errorToString != "" {
-			log.Errorf("error while calling '%s %s': %v:'%s'", *lmutilPath,
+			return nil, fmt.Errorf("error while calling '%s %s': %v:'%s'", *lmutilPath,
 				strings.Join(args, " "), err, errorToString)
-		} else {
-			log.Errorf("error while calling '%s %s': %v:'unknown error'",
-				*lmutilPath, strings.Join(args, " "), err)
 		}
+
+		return nil, fmt.Errorf("error while calling '%s %s': %v:'unknown error'",
+			*lmutilPath, strings.Join(args, " "), err)
 	}
 
 	return out, nil
@@ -74,7 +81,6 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 
 	result, err := r.ReadAll()
 	if err != nil {
-		log.Errorf("could not parse lmutil output: %v", err)
 		return result, fmt.Errorf("could not parse lmutil output: %w", err)
 	}
 
@@ -171,7 +177,7 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 	return vendors
 }
 
-func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
+func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[string]*feature,
 	map[string]map[string][]*featureUserUsed, map[string]map[string]float64) {
 	features := make(map[string]*feature)
 	licUsersByFeature := make(map[string]map[string][]*featureUserUsed)
@@ -186,16 +192,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 
 			issued, err := strconv.Atoi(matches[2])
 			if err != nil {
-				log.Errorf("could not convert %s to integer: %v", matches[2],
-					err)
+				level.Error(logger).Log("could not convert", matches[2], "to integer:", err)
 			}
 
 			featureName = matches[1]
 
 			used, err := strconv.Atoi(matches[3])
 			if err != nil {
-				log.Errorf("could not convert %s to integer: %v", matches[3],
-					err)
+				level.Error(logger).Log("could not convert", matches[3], "to integer:", err)
 			}
 
 			features[featureName] = &feature{
@@ -209,7 +213,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			matches := lmutilLicenseFeatureUsageUserRegex.FindStringSubmatch(lineJoined)
 			username := matches[1]
 			if strings.TrimSpace(username) == "" {
-				log.Debugln("username couldn't be found for '" + lineJoined +
+				level.Debug(logger).Log("username couldn't be found for '", lineJoined,
 					"', using lmutilLicenseFeatureUsageUser2Regex.")
 				matches = lmutilLicenseFeatureUsageUser2Regex.FindStringSubmatch(lineJoined)
 				username = matches[1]
@@ -229,8 +233,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			if matches[4] != "" {
 				licUsed, err := strconv.Atoi(matches[4])
 				if err != nil {
-					log.Errorf("could not convert %s to integer: %v",
-						matches[4], err)
+					level.Error(logger).Log("could not convert", matches[4], "to integer:", err)
 				}
 				for i := range licUsersByFeature[featureName][username] {
 					if licUsersByFeature[featureName][username][i].version == matches[2] {
@@ -251,8 +254,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 			matches := lmutilLicenseFeatureGroupReservRegex.FindStringSubmatch(lineJoined)
 			groupReserv, err := strconv.Atoi(matches[2])
 			if err != nil {
-				log.Errorf("could not convert %s to integer: %v", matches[1],
-					err)
+				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
 			}
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
 		}
@@ -263,15 +265,13 @@ func parseLmstatLicenseInfoFeature(outStr [][]string) (map[string]*feature,
 
 // getLmstatInfo returns lmstat binary information.
 func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
-	outBytes, err := lmutilOutput("lmstat", "-v")
+	outBytes, err := lmutilOutput(c.logger, "lmstat", "-v")
 	if err != nil {
-		log.Errorln(err)
 		return err
 	}
 
 	outStr, err := splitOutput(outBytes)
 	if err != nil {
-		log.Errorln(err)
 		return err
 	}
 
@@ -312,24 +312,22 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 
 	// Call lmstat with -a (display everything)
 	if licenses.LicenseFile != "" {
-		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-a")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-a")
 		if err != nil {
 			return err
 		}
 	} else if licenses.LicenseServer != "" {
-		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-a")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-a")
 		if err != nil {
 			return err
 		}
 	} else {
-		log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
+		return fmt.Errorf("couldn`t find `license_file` or `license_server` for %v",
 			licenses.Name)
-		return nil
 	}
 
 	outStr, err := splitOutput(outBytes)
 	if err != nil {
-		log.Errorln(err)
 		return err
 	}
 
@@ -364,16 +362,15 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 	)
 
 	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
-		log.Fatalln("%v: can not define `features_to_include` and "+
+		return fmt.Errorf("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-		return nil
 	} else if licenses.FeaturesToExclude != "" {
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
 	} else if licenses.FeaturesToInclude != "" {
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 
-	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr)
+	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr, c.logger)
 	for name, info := range features {
 		if contains(featuresToExclude, name) {
 			continue

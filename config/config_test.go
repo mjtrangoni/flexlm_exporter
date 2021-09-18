@@ -18,6 +18,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/go-kit/log"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 )
 
@@ -28,7 +29,7 @@ const (
 func TestLoad(t *testing.T) {
 	t.Parallel()
 
-	testLicenseConfig, err := config.Load(testLoadYml)
+	testLicenseConfig, err := config.Load(testLoadYml, log.NewNopLogger())
 	if err != nil {
 		t.Fatal(err)
 	}
