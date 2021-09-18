@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build linux || windows
 // +build linux windows
 
 package collector
