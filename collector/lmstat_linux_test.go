@@ -17,6 +17,8 @@ package collector
 import (
 	"io/ioutil"
 	"testing"
+
+	"github.com/go-kit/log"
 )
 
 const (
@@ -206,7 +208,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(dataStr)
+	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
 	for name, info := range features {
 		if name == "feature11" {
 			if info.issued != 16384 || info.used != 80 {

@@ -23,9 +23,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 )
 
 const (
@@ -34,7 +35,7 @@ const (
 	yearLength  = 4
 )
 
-func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
+func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[int]*featureExp {
 	var (
 		expires     float64
 		index       int
@@ -60,7 +61,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 			vendorIndex = 4
 		}
 
-		log.Debugln(matches)
+		level.Debug(logger).Log(matches)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[expIndex], "-")
 		if len(slice) > lenghtOne {
@@ -80,7 +81,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string) map[int]*featureExp {
 				fmt.Sprintf("%s-%s-%s", day,
 					strings.Title(month), year))
 			if err != nil {
-				log.Errorf("could not convert to date: %v", err)
+				level.Error(logger).Log("could not convert to date:", err)
 			}
 
 			if expireDate.Unix() <= 0 {
@@ -137,24 +138,21 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	// Call lmstat with -i (lmstat -i does not give information from the server,
 	// but only reads the license file)
 	if licenses.LicenseFile != "" {
-		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseFile, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-i")
 		if err != nil {
 			return err
 		}
 	} else if licenses.LicenseServer != "" {
-		outBytes, err = lmutilOutput("lmstat", "-c", licenses.LicenseServer, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-i")
 		if err != nil {
 			return err
 		}
 	} else {
-		log.Fatalf("couldn`t find `license_file` or `license_server` for %v",
-			licenses.Name)
-		return nil
+		return fmt.Errorf("couldn`t find `license_file` or `license_server` for %v", licenses.Name)
 	}
 
 	outStr, err := splitOutput(outBytes)
 	if err != nil {
-		log.Errorln(err)
 		return err
 	}
 
@@ -165,17 +163,15 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	)
 
 	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
-		log.Fatalln("%v: can not define `features_to_include` and "+
+		return fmt.Errorf("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-
-		return nil
 	} else if licenses.FeaturesToExclude != "" {
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
 	} else if licenses.FeaturesToInclude != "" {
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 
-	featuresExp := parseLmstatLicenseFeatureExpDate(outStr)
+	featuresExp := parseLmstatLicenseFeatureExpDate(outStr, c.logger)
 	aggrFeaturesExpMap := make(map[float64]*aggrFeaturesExp)
 
 	for idx, feature := range featuresExp {

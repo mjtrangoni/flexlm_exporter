@@ -19,7 +19,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/prometheus/common/log"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"gopkg.in/yaml.v3"
 )
 
@@ -43,9 +44,9 @@ type Configuration struct {
 }
 
 // Load parses the YAML file.
-func Load(filename string) (Configuration, error) {
-	log.Infoln("Loading license config file:")
-	log.Infof(" - %s", filename)
+func Load(filename string, logger log.Logger) (Configuration, error) {
+	level.Info(logger).Log("msg", "Loading license config file:")
+	level.Info(logger).Log(" - ", filename)
 
 	bytes, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
@@ -56,7 +57,8 @@ func Load(filename string) (Configuration, error) {
 
 	err = yaml.Unmarshal(bytes, &c)
 	if err != nil {
-		log.Fatalf("Couldn't load config file: %s", err)
+		level.Error(logger).Log("Couldn't load config file: ", err)
+		return c, err
 	}
 
 	return c, nil

@@ -20,8 +20,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -55,11 +56,14 @@ const (
 )
 
 var (
-	factories      = make(map[string]func() (Collector, error))
-	collectorState = make(map[string]*bool)
+	factories              = make(map[string]func(logger log.Logger) (Collector, error))
+	initiatedCollectorsMtx = sync.Mutex{}
+	initiatedCollectors    = make(map[string]Collector)
+	collectorState         = make(map[string]*bool)
+	forcedCollectors       = map[string]bool{} // collectors which have been explicitly enabled or disabled
 )
 
-func registerCollector(collector string, isDefaultEnabled bool, factory func() (Collector, error)) {
+func registerCollector(collector string, isDefaultEnabled bool, factory func(logger log.Logger) (Collector, error)) {
 	var helpDefaultState string
 	if isDefaultEnabled {
 		helpDefaultState = "enabled"
@@ -71,7 +75,7 @@ func registerCollector(collector string, isDefaultEnabled bool, factory func() (
 	flagHelp := fmt.Sprintf("Enable the %s collector (default: %s).", collector, helpDefaultState)
 	defaultValue := fmt.Sprintf("%v", isDefaultEnabled)
 
-	flag := kingpin.Flag(flagName, flagHelp).Default(defaultValue).Bool()
+	flag := kingpin.Flag(flagName, flagHelp).Default(defaultValue).Action(collectorFlagAction(collector)).Bool()
 	collectorState[collector] = flag
 
 	factories[collector] = factory
@@ -80,10 +84,23 @@ func registerCollector(collector string, isDefaultEnabled bool, factory func() (
 // FlexlmCollector implements the prometheus.Collector interface.
 type FlexlmCollector struct {
 	Collectors map[string]Collector
+	logger     log.Logger
+}
+
+// collectorFlagAction generates a new action function for the given collector
+// to track whether it has been explicitly enabled or disabled from the command line.
+// A new action function is needed for each collector flag because the ParseContext
+// does not contain information about which flag called the action.
+// See: https://github.com/alecthomas/kingpin/issues/294
+func collectorFlagAction(collector string) func(ctx *kingpin.ParseContext) error {
+	return func(ctx *kingpin.ParseContext) error {
+		forcedCollectors[collector] = true
+		return nil
+	}
 }
 
 // NewFlexlmCollector creates a new FlexlmCollector.
-func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
+func NewFlexlmCollector(logger log.Logger, filters ...string) (*FlexlmCollector, error) {
 	f := make(map[string]bool)
 
 	for _, filter := range filters {
@@ -100,19 +117,26 @@ func NewFlexlmCollector(filters ...string) (*FlexlmCollector, error) {
 
 	collectors := make(map[string]Collector)
 
+	initiatedCollectorsMtx.Lock()
+	defer initiatedCollectorsMtx.Unlock()
+
 	for key, enabled := range collectorState {
-		if *enabled {
-			collector, err := factories[key]()
+		if !*enabled || (len(f) > 0 && !f[key]) {
+			continue
+		}
+		if collector, ok := initiatedCollectors[key]; ok {
+			collectors[key] = collector
+		} else {
+			collector, err := factories[key](log.With(logger, "collector", key))
 			if err != nil {
 				return nil, err
 			}
-			if len(f) == 0 || f[key] {
-				collectors[key] = collector
-			}
+			collectors[key] = collector
+			initiatedCollectors[key] = collector
 		}
 	}
 
-	return &FlexlmCollector{Collectors: collectors}, nil
+	return &FlexlmCollector{Collectors: collectors, logger: logger}, nil
 }
 
 // Describe implements the prometheus.Collector interface.
@@ -130,7 +154,7 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 
 	for name, c := range n.Collectors {
 		go func(name string, c Collector) {
-			execute(name, c, ch)
+			execute(name, c, ch, n.logger)
 			wg.Done()
 		}(name, c)
 	}
@@ -138,7 +162,7 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 	wg.Wait()
 }
 
-func execute(name string, c Collector, ch chan<- prometheus.Metric) {
+func execute(name string, c Collector, ch chan<- prometheus.Metric, logger log.Logger) {
 	var success float64
 
 	begin := time.Now()
@@ -146,11 +170,11 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric) {
 	duration := time.Since(begin)
 
 	if err != nil {
-		log.Errorf("ERROR: %s collector failed after %fs: %s", name, duration.Seconds(), err)
+		level.Error(logger).Log(name, "collector failed after:", duration.Seconds(), ":", err)
 
 		success = 0
 	} else {
-		log.Debugf("OK: %s collector succeeded after %fs.", name, duration.Seconds())
+		level.Debug(logger).Log("OK:", name, "collector succeeded after:", duration.Seconds())
 		success = 1
 	}
 	ch <- prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name)
