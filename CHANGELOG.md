@@ -1,7 +1,7 @@
 ## v0.0.7 / 2021-09-25
 
  * [ENHANCEMENT] Replace deprecated `prometheus/common/log` with `go-kit/log`.
- * [BUGFIX] Count licenses seperately for different versions, which fix
+ * [BUGFIX] Count licenses separately for different versions, which fix
    "flexlm_feature_used_users" implementation. Thanks @TobiasKadelka.
 
 ## v0.0.6 / 2021-07-14
