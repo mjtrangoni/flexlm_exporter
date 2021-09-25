@@ -12,10 +12,10 @@
 [Prometheus](https://prometheus.io/) exporter for FLEXlm License Manager
 `lmstat` license information.
 
-## Getting
+## Install
 
 ```
-$ go get github.com/mjtrangoni/flexlm_exporter
+$ go install github.com/mjtrangoni/flexlm_exporter
 ```
 
 ## Building
