@@ -1,3 +1,7 @@
+## v0.0.8 / unreleased
+
+ * [ENHANCEMENT] Replace EOL CentOS8 docker image with RockyLinux8.
+
 ## v0.0.7 / 2021-09-25
 
  * [ENHANCEMENT] Replace deprecated `prometheus/common/log` with `go-kit/log`.
