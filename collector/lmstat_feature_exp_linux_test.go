@@ -15,8 +15,8 @@
 package collector
 
 import (
-	"io/ioutil"
 	"math"
+	"os"
 	"testing"
 
 	"github.com/go-kit/log"
@@ -33,7 +33,7 @@ const (
 func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 	t.Parallel()
 
-	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseFeatureExpDate1)
+	dataByte, err := os.ReadFile(testParseLmstatLicenseFeatureExpDate1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -108,7 +108,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 func TestParseLmstatLicenseFeatureExpDate2(t *testing.T) {
 	t.Parallel()
 
-	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseFeatureExpDate2)
+	dataByte, err := os.ReadFile(testParseLmstatLicenseFeatureExpDate2)
 	if err != nil {
 		t.Fatal(err)
 	}

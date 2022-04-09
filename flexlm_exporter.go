@@ -92,8 +92,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		level.Warn(h.logger).Log("msg", "Couldn't create filtered metrics handler:", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
-		//nolint:errcheck
-		w.Write([]byte(fmt.Sprintf("Couldn't create filtered metrics handler: %s", err)))
+		fmt.Fprintf(w, "Couldn't create filtered metrics handler: %s", err)
 
 		return
 	}
@@ -207,7 +206,6 @@ func main() {
 
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		//nolint:errcheck
 		w.Write([]byte(`<html>
 			<head><title>Node Exporter</title></head>
 			<body>
