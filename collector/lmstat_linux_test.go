@@ -15,7 +15,7 @@
 package collector
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/go-kit/log"
@@ -28,7 +28,7 @@ const (
 	testParseLmstatVersionOld   = "fixtures/lmstat_old.txt"
 	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
 	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
-	testParseLmstatServerUpWin  = "fixtures/lmstat_server_up_win.txt"
+	testParseLmstatServerUp     = "fixtures/lmstat_server_up_win.txt"
 )
 
 func TestContains(t *testing.T) {
@@ -48,7 +48,7 @@ func TestContains(t *testing.T) {
 func TestParseLmstatVersion(t *testing.T) {
 	t.Parallel()
 
-	dataByte, err := ioutil.ReadFile(testParseLmstatVersionNew)
+	dataByte, err := os.ReadFile(testParseLmstatVersionNew)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func TestParseLmstatVersion(t *testing.T) {
 		t.Fatalf("Unexpected values %s, %s, %s != x64_lsb, 188735, v11.14.0.1", lmstatInfo.arch, lmstatInfo.build, lmstatInfo.version)
 	}
 
-	dataByte, err = ioutil.ReadFile(testParseLmstatVersionOld)
+	dataByte, err = os.ReadFile(testParseLmstatVersionOld)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -90,7 +90,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 
 	t.Parallel()
 
-	dataByte, err = ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	dataByte, err = os.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -117,7 +117,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 		}
 	}
 
-	dataByte, err = ioutil.ReadFile(testParseLmstatServerDown)
+	dataByte, err = os.ReadFile(testParseLmstatServerDown)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 		}
 	}
 
-	dataByte, err = ioutil.ReadFile(testParseLmstatServerUpWin)
+	dataByte, err = os.ReadFile(testParseLmstatServerUp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -172,7 +172,7 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 func TestParseLmstatLicenseInfoVendor(t *testing.T) {
 	t.Parallel()
 
-	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	dataByte, err := os.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -198,7 +198,7 @@ func TestParseLmstatLicenseInfoVendor(t *testing.T) {
 func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	t.Parallel()
 
-	dataByte, err := ioutil.ReadFile(testParseLmstatLicenseInfo1)
+	dataByte, err := os.ReadFile(testParseLmstatLicenseInfo1)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -16,7 +16,7 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/go-kit/log"
@@ -48,7 +48,7 @@ func Load(filename string, logger log.Logger) (Configuration, error) {
 	level.Info(logger).Log("msg", "Loading license config file:")
 	level.Info(logger).Log(" - ", filename)
 
-	bytes, err := ioutil.ReadFile(filepath.Clean(filename))
+	bytes, err := os.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return Configuration{}, fmt.Errorf("failed to read %s: %w", filename, err)
 	}
@@ -56,6 +56,7 @@ func Load(filename string, logger log.Logger) (Configuration, error) {
 	var c Configuration
 
 	err = yaml.Unmarshal(bytes, &c)
+
 	if err != nil {
 		level.Error(logger).Log("Couldn't load config file: ", err)
 		return c, err

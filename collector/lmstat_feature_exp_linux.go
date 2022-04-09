@@ -27,6 +27,8 @@ import (
 	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -79,7 +81,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[
 
 			expireDate, err := time.Parse("02-Jan-2006",
 				fmt.Sprintf("%s-%s-%s", day,
-					strings.Title(month), year))
+					cases.Title(language.English).String(month), year))
 			if err != nil {
 				level.Error(logger).Log("could not convert to date:", err)
 			}

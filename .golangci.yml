@@ -82,12 +82,12 @@ issues:
      - text: "consider giving a name to these results"
        linters:
          - gocritic
-     - text: "Subprocess launched with function call as argument or cmd arguments"
+     - text: "Subprocess launched with a potential tainted input or cmd arguments"
        linters:
          - gosec
      - text: "if statements should only be cuddled with assignments"
        linters:
          - wsl
-     - text: "Error return value of `` is not checked"
+     - text: "Error return value of"
        linters:
          errcheck
