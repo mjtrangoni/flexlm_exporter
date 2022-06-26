@@ -18,18 +18,24 @@ jobs:
       - run: codespell --skip=".git,./vendor"
 
   build:
-    executor: golang
-
+    docker:
+      - image: cimg/go:1.18
     environment:
      - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
      - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
     steps:
       # checkout the project
       - checkout
+
       # make and test
       - run:
           name: Binary Build
           command: make
+
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+
       # quay build
       - run:
           name: Quay.io Build
