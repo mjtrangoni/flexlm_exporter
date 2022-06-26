@@ -7,23 +7,15 @@ executors:
   golang:
     docker:
     - image: cimg/go:1.18
-    parameters:
-      working_dir:
-        type: string
-        default: ~/project
-    working_directory: /go/src/github.com/mjtrangoni/flexlm_exporter
-  python:
-    docker:
-    - image: cimg/python:3.10.4
 
 jobs:
   codespell:
-    executor: python
-
+    docker:
+      - image: circleci/python
     steps:
-    - checkout
-    - run: pip3 install codespell
-    - run: codespell --skip=".git,./vendor"
+      - checkout
+      - run: sudo pip install codespell
+      - run: codespell --skip=".git,./vendor"
 
   build:
     executor: golang
