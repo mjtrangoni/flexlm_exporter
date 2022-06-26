@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/mjtrangoni/flexlm_exporter.svg?style=svg)](https://circleci.com/gh/mjtrangoni/flexlm_exporter)
 [![Docker Repository on Quay](https://quay.io/repository/mjtrangoni/flexlm_exporter/status)][quay]
-[![Docker Pulls](https://img.shields.io/docker/pulls/mjtrangoni/flexlm_exporter.svg?maxAge=604800)][hub]
+[![Docker Pulls](https://badgen.net/docker/pulls/mjtrangoni/flexlm_exporter?icon=docker)][hub]
 [![Go Reference](https://pkg.go.dev/badge/github.com/mjtrangoni/flexlm_exporter.svg)](https://pkg.go.dev/github.com/mjtrangoni/flexlm_exporter)
 [![Coverage Status](https://coveralls.io/repos/github/mjtrangoni/flexlm_exporter/badge.svg?branch=master)](https://coveralls.io/github/mjtrangoni/flexlm_exporter?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mjtrangoni/flexlm_exporter)](https://goreportcard.com/report/github.com/mjtrangoni/flexlm_exporter)
@@ -14,13 +14,13 @@
 
 ## Install
 
-```
+```shell
 $ go install github.com/mjtrangoni/flexlm_exporter
 ```
 
 ## Building
 
-```
+```shell
 $ cd $GOPATH/src/github.com/mjtrangoni/flexlm_exporter
 $ make
 ```
@@ -29,7 +29,7 @@ $ make
 
 This is an illustrative example of the configuration file in YAML format.
 
-```
+```yaml
 # FlexLM Licenses to be monitored.
 ---
 licenses:
@@ -70,10 +70,20 @@ Docker images are available on,
  1. [Docker](https://hub.docker.com/r/mjtrangoni/flexlm_exporter/).
     `$ docker pull mjtrangoni/flexlm_exporter:master`
 
+Please make sure that SELinux is not running in your host, or run the container
+as root.
+
 You can launch a *flexlm_exporter* container with,
 
-```
-$ docker run --name flexlm_exporter -d -p 9319:9319 --volume $LMUTIL_LOCAL:/usr/bin/flexlm/ --volume $CONFIG_PATH_LOCAL:/config $DOCKER_REPOSITORY --path.lmutil="/usr/bin/flexlm/lmutil" --path.config="/config/licenses.yml"
+```shell
+$ export DOCKER_REPOSITORY="quay.io/mjtrangoni/flexlm_exporter:latest"
+$ export LMUTIL_LOCAL="PATH where your lmutil binary is located"
+$ export CONFIG_PATH_LOCAL="PATH where your exporter config file is located"
+$ docker run --name flexlm_exporter -d -p 9319:9319 \
+    --volume $LMUTIL_LOCAL:/usr/bin/flexlm/ \
+    --volume $CONFIG_PATH_LOCAL:/home/exporter/config/licenses.yml \
+    $DOCKER_REPOSITORY --path.lmutil="/usr/bin/flexlm/lmutil" \
+    --path.config="/home/exporter/config/licenses.yml"
 ```
 
 Metrics will now be reachable at http://localhost:9319/metrics.

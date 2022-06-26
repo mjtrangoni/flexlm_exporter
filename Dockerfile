@@ -8,6 +8,18 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial && \
 
 COPY flexlm_exporter /bin/flexlm_exporter
 
+# Add exporter user and group
+RUN groupadd -g 30001 exporter && \
+  useradd --no-log-init -m -d /home/exporter -u 30001 -g 30001 exporter
+
 EXPOSE      9319
-USER        nobody
+USER        exporter
+WORKDIR     /home/exporter
+
+RUN mkdir -p /home/exporter/config &&\
+  chown -R 30001:30001 /home/exporter/config
+
+# Default home dir
+ENV HOME=/home/exporter
+
 ENTRYPOINT  [ "/bin/flexlm_exporter" ]
