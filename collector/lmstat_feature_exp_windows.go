@@ -27,61 +27,94 @@ import (
 	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
-	lenghtOne = 1
+	lenghtOne   = 1
+	posInfinity = 1
+	yearLength  = 4
 )
 
 func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[int]*featureExp {
+	var (
+		expires     float64
+		index       int
+		expIndex    int
+		vendorIndex int
+		matches     []string
+	)
+
 	featuresExp := make(map[int]*featureExp)
-	var expires float64
-	var index int
 	// iterate over output lines
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
-		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
+		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) &&
+			!lmutilLicenseFeatureExpRegex2.MatchString(lineJoined) {
 			continue
-		}
-		matches := lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
-		// Parse date, month has to be capitalized.
-		slice := strings.Split(matches[4], "-")
-		day, month, year := slice[0], slice[1], slice[2]
-		if len(day) == 1 {
-			day = "0" + day
-		}
-		if len(year) == 1 {
-			year = "000" + year
-		}
-		expireDate, err := time.Parse("02-Jan-2006",
-			fmt.Sprintf("%s-%s-%s", day,
-				strings.Title(month), year))
-		if err != nil {
-			level.Error(logger).Log("could not convert to date:", err)
-		}
-
-		if expireDate.Unix() <= 0 {
-			expires = math.Inf(1)
+		} else if lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
+			matches = lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
+			expIndex = 4
+			vendorIndex = 5
 		} else {
-			expires = float64(expireDate.Unix())
+			matches = lmutilLicenseFeatureExpRegex2.FindStringSubmatch(lineJoined)
+			expIndex = 5
+			vendorIndex = 4
 		}
 
+		level.Debug(logger).Log(matches)
+		// Parse date, month has to be capitalized.
+		slice := strings.Split(matches[expIndex], "-")
+		if len(slice) > lenghtOne {
+			day, month, year := slice[0], slice[1], slice[2]
+			if len(year) > yearLength {
+				lenToRemove := len(year) - yearLength
+				year = year[:len(year)-lenToRemove]
+			}
+			if len(day) == lenghtOne {
+				day = "0" + day
+			}
+			if len(year) == lenghtOne {
+				year = "000" + year
+			}
+
+			expireDate, err := time.Parse("02-Jan-2006",
+				fmt.Sprintf("%s-%s-%s", day,
+					cases.Title(language.English).String(month), year))
+			if err != nil {
+				level.Error(logger).Log("could not convert to date:", err)
+			}
+
+			if expireDate.Unix() <= 0 {
+				expires = math.Inf(posInfinity)
+			} else {
+				expires = float64(expireDate.Unix())
+			}
+		} else {
+			// every string matching the expiration position will be considered
+			// as permanent
+			expires = math.Inf(posInfinity)
+		}
 		index++
+
 		featuresExp[index] = &featureExp{
 			name:     matches[1],
 			expires:  expires,
 			licenses: matches[3],
-			vendor:   matches[5],
+			vendor:   matches[vendorIndex],
 			version:  matches[2],
 		}
 	}
+
 	return featuresExp
 }
 
-// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
+// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date.
 func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
+
 	for _, licenses := range LicenseConfig.Licenses {
 		wg.Add(lenghtOne)
 
@@ -99,11 +132,11 @@ func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus
 	return nil
 }
 
-// getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date
 func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- prometheus.Metric) error {
-	var outBytes []byte
-	var err error
-
+	var (
+		outBytes []byte
+		err      error
+	)
 	// Call lmstat with -i (lmstat -i does not give information from the server,
 	// but only reads the license file)
 	if licenses.LicenseFile != "" {
@@ -126,12 +159,14 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	}
 
 	// features
-	var featuresToExclude = []string{}
-	var featuresToInclude = []string{}
+	var (
+		featuresToExclude = []string{}
+		featuresToInclude = []string{}
+	)
+
 	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
 		return fmt.Errorf("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-		return nil
 	} else if licenses.FeaturesToExclude != "" {
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
 	} else if licenses.FeaturesToInclude != "" {
@@ -182,5 +217,6 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			prometheus.GaugeValue, exp,
 			val.app, strconv.Itoa(idx), strconv.Itoa(val.licenses), strconv.Itoa(val.features))
 	}
+
 	return nil
 }
