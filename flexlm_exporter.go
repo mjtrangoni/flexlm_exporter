@@ -18,6 +18,7 @@ import (
 	"fmt"
 	stdlog "log"
 	"net/http"
+	"time"
 
 	//nolint:gosec
 	_ "net/http/pprof"
@@ -38,6 +39,10 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/prometheus/exporter-toolkit/web"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
+)
+
+const (
+	serverReadHeaderTimeout = 60
 )
 
 // handler wraps an unfiltered http.Handler but uses a filtered handler,
@@ -217,7 +222,10 @@ func main() {
 
 	level.Info(logger).Log("msg", "Listening on", "address", *listenAddress)
 
-	server := &http.Server{Addr: *listenAddress}
+	server := &http.Server{
+		Addr:              *listenAddress,
+		ReadHeaderTimeout: serverReadHeaderTimeout * time.Second,
+	}
 
 	if err := web.ListenAndServe(server, *configFile, logger); err != nil {
 		level.Error(logger).Log("err", err)
