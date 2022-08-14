@@ -1,5 +1,6 @@
 ## v0.0.8 / unreleased
 
+ * [ENHANCEMENT] Consolidate windows and linux support #53. Thanks @SuperSonicFlea.
  * [ENHANCEMENT] Replace EOL CentOS8 docker image with RockyLinux8.
 
 ## v0.0.7 / 2021-09-25
