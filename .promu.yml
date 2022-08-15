@@ -1,7 +1,7 @@
 go:
     # Whenever the Go version is updated here, go.mod, .github/workflows/build.yml,
     # and .circleci/config.yml should also be updated.
-    version: 1.18
+    version: 1.19
     cgo: false
 repository:
     path: github.com/mjtrangoni/flexlm_exporter
@@ -22,6 +22,8 @@ tarball:
         - NOTICE
 crossbuild:
     platforms:
+        - darwin/amd64
+        - darwin/arm64
         - linux/amd64
         - linux/386
         - windows/amd64
