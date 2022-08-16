@@ -60,6 +60,9 @@ jobs:
     executor: golang
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "f5:e9:3e:54:1e:4d:db:c8:14:27:1f:8d:60:9f:4e:f5"
       - run:
           name: Release binaries
           command: |
