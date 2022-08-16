@@ -1,4 +1,4 @@
-## v0.0.8 / unreleased
+## v0.0.8 / 2022-08-16
 
  * [ENHANCEMENT] Compile for darwin-arm64 and darwin-amd64.
  * [ENHANCEMENT] Consolidate windows and linux support #53. Thanks @SuperSonicFlea.
