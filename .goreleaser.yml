@@ -10,6 +10,7 @@ builds:
     hooks:
       post: make tarball
     goos:
+      - darwin
       - linux
       - windows
     goarch:
