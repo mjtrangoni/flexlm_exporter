@@ -7,7 +7,7 @@ jobs:
         go-version: ["tip", 1.18.x, 1.19.x]
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/setup-go@v2
+    - uses: actions/setup-go@v3
       if: matrix.go-version != 'tip'
       with:
         go-version: ${{ matrix.go-version}}
@@ -22,7 +22,11 @@ jobs:
         echo "PATH=$HOME/gotip/bin:$PATH" >> $GITHUB_ENV
         go version
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+    - name: Install yamllint
+      shell: sh
+      run: |
+        sudo apt-get install yamllint
     - name: Build
       shell: sh
       run: |
@@ -32,11 +36,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Install go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
         go-version: 1.19.x
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Install goveralls
       env:
         GO111MODULE: on
