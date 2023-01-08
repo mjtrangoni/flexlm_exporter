@@ -11,63 +11,63 @@ executors:
 jobs:
   codespell:
     docker:
-      - image: circleci/python
+    - image: circleci/python
     steps:
-      - checkout
-      - run: sudo pip install codespell
-      - run: codespell --skip=".git,./vendor"
+    - checkout
+    - run: sudo pip install codespell
+    - run: codespell --skip=".git,./vendor"
 
   build:
     docker:
-      - image: cimg/go:1.19
+    - image: cimg/go:1.19
     environment:
-     - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
-     - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
+    - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
+    - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
     steps:
-      # checkout the project
-      - checkout
+     # checkout the project
+    - checkout
 
-      # make and test
-      - run:
-          name: Binary Build
-          command: make
+    # make and test
+    - run:
+        name: Binary Build
+        command: make
 
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
+    - setup_remote_docker:
+        version: 20.10.14
+        docker_layer_caching: true
 
-      # quay build
-      - run:
-          name: Quay.io Build
-          command: docker build -t $QUAY_IMAGE_NAME -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
-      - run:
-          name: Quay Login
-          command: docker login -u $QUAYLOGIN -p $QUAYPASSWORD quay.io
-      - run:
-          name: Quay Push
-          command: docker push $QUAY_IMAGE_NAME:$CIRCLE_BRANCH
-      - run:
-          name: Docker Build
-          command: make docker
-      - run:
-          name: Docker Login
-          command: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-      - run:
-          name: Docker Push
-          command : docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+    # quay build
+    - run:
+        name: Quay.io Build
+        command: docker build -t $QUAY_IMAGE_NAME -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
+    - run:
+        name: Quay Login
+        command: docker login -u $QUAYLOGIN -p $QUAYPASSWORD quay.io
+    - run:
+        name: Quay Push
+        command: docker push $QUAY_IMAGE_NAME:$CIRCLE_BRANCH
+    - run:
+        name: Docker Build
+        command: make docker
+    - run:
+        name: Docker Login
+        command: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+    - run:
+        name: Docker Push
+        command: docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
 
   release:
     executor: golang
     steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "f5:e9:3e:54:1e:4d:db:c8:14:27:1f:8d:60:9f:4e:f5"
-      - run:
-          name: Release binaries
-          command: |
-            go install github.com/prometheus/promu@v0.13.0
-            curl -sL https://git.io/goreleaser | bash
+    - checkout
+    - add_ssh_keys:
+        fingerprints:
+        - "f5:e9:3e:54:1e:4d:db:c8:14:27:1f:8d:60:9f:4e:f5"
+    - run:
+        name: Release binaries
+        command: |
+          go install github.com/prometheus/promu@v0.13.0
+          curl -sL https://git.io/goreleaser | bash
 
 workflows:
   version: 2

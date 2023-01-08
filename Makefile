@@ -25,7 +25,7 @@ PREFIX                  ?= $(shell pwd)
 BIN_DIR                 ?= $(shell pwd)
 
 .PHONY: all
-all: clean format vet golangci build test
+all: clean format vet golangci yamllint build test
 
 .PHONY: test
 test:
@@ -46,6 +46,15 @@ vet:
 golangci: $(GOLINTER)
 	@echo ">> linting code"
 	@$(GOLINTER) run --config ./.golangci.yml
+
+.PHONY: yamllint
+yamllint:
+	@echo ">> running yamllint on all YAML files in the repository"
+ifeq (, $(shell which yamllint))
+	@echo "yamllint not installed so skipping"
+else
+	yamllint .
+endif
 
 .PHONY: build
 build: $(PROMU)
