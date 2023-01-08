@@ -38,6 +38,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	"github.com/prometheus/exporter-toolkit/web"
+	"github.com/prometheus/exporter-toolkit/web/kingpinflag"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -170,10 +171,6 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 func main() {
 	var (
-		listenAddress = kingpin.Flag(
-			"web.listen-address",
-			"Address on which to expose metrics and web interface.",
-		).Default(":9319").String()
 		metricsPath = kingpin.Flag(
 			"web.telemetry-path",
 			"Path under which to expose metrics.",
@@ -183,14 +180,11 @@ func main() {
 			"web.max-requests",
 			"Maximum number of parallel scrape requests. Use 0 to disable.",
 		).Default("40").Int()
-		configFile = kingpin.Flag(
-			"web.config",
-			"[EXPERIMENTAL] Path to config yaml file that can enable TLS or authentication.",
-		).Default("").String()
 		disableExporterMetrics = kingpin.Flag(
 			"web.disable-exporter-metrics",
 			"Exclude metrics about the exporter itself (promhttp_*, process_*, go_*).",
 		).Bool()
+		toolkitFlags = kingpinflag.AddFlags(kingpin.CommandLine, ":9319")
 	)
 
 	promlogConfig := &promlog.Config{}
@@ -206,7 +200,7 @@ func main() {
 	level.Info(logger).Log("msg", "Build context", "build_context", version.BuildContext())
 	if userCurrent, err := user.Current(); err == nil && userCurrent.Uid == "0" {
 		level.Warn(logger).Log("msg", `FLEXlm Exporter is running as root user. `+
-			`This exporter is designed to run as unpriviledged user, root is not required.`)
+			`This exporter is designed to run as unprivileged user, root is not required.`)
 	}
 
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger))
@@ -220,14 +214,10 @@ func main() {
 			</html>`))
 	})
 
-	level.Info(logger).Log("msg", "Listening on", "address", *listenAddress)
-
 	server := &http.Server{
-		Addr:              *listenAddress,
 		ReadHeaderTimeout: serverReadHeaderTimeout * time.Second,
 	}
-
-	if err := web.ListenAndServe(server, *configFile, logger); err != nil {
+	if err := web.ListenAndServe(server, toolkitFlags, logger); err != nil {
 		level.Error(logger).Log("err", err)
 		os.Exit(1)
 	}

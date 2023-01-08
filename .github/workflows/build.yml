@@ -17,6 +17,8 @@ jobs:
       run: |
         git clone https://go.googlesource.com/go $HOME/gotip
         cd $HOME/gotip/src
+        tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+        git checkout $tag -b latest
         ./make.bash
         echo "GOROOT=$HOME/gotip" >> $GITHUB_ENV
         echo "PATH=$HOME/gotip/bin:$PATH" >> $GITHUB_ENV
