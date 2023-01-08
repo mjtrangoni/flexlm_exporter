@@ -66,7 +66,7 @@ jobs:
     - run:
         name: Release binaries
         command: |
-          go install github.com/prometheus/promu@v0.13.0
+          go install github.com/prometheus/promu@v0.14.0
           curl -sL https://git.io/goreleaser | bash
 
 workflows:
