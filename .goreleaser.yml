@@ -24,10 +24,10 @@ changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-    - Merge pull request
-    - Merge branch
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
 
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
@@ -38,8 +38,8 @@ archives:
       386: i386
       amd64: x86_64
     format_overrides:
-    - goos: windows
-      format: zip
+      - goos: windows
+        format: zip
 
 snapshot:
   name_template: "{{ .Tag }}-snapshot"
