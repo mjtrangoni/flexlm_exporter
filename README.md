@@ -98,7 +98,7 @@ Metrics will now be reachable at http://localhost:9319/metrics.
 
 ## Dashboards
 
- 1. [Grafana Dashboard](https://grafana.com/dashboards/3854)
+ 1. [Grafana Dashboard](https://grafana.com/grafana/dashboards/3854-flexlm)
 
 ## Alerting
 
