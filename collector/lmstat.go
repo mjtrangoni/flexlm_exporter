@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -78,12 +79,12 @@ func NewLmstatCollector(logger log.Logger) (Collector, error) {
 		lmstatFeatureUsedUsers: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
 			"License feature used by user labeled by app, feature name and "+
-				"username of the license.", []string{"app", "name", "user"}, nil,
+				"username of the license.", []string{"app", "name", "user", "since"}, nil,
 		),
 		lmstatFeatureUsedUsersVersions: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
 			"License feature used by user labeled by app, feature name, "+
-				"username of the license and version.", []string{"app", "name", "user", "version"}, nil,
+				"username of the license and version.", []string{"app", "name", "user", "since", "version"}, nil,
 		),
 		lmstatFeatureReservGroups: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "reserved_groups"),
@@ -296,39 +297,39 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			if licUsersByFeature[featureName] == nil {
 				licUsersByFeature[featureName] = map[string][]*featureUserUsed{}
 			}
-			matches := lmutilLicenseFeatureUsageUserRegex.FindStringSubmatch(lineJoined)
-			username := matches[1]
+			matches := reSubMatchMap(lmutilLicenseFeatureUsageUserRegex, lineJoined)
+			username := matches["user"]
 			if strings.TrimSpace(username) == "" {
 				level.Debug(logger).Log("username couldn't be found for '", lineJoined,
 					"', using lmutilLicenseFeatureUsageUser2Regex.")
-				matches = lmutilLicenseFeatureUsageUser2Regex.FindStringSubmatch(lineJoined)
-				username = matches[1]
+				matches = reSubMatchMap(lmutilLicenseFeatureUsageUser2Regex, lineJoined)
+				username = matches["user"]
 			}
-			if matches[2] != "" {
+			if matches["ver"] != "" {
 				var found = -1
 				for i := range licUsersByFeature[featureName][username] {
-					if licUsersByFeature[featureName][username][i].version == matches[2] {
+					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						found = i
 					}
 				}
 				if found < 0 {
 					licUsersByFeature[featureName][username] = append(licUsersByFeature[featureName][username],
-						&featureUserUsed{num: 0, version: matches[2]})
+						&featureUserUsed{num: 0, version: matches["ver"], since: matches["since"]})
 				}
 			}
-			if matches[4] != "" {
-				licUsed, err := strconv.Atoi(matches[4])
+			if matches["licenses"] != "" {
+				licUsed, err := strconv.Atoi(matches["licenses"])
 				if err != nil {
-					level.Error(logger).Log("could not convert", matches[4], "to integer:", err)
+					level.Error(logger).Log("could not convert", matches["licenses"], "to integer:", err)
 				}
 				for i := range licUsersByFeature[featureName][username] {
-					if licUsersByFeature[featureName][username][i].version == matches[2] {
+					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						licUsersByFeature[featureName][username][i].num += float64(licUsed)
 					}
 				}
 			} else {
 				for i := range licUsersByFeature[featureName][username] {
-					if licUsersByFeature[featureName][username][i].version == matches[2] {
+					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						licUsersByFeature[featureName][username][i].num += 1.0
 					}
 				}
@@ -476,7 +477,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 					for i := range licused {
 						ch <- prometheus.MustNewConstMetric(
 							c.lmstatFeatureUsedUsersVersions, prometheus.GaugeValue,
-							licused[i].num, licenses.Name, name, username, licused[i].version)
+							licused[i].num, licenses.Name, name, username, licused[i].since, licused[i].version)
 					}
 				}
 			} else {
@@ -484,7 +485,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 					for i := range licused {
 						ch <- prometheus.MustNewConstMetric(
 							c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
-							licused[i].num, licenses.Name, name, username)
+							licused[i].num, licenses.Name, name, username, licused[i].since)
 					}
 				}
 			}
@@ -499,4 +500,18 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 	}
 
 	return nil
+}
+
+// from https://stackoverflow.com/a/46202939
+func reSubMatchMap(r *regexp.Regexp, str string) map[string]string {
+	match := r.FindStringSubmatch(str)
+	subMatchMap := make(map[string]string)
+
+	for i, name := range r.SubexpNames() {
+		if i != 0 {
+			subMatchMap[name] = match[i]
+		}
+	}
+
+	return subMatchMap
 }
