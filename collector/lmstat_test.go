@@ -331,3 +331,40 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatalf("Unexpected value for feature11: shouldn't match any reservation")
 	}
 }
+
+func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
+	t.Parallel()
+
+	dataByte, err := os.ReadFile(testParseLmstatLicenseInfo1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, licUsersByFeature, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
+
+	const (
+		sinceUser1  = "Fri 10/20 14:12"
+		sinceUser17 = "Fri 10/20 12:36"
+	)
+
+	for username, licused := range licUsersByFeature["feature34"] {
+		for i := range licused {
+			if username == "user1" {
+				if licused[i].since != sinceUser1 {
+					t.Fatalf("Unexpected values for feature34[%s]: %s!=%s",
+						username, licused[i].since, sinceUser1)
+				}
+			} else if username == "user17" {
+				if licused[i].since != sinceUser17 {
+					t.Fatalf("Unexpected values for feature34[%s]: %s!=%s",
+						username, licused[i].since, sinceUser17)
+				}
+			}
+		}
+	}
+}
