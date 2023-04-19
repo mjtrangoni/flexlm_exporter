@@ -16,7 +16,9 @@ package collector
 
 import (
 	"os"
+	"strconv"
 	"testing"
+	"time"
 
 	"github.com/go-kit/log"
 )
@@ -347,22 +349,43 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 
 	_, licUsersByFeature, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
 
-	const (
-		sinceUser1  = "Fri 10/20 14:12"
-		sinceUser17 = "Fri 10/20 12:36"
-	)
+	// the year does not matter in this case, since lmstat omits the year information
+	sinceUser1 := time.Date(2000, 10, 20, 14, 12, 0, 0, time.UTC)
+	sinceUser17 := time.Date(2000, 10, 20, 12, 36, 0, 0, time.UTC)
 
+	// only compare the relevant fields
+	compareTime := func(time1 time.Time, time2 time.Time) bool {
+		return time1.Month() == time2.Month() &&
+			time1.Day() == time2.Day() &&
+			time1.Hour() == time2.Hour() &&
+			time1.Minute() == time2.Minute()
+	}
+
+	// for comparison, the unix time is converted to time.Time in time.Local zone. time.Local is used while parsing
+	// the lmstat output, so it must be used in the test as well
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {
 			if username == "user1" {
-				if licused[i].since != sinceUser1 {
-					t.Fatalf("Unexpected values for feature34[%s]: %s!=%s",
-						username, licused[i].since, sinceUser1)
+				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
+				if err != nil {
+					panic(err)
+				}
+
+				since := time.Unix(utime, 0).In(time.Local)
+				if !compareTime(since, sinceUser1) {
+					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
+						username, since.String(), sinceUser1.String())
 				}
 			} else if username == "user17" {
-				if licused[i].since != sinceUser17 {
-					t.Fatalf("Unexpected values for feature34[%s]: %s!=%s",
-						username, licused[i].since, sinceUser17)
+				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
+				if err != nil {
+					panic(err)
+				}
+
+				since := time.Unix(utime, 0).In(time.Local)
+				if !compareTime(since, sinceUser17) {
+					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
+						username, since.String(), sinceUser17.String())
 				}
 			}
 		}
