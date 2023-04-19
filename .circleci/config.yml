@@ -6,7 +6,7 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: cimg/go:1.19
+    - image: cimg/go:1.20
 
 jobs:
   codespell:
@@ -19,7 +19,7 @@ jobs:
 
   build:
     docker:
-    - image: cimg/go:1.19
+    - image: cimg/go:1.20
     environment:
     - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
     - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
