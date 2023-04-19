@@ -36,4 +36,6 @@ var (
 	lmutilLicenseFeatureExpRegex2 = regexp.MustCompile(
 		`^(?P<feature>[[:graph:]]+)\s+(?P<version>[\d\.]+)\s+` +
 			`(?P<licenses>\d+)\s+(?P<vendor>\w+)\s+(?P<expires>[\w\-\s\(\)]+)$`)
+	lmutilTimeRegex = regexp.MustCompile(
+		`^\w+ (?P<month>\d+)/(?P<day>\d+) (?P<time>\d+:\d+)$`)
 )
