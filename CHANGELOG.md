@@ -1,3 +1,7 @@
+## v0.0.9 / unreleased
+
+ * [ENHANCEMENT] Add since label to "flexlm_feature_used_users". Thanks @stefankaufmann.
+
 ## v0.0.8 / 2022-08-16
 
  * [ENHANCEMENT] Compile for darwin-arm64 and darwin-amd64.
