@@ -4,25 +4,25 @@
 [![Docker Repository on Quay](https://quay.io/repository/mjtrangoni/flexlm_exporter/status)][quay]
 [![Docker Pulls](https://badgen.net/docker/pulls/mjtrangoni/flexlm_exporter?icon=docker)][hub]
 [![Go Reference](https://pkg.go.dev/badge/github.com/mjtrangoni/flexlm_exporter.svg)](https://pkg.go.dev/github.com/mjtrangoni/flexlm_exporter)
-[![Coverage Status](https://coveralls.io/repos/github/mjtrangoni/flexlm_exporter/badge.svg?branch=master)](https://coveralls.io/github/mjtrangoni/flexlm_exporter?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mjtrangoni/flexlm_exporter/badge.svg?branch=main)](https://coveralls.io/github/mjtrangoni/flexlm_exporter?branch=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mjtrangoni/flexlm_exporter)](https://goreportcard.com/report/github.com/mjtrangoni/flexlm_exporter)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/mjtrangoni/flexlm_exporter/master/LICENSE)
-[![StyleCI](https://github.styleci.io/repos/107779392/shield?branch=master)](https://github.styleci.io/repos/107779392)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/mjtrangoni/flexlm_exporter/main/LICENSE)
+[![StyleCI](https://github.styleci.io/repos/107779392/shield?branch=main)](https://github.styleci.io/repos/107779392)
 
 [Prometheus](https://prometheus.io/) exporter for FLEXlm License Manager
 `lmstat` license information.
 
 ## Install
 
-```shell
-$ go install github.com/mjtrangoni/flexlm_exporter
+```console
+go install github.com/mjtrangoni/flexlm_exporter
 ```
 
 ## Building
 
-```shell
-$ cd $GOPATH/src/github.com/mjtrangoni/flexlm_exporter
-$ make
+```console
+cd $GOPATH/src/github.com/mjtrangoni/flexlm_exporter
+make
 ```
 
 ## Configuration
@@ -57,8 +57,8 @@ Notes:
 
 ## Running
 
-```
-$ ./flexlm_exporter <flags>
+```console
+./flexlm_exporter <flags>
 ```
 
 ### Docker images
@@ -66,16 +66,18 @@ $ ./flexlm_exporter <flags>
 Docker images are available on,
 
  1. [Quay.io](https://quay.io/repository/mjtrangoni/flexlm_exporter).
-    `$ docker pull quay.io/mjtrangoni/flexlm_exporter:master`
+    `$ docker pull quay.io/mjtrangoni/flexlm_exporter:latest`
  1. [Docker](https://hub.docker.com/r/mjtrangoni/flexlm_exporter/).
-    `$ docker pull mjtrangoni/flexlm_exporter:master`
+    `$ docker pull mjtrangoni/flexlm_exporter:latest`
+ 1. [GHCR](https://github.com/mjtrangoni/flexlm_exporter/pkgs/container/flexlm_exporter/).
+    `$ docker pull ghcr.io/mjtrangoni/flexlm_exporter:latest`
 
 Please make sure that SELinux is not running in your host, or run the container
 as root.
 
 You can launch a *flexlm_exporter* container with,
 
-```shell
+```console
 $ export DOCKER_REPOSITORY="quay.io/mjtrangoni/flexlm_exporter:latest"
 $ export LMUTIL_LOCAL="PATH where your lmutil binary is located"
 $ export CONFIG_PATH_LOCAL="PATH where your exporter config file is located"
@@ -86,14 +88,14 @@ $ docker run --name flexlm_exporter -d -p 9319:9319 \
     --path.config="/home/exporter/config/licenses.yml"
 ```
 
-Metrics will now be reachable at http://localhost:9319/metrics.
+Metrics will now be reachable at <http://localhost:9319/metrics>.
 
 ## What's exported?
 
- * `lmutil lmstat -v` information.
- * `lmutil lmstat -c license_file -a` or `lmutil lmstat -c license_server -a`
+ 1. `lmutil lmstat -v` information.
+ 1. `lmutil lmstat -c license_file -a` or `lmutil lmstat -c license_server -a`
    license information.
- * `lmutil lmstat -c license_file -i` or `lmutil lmstat -c license_server -i`
+ 1. `lmutil lmstat -c license_file -i` or `lmutil lmstat -c license_server -i`
    license features expiration date.
 
 ## Dashboards
@@ -139,11 +141,11 @@ groups:
 
 ## Contributing
 
-Refer to [CONTRIBUTING.md](https://github.com/mjtrangoni/flexlm_exporter/blob/master/CONTRIBUTING.md)
+Refer to [CONTRIBUTING.md](https://github.com/mjtrangoni/flexlm_exporter/blob/main/CONTRIBUTING.md)
 
 ## License
 
-Apache License 2.0, see [LICENSE](https://github.com/mjtrangoni/mjtrangoni/blob/master/LICENSE).
+Apache License 2.0, see [LICENSE](https://github.com/mjtrangoni/mjtrangoni/blob/main/LICENSE).
 
 [hub]: https://hub.docker.com/r/mjtrangoni/flexlm_exporter/
 [quay]: https://quay.io/repository/mjtrangoni/flexlm_exporter

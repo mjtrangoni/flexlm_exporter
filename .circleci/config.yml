@@ -6,23 +6,24 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: cimg/go:1.20
+    - image: cimg/go:1.21
 
 jobs:
   codespell:
     docker:
-    - image: circleci/python
+    - image: cimg/python:3.11
     steps:
     - checkout
-    - run: sudo pip install codespell
+    - run: pip3 install codespell
     - run: codespell --skip=".git,./vendor"
 
   build:
     docker:
-    - image: cimg/go:1.20
+    - image: cimg/go:1.21
     environment:
     - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
     - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
+    - GHCR_IMAGE_NAME: "ghcr.io/mjtrangoni/flexlm_exporter"
     steps:
      # checkout the project
     - checkout
@@ -36,25 +37,65 @@ jobs:
         version: 20.10.14
         docker_layer_caching: true
 
-    # quay build
+    # ghcr.io build
     - run:
-        name: Quay.io Build
-        command: docker build -t $QUAY_IMAGE_NAME -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
+        name: Build
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker build -t $GHCR_IMAGE_NAME:latest -t $GHCR_IMAGE_NAME:$CIRCLE_TAG .
+          else
+            docker build -t $GHCR_IMAGE_NAME:$CIRCLE_BRANCH .
+          fi
     - run:
-        name: Quay Login
-        command: docker login -u $QUAYLOGIN -p $QUAYPASSWORD quay.io
+        name: GHCR Login
+        command: echo $GHCR_TOKEN | docker login ghcr.io -u $GHCR_USERNAME --password-stdin
     - run:
-        name: Quay Push
-        command: docker push $QUAY_IMAGE_NAME:$CIRCLE_BRANCH
+        name: GHCR Push
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker push $GHCR_IMAGE_NAME:latest
+            docker push $GHCR_IMAGE_NAME:$CIRCLE_TAG
+          else
+            docker push $GHCR_IMAGE_NAME:$CIRCLE_BRANCH
+          fi
+
+    # quay.io build
+    - run:
+        name: Build
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker build -t $QUAY_IMAGE_NAME:latest -t $QUAY_IMAGE_NAME:$CIRCLE_TAG .
+          else
+            docker build -t $QUAY_IMAGE_NAME:$CIRCLE_BRANCH .
+          fi
+    - run:
+        name: QUAY Login
+        command: echo $QUAYPASSWORD | docker login quay.io -u $QUAYLOGIN --password-stdin
+    - run:
+        name: QUAY Push
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker push $QUAY_IMAGE_NAME:latest
+            docker push $QUAY_IMAGE_NAME:$CIRCLE_TAG
+          else
+            docker push $QUAY_IMAGE_NAME:$CIRCLE_BRANCH
+          fi
+
     - run:
         name: Docker Build
         command: make docker
     - run:
         name: Docker Login
-        command: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        command: echo $DOCKER_PASSWORD | docker login docker.io -u $DOCKER_LOGIN --password-stdin
     - run:
         name: Docker Push
-        command: docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker push $DOCKER_IMAGE_NAME:latest
+            docker push $DOCKER_IMAGE_NAME:$CIRCLE_TAG
+          else
+            docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+          fi
 
   release:
     executor: golang
@@ -66,7 +107,7 @@ jobs:
     - run:
         name: Release binaries
         command: |
-          go install github.com/prometheus/promu@v0.14.0
+          go install github.com/prometheus/promu@v0.15.0
           curl -sL https://git.io/goreleaser | bash
 
 workflows:
@@ -75,6 +116,8 @@ workflows:
     jobs:
     - codespell:
         filters:
+          branches:
+            only: main
           tags:
             only: /.*/
     - build:
@@ -82,7 +125,11 @@ workflows:
         context: org-global
         filters:
           branches:
-            only: master
+            only:
+            - main
+          tags:
+            only:
+            - /v[0-9]+(\.[0-9]+)*(-.*)*/
     - release:
         filters:
           branches:
