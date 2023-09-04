@@ -1,5 +1,6 @@
 FROM docker.io/rockylinux/rockylinux:8
 LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
+LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_exporter"
 
 # Install dependencies and clean cache
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial && \
