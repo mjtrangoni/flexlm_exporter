@@ -1,4 +1,4 @@
-## v0.0.9 / unreleased
+## v0.0.9 / 2023-09-04
 
  * [ENHANCEMENT] Add GitHub Container Registry.
  * [ENHANCEMENT] Add since label to "flexlm_feature_used_users". Thanks @stefankaufmann.
