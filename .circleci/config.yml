@@ -39,7 +39,7 @@ jobs:
 
     # ghcr.io build
     - run:
-        name: Build
+        name: GHCR Build
         command: |
           if [ -n "$CIRCLE_TAG" ]; then
             docker build -t $GHCR_IMAGE_NAME:latest -t $GHCR_IMAGE_NAME:$CIRCLE_TAG .
@@ -61,7 +61,7 @@ jobs:
 
     # quay.io build
     - run:
-        name: Build
+        name: Quay Build
         command: |
           if [ -n "$CIRCLE_TAG" ]; then
             docker build -t $QUAY_IMAGE_NAME:latest -t $QUAY_IMAGE_NAME:$CIRCLE_TAG .
@@ -83,7 +83,12 @@ jobs:
 
     - run:
         name: Docker Build
-        command: make docker
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            docker build -t $DOCKER_IMAGE_NAME:latest -t $DOCKER_IMAGE_NAME:$CIRCLE_TAG .
+          else
+            docker build -t $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH .
+          fi
     - run:
         name: Docker Login
         command: echo $DOCKER_PASSWORD | docker login docker.io -u $DOCKER_LOGIN --password-stdin
@@ -108,7 +113,7 @@ jobs:
         name: Release binaries
         command: |
           go install github.com/prometheus/promu@v0.15.0
-          curl -sL https://git.io/goreleaser | bash
+          curl -sfL https://goreleaser.com/static/run | DISTRIBUTION=oss bash
 
 workflows:
   version: 2
