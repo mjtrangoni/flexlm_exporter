@@ -15,7 +15,7 @@
 package collector
 
 import (
-	"gopkg.in/alecthomas/kingpin.v2"
+	kingpin "github.com/alecthomas/kingpin/v2"
 )
 
 // The path of the Flexlm binaries.
