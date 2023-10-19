@@ -195,7 +195,7 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			return err
 		}
 	} else {
-		return fmt.Errorf("couldn`t find `license_file` or `license_server` for %v", licenses.Name)
+		return fmt.Errorf("couldn't find `license_file` or `license_server` for %v", licenses.Name)
 	}
 
 	outStr, err := splitOutput(outBytes)

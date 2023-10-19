@@ -414,7 +414,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 			return err
 		}
 	} else {
-		return fmt.Errorf("couldn`t find `license_file` or `license_server` for %v",
+		return fmt.Errorf("couldn't find `license_file` or `license_server` for %v",
 			licenses.Name)
 	}
 
