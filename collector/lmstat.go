@@ -39,6 +39,7 @@ type lmstatCollector struct {
 	lmstatFeatureUsedUsers         *prometheus.Desc
 	lmstatFeatureUsedUsersVersions *prometheus.Desc
 	lmstatFeatureReservGroups      *prometheus.Desc
+	lmstatFeatureReservHost        *prometheus.Desc
 	lmstatFeatureIssued            *prometheus.Desc
 	logger                         log.Logger
 }
@@ -91,6 +92,12 @@ func NewLmstatCollector(logger log.Logger) (Collector, error) {
 			prometheus.BuildFQName(namespace, "feature", "reserved_groups"),
 			"License feature reserved by group labeled by app, feature name "+
 				"and group name of the license.", []string{"app", "name", "group"},
+			nil,
+		),
+		lmstatFeatureReservHost: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "reserved_host"),
+			"License feature reserved by host labeled by app, feature name "+
+				"and host name of the license.", []string{"app", "name", "host"},
 			nil,
 		),
 		lmstatFeatureIssued: prometheus.NewDesc(
@@ -267,10 +274,11 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 }
 
 func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[string]*feature,
-	map[string]map[string][]*featureUserUsed, map[string]map[string]float64) {
+	map[string]map[string][]*featureUserUsed, map[string]map[string]float64, map[string]map[string]float64) {
 	features := make(map[string]*feature)
 	licUsersByFeature := make(map[string]map[string][]*featureUserUsed)
 	reservGroupByFeature := make(map[string]map[string]float64)
+	reservHostByFeature := make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
 
@@ -357,10 +365,20 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			}
 
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
+		} else if lmutilLicenseFeatureHostReservRegex.MatchString(lineJoined) {
+			if reservHostByFeature[featureName] == nil {
+				reservHostByFeature[featureName] = map[string]float64{}
+			}
+			matches := lmutilLicenseFeatureHostReservRegex.FindStringSubmatch(lineJoined)
+			hostReserv, err := strconv.Atoi(matches[2])
+			if err != nil {
+				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
+			}
+			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
 		}
 	}
 
-	return features, licUsersByFeature, reservGroupByFeature
+	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
 }
 
 // getLmstatInfo returns lmstat binary information.
@@ -472,7 +490,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 
-	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(outStr, c.logger)
+	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(outStr, c.logger)
 	for name, info := range features {
 		if contains(featuresToExclude, name) {
 			continue
@@ -508,6 +526,13 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 				ch <- prometheus.MustNewConstMetric(
 					c.lmstatFeatureReservGroups, prometheus.GaugeValue,
 					licreserv, licenses.Name, name, group)
+			}
+		}
+		if licenses.MonitorReservations && (reservHostByFeature[name] != nil) {
+			for host, licreserv := range reservHostByFeature[name] {
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureReservHost, prometheus.GaugeValue,
+					licreserv, licenses.Name, name, host)
 			}
 		}
 	}
