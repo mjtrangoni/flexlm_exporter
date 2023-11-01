@@ -350,8 +350,9 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	_, licUsersByFeature, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
 
 	// the year does not matter in this case, since lmstat omits the year information
-	sinceUser1 := time.Date(2000, 10, 20, 14, 12, 0, 0, time.UTC)
-	sinceUser17 := time.Date(2000, 10, 20, 12, 36, 0, 0, time.UTC)
+	ctime := time.Now()
+	sinceUser1 := time.Date(ctime.Year(), 10, 20, 14, 12, 0, 0, time.UTC)
+	sinceUser17 := time.Date(ctime.Year(), 10, 20, 12, 36, 0, 0, time.UTC)
 
 	// only compare the relevant fields
 	compareTime := func(time1 time.Time, time2 time.Time) bool {
@@ -371,7 +372,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 					panic(err)
 				}
 
-				since := time.Unix(utime, 0).In(time.Local)
+				since := time.Unix(utime, 0).In(time.UTC)
 				if !compareTime(since, sinceUser1) {
 					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
 						username, since.String(), sinceUser1.String())
@@ -382,7 +383,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 					panic(err)
 				}
 
-				since := time.Unix(utime, 0).In(time.Local)
+				since := time.Unix(utime, 0).In(time.UTC)
 				if !compareTime(since, sinceUser17) {
 					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
 						username, since.String(), sinceUser17.String())
