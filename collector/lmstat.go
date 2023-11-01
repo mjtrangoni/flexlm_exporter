@@ -524,7 +524,7 @@ func convertLmstatTimeToUnixTime(lmtime string, logger log.Logger) time.Time {
 
 	// current time and offset (lmstat outputs the time for the current time zone of the server where it is executed)
 	ctime := time.Now()
-	_, offset := ctime.Local().Zone()
+	_, offset := ctime.UTC().Zone()
 
 	closure := func(m map[string]string, year int) time.Time {
 		month, _ := strconv.Atoi(m["month"])
