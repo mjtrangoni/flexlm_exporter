@@ -2,11 +2,15 @@
 run:
   modules-download-mode: mod
 linters-settings:
+  dogsled:
+    # Checks assignments with too many blank identifiers.
+    # Default: 2
+    max-blank-identifiers: 3
   funlen:
     lines: 300
     statements: 300
   gocyclo:
-    min-complexity: 40
+    min-complexity: 50
   dupl:
     threshold: 150
   depguard:

@@ -19,6 +19,8 @@ Users of feature1:  (Total of 1814 licenses issued;  Total of 1206 licenses in u
   "feature0" v61.9, vendor: VENDOR1
   floating license
 
+	1 RESERVATION for HOST HOSTPC11 (host3.domain.net/27002)
+	10 RESERVATIONs for HOST HOSTPC12 (host3.domain.net/27002)
 	48 RESERVATIONs for GROUP GROUP1 (host3.domain.net/27002)
 	8 RESERVATIONs for GROUP GROUP2 (host3.domain.net/27002)
 	8 RESERVATIONs for GROUP GROUP3 (host3.domain.net/27002)

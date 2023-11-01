@@ -210,7 +210,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	features, licUsersByFeature, reservGroupByFeature := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
+	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
 	for name, info := range features {
 		if name == "feature11" {
 			if info.issued != 16384 || info.used != 80 {
@@ -225,6 +225,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	const (
 		licUsed1  = 1
 		licUsed8  = 8
+		licUsed10 = 10
 		licUsed12 = 12
 		licUsed16 = 16
 		licUsed26 = 26
@@ -329,6 +330,16 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 			}
 		}
 	}
+
+	for host, licreserv := range reservHostByFeature["feature0"] {
+		if host == "HOSTPC12" {
+			if licreserv != licUsed10 {
+				t.Fatalf("Unexpected values for feature0[%s]: %v!=10", host,
+					licreserv)
+			}
+		}
+	}
+
 	if reservGroupByFeature["feature11"] != nil {
 		t.Fatalf("Unexpected value for feature11: shouldn't match any reservation")
 	}
@@ -347,7 +358,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, licUsersByFeature, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
+	_, licUsersByFeature, _, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
 
 	// the year does not matter in this case, since lmstat omits the year information
 	ctime := time.Now()
