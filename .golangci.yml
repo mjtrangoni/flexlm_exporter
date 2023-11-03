@@ -10,11 +10,31 @@ linters-settings:
   dupl:
     threshold: 150
   depguard:
-    list-type: blacklist
-    packages:
-      # logging is allowed only by logutils.Log, logrus
-      # is allowed to use only in logutils package
-      - github.com/sirupsen/logrus
+    # Rules to apply.
+    # Default: Only allow $gostd in all files.
+    rules:
+      # Name of a rule.
+      main:
+        # List of file globs that will match this list of settings to compare against.
+        # Default: $all
+        files:
+          - "!**/*_a _file.go"
+        # List of allowed packages.
+        allow:
+          - $gostd
+          - github.com/mjtrangoni/flexlm_exporter
+          - github.com/prometheus/client_golang
+          - github.com/go-kit/log
+          - github.com/prometheus/common/promlog
+          - github.com/prometheus/common/version
+          - github.com/prometheus/exporter-toolkit/web
+          - github.com/alecthomas/kingpin/v2
+        # Packages that are not allowed where the value is a suggestion.
+        deny:
+          - pkg: "github.com/sirupsen/logrus"
+            desc: not allowed
+          - pkg: "github.com/pkg/errors"
+            desc: Should be replaced by standard lib errors package
   misspell:
     locale: US
   lll:
@@ -34,6 +54,7 @@ linters:
   disable-all: true
   enable:
     - bodyclose
+    - depguard
     - dogsled
     - dupl
     - errcheck
