@@ -5,6 +5,7 @@ License server status: 7788@BVS15004
     License file(s) on BVS15004: licensing\license.dat:
 
   BVS15004: license server UP (MASTER) v11.12
+  bvs15004: license server UP v11.12
 
 Vendor daemon status (on BVS15004):
 

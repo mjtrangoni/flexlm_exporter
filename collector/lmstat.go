@@ -223,19 +223,19 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 		if lmutilLicenseServersRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseServersRegex.FindStringSubmatch(lineJoined)[1]
 			for _, portServer := range strings.Split(matches, ",") {
-				fqdn := strings.Split(portServer, "@")[1]
+				fqdn := strings.ToLower(strings.Split(portServer, "@")[1])
 				servers[strings.Split(fqdn, ".")[0]] = &server{
 					fqdn: fqdn, port: strings.Split(portServer, "@")[0],
 				}
 			}
 		} else if lmutilLicenseServerStatusRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseServerStatusRegex.FindStringSubmatch(lineJoined)
-			servers[strings.Split(matches[1], ".")[0]].version = matches[4]
+			servers[strings.ToLower(strings.Split(matches[1], ".")[0])].version = matches[4]
 			if matches[2] == upString {
-				servers[strings.Split(matches[1], ".")[0]].status = true
+				servers[strings.ToLower(strings.Split(matches[1], ".")[0])].status = true
 			}
 			if matches[3] == " (MASTER)" {
-				servers[strings.Split(matches[1], ".")[0]].master = true
+				servers[strings.ToLower(strings.Split(matches[1], ".")[0])].master = true
 			}
 		}
 	}
