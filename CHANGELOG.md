@@ -1,3 +1,8 @@
+## v0.0.10 / 2023-11-28
+
+ * [BUGFIX] Force server FQDN to lowercase, for handling windows output gracefully.
+ * [BUGFIX] Fix wrong kingpin module reference.
+
 ## v0.0.9 / 2023-09-04
 
  * [ENHANCEMENT] Add GitHub Container Registry.
