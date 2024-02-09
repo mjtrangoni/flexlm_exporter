@@ -1,0 +1,63 @@
+---
+name: Bug report
+description: Create a report to help us improve.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for opening a bug report for FlexLM Exporter.
+
+  - type: textarea
+    attributes:
+      label: What did you do?
+      description: Please provide steps for us to reproduce this issue.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What did you expect to see?
+  - type: textarea
+    attributes:
+      label: What did you see instead? Under which circumstances?
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: input
+    attributes:
+      label: System information
+      description: insert output of `uname -srm` here, or operating system version
+      placeholder: e.g. Linux 5.16.15 x86_64
+  - type: textarea
+    attributes:
+      label: FlexLM Server information
+      description: insert output of `lmutil lmver lmgrd` here
+      render: text
+      placeholder: |
+        e.g. lmutil - Copyright (c) 1989-2009 Flexera Software, Inc. All Rights Reserved.
+             FLEXnet Licensing v11.8.0.0 build 80733 i86_n3 (lmgr.lib), Copyright (c) 1988-20
+             09 Flexera Software, Inc. All Rights Reserved.
+  - type: textarea
+    attributes:
+      label: FlexLM Exporter version
+      description: Insert output of `flexlm_exporter --version` here.
+      render: text
+      placeholder: |
+        e.g. flexlm_exporter, version 0.0.10 (branch: main, revision: 19151c6ac07dbdb410017339090206b66c666ef6)
+               build user:       root@37609b3a0a21
+               build date:       20240209-09:37:11
+               go version:       go1.21.7
+               platform:         linux/amd64
+               tags:             netgo static_build
+  - type: textarea
+    attributes:
+      label: FlexLM Exporter configuration file
+      description: Insert relevant configuration here. Don't forget to remove secrets.
+      render: yaml
+  - type: textarea
+    attributes:
+      label: Logs
+      description: Insert FlexLM Exporter logs relevant to the issue here.
+      render: text
