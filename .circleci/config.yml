@@ -11,7 +11,7 @@ executors:
 jobs:
   codespell:
     docker:
-    - image: cimg/python:3.11
+    - image: cimg/python:3.12
     steps:
     - checkout
     - run: pip3 install codespell
@@ -34,7 +34,7 @@ jobs:
         command: make
 
     - setup_remote_docker:
-        version: 20.10.14
+        version: edge
         docker_layer_caching: true
 
     # ghcr.io build
