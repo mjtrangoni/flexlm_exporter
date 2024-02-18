@@ -369,11 +369,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			if reservHostByFeature[featureName] == nil {
 				reservHostByFeature[featureName] = map[string]float64{}
 			}
+
 			matches := lmutilLicenseFeatureHostReservRegex.FindStringSubmatch(lineJoined)
 			hostReserv, err := strconv.Atoi(matches[2])
+
 			if err != nil {
 				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
 			}
+
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
 		}
 	}
