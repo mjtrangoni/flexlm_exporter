@@ -139,6 +139,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[
 			// as permanent
 			expires = math.Inf(posInfinity)
 		}
+
 		index++
 
 		featuresExp[index] = &featureExp{
