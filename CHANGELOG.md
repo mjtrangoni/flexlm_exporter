@@ -1,3 +1,7 @@
+## v0.0.11 / 2024-02-18
+
+ * [CHORE] Update golang modules and actions versions.
+
 ## v0.0.10 / 2023-11-28
 
  * [BUGFIX] Force server FQDN to lowercase, for handling windows output gracefully.
