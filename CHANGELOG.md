@@ -1,3 +1,7 @@
+## v0.0.12 / 2024-02-18
+
+ * [ENHANCEMENT] Add "flexlm_feature_reserved_host" metrics for "RESERVATION for HOST".
+
 ## v0.0.11 / 2024-02-18
 
  * [CHORE] Update golang modules and actions versions.
