@@ -231,6 +231,7 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 		} else if lmutilLicenseServerStatusRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseServerStatusRegex.FindStringSubmatch(lineJoined)
 			servers[strings.ToLower(strings.Split(matches[1], ".")[0])].version = matches[4]
+
 			if matches[2] == upString {
 				servers[strings.ToLower(strings.Split(matches[1], ".")[0])].status = true
 			}
@@ -298,21 +299,26 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			if licUsersByFeature[featureName] == nil {
 				licUsersByFeature[featureName] = map[string][]*featureUserUsed{}
 			}
+
 			matches := reSubMatchMap(lmutilLicenseFeatureUsageUserRegex, lineJoined)
 			username := matches["user"]
+
 			if strings.TrimSpace(username) == "" {
 				level.Debug(logger).Log("username couldn't be found for '", lineJoined,
 					"', using lmutilLicenseFeatureUsageUser2Regex.")
+
 				matches = reSubMatchMap(lmutilLicenseFeatureUsageUser2Regex, lineJoined)
 				username = matches["user"]
 			}
 			if matches["ver"] != "" {
 				var found = -1
+
 				for i := range licUsersByFeature[featureName][username] {
 					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						found = i
 					}
 				}
+
 				if found < 0 {
 					unixSince := convertLmstatTimeToUnixTime(matches["since"], logger).Unix()
 					sinceString := strconv.FormatInt(unixSince, 10)
@@ -325,6 +331,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 				if err != nil {
 					level.Error(logger).Log("could not convert", matches["licenses"], "to integer:", err)
 				}
+
 				for i := range licUsersByFeature[featureName][username] {
 					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						licUsersByFeature[featureName][username][i].num += float64(licUsed)
@@ -341,11 +348,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			if reservGroupByFeature[featureName] == nil {
 				reservGroupByFeature[featureName] = map[string]float64{}
 			}
+
 			matches := lmutilLicenseFeatureGroupReservRegex.FindStringSubmatch(lineJoined)
+
 			groupReserv, err := strconv.Atoi(matches[2])
 			if err != nil {
 				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
 			}
+
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
 		}
 	}

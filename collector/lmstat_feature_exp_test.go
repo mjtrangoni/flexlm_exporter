@@ -97,6 +97,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
+
 			found = true
 		}
 	}
@@ -142,6 +143,7 @@ func TestParseLmstatLicenseFeatureExpDate2(t *testing.T) {
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
+
 			found = true
 		}
 	}

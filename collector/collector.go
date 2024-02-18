@@ -92,12 +92,16 @@ type FlexlmCollector struct {
 // A new action function is needed for each collector flag because the ParseContext
 // does not contain information about which flag called the action.
 // See: https://github.com/alecthomas/kingpin/issues/294
+//
+//revive:disable:unused-parameter
 func collectorFlagAction(collector string) func(ctx *kingpin.ParseContext) error {
 	return func(ctx *kingpin.ParseContext) error {
 		forcedCollectors[collector] = true
 		return nil
 	}
 }
+
+//revive:enable:unused-parameter
 
 // NewFlexlmCollector creates a new FlexlmCollector.
 func NewFlexlmCollector(logger log.Logger, filters ...string) (*FlexlmCollector, error) {
@@ -131,6 +135,7 @@ func NewFlexlmCollector(logger log.Logger, filters ...string) (*FlexlmCollector,
 			if err != nil {
 				return nil, err
 			}
+
 			collectors[key] = collector
 			initiatedCollectors[key] = collector
 		}
@@ -175,6 +180,7 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger log.L
 		success = 0
 	} else {
 		level.Debug(logger).Log("OK:", name, "collector succeeded after:", duration.Seconds())
+
 		success = 1
 	}
 	ch <- prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name)
