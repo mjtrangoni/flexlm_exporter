@@ -18,8 +18,7 @@ jobs:
     - run: codespell --skip=".git,./vendor"
 
   build:
-    docker:
-    - image: cimg/go:1.21
+    executor: golang
     environment:
     - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
     - QUAY_IMAGE_NAME: "quay.io/mjtrangoni/flexlm_exporter"
