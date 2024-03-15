@@ -328,7 +328,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 				}
 
 				if found < 0 {
-					unixSince := convertLmstatTimeToUnixTime(matches["since"], logger).Unix()
+					unixSince := convertLmstatTimeToUnixTime(matches["since"], time.Now(), logger).Unix()
 					sinceString := strconv.FormatInt(unixSince, 10)
 					licUsersByFeature[featureName][username] = append(licUsersByFeature[featureName][username],
 						&featureUserUsed{num: 0, version: matches["ver"], since: sinceString})
@@ -557,12 +557,13 @@ func reSubMatchMap(r *regexp.Regexp, str string) map[string]string {
 	return subMatchMap
 }
 
-func convertLmstatTimeToUnixTime(lmtime string, logger log.Logger) time.Time {
+// convertLmstatTimeToUnixTime converts lmstat license start time format strings
+// 'Fri 10/20 15:08' to unixtime. Note that we need to fill the year in.
+func convertLmstatTimeToUnixTime(lmtime string, currentTime time.Time, logger log.Logger) time.Time {
 	matches := reSubMatchMap(lmutilTimeRegex, lmtime)
 
 	// current time and offset (lmstat outputs the time for the current time zone of the server where it is executed)
-	ctime := time.Now()
-	_, offset := ctime.UTC().Zone()
+	_, offset := currentTime.UTC().Zone()
 
 	closure := func(m map[string]string, year int) time.Time {
 		month, _ := strconv.Atoi(m["month"])
@@ -579,18 +580,18 @@ func convertLmstatTimeToUnixTime(lmtime string, logger log.Logger) time.Time {
 			level.Error(logger).Log("could not convert", ltime, "to unix time:", err)
 
 			// fallback, just return the current time in case of errors
-			return ctime
+			return currentTime
 		}
 
 		return ltime
 	}
 
-	unixtime := closure(matches, ctime.Year())
+	unixtime := closure(matches, currentTime.Year())
 
 	// if the created unixtime > current time, then the year is wrong, and we just subtract 1 year here. This is a guess
 	// and not necessarily correct, but lmstat does not provide any information about the year
-	if unixtime.After(ctime) {
-		unixtime = closure(matches, ctime.Year()-1)
+	if unixtime.After(currentTime) {
+		unixtime = closure(matches, currentTime.Year()-1)
 	}
 
 	return unixtime

@@ -403,3 +403,31 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 		}
 	}
 }
+
+func TestConvertLmstatTimeToUnixTime(t *testing.T) {
+	t.Parallel()
+
+	w := log.NewSyncWriter(os.Stderr)
+	logger := log.NewLogfmtLogger(w)
+
+	testDateTime := time.Date(2024, time.March, 16, 16, 38, 0, 0, time.UTC)
+	unixSince := convertLmstatTimeToUnixTime("Fri 10/20 15:08", testDateTime, logger).Unix()
+
+	if unixSince != 1697814480 {
+		t.Fatalf("Unexpected resulting value: %d !~= 1697814480", unixSince)
+	}
+
+	testDateTime = time.Date(2024, time.February, 29, 20, 38, 0, 0, time.UTC)
+	unixSince = convertLmstatTimeToUnixTime("Thu 2/29 15:08", testDateTime, logger).Unix()
+
+	if unixSince != 1709219280 {
+		t.Logf("Unexpected resulting value: %d !~= 1709219280", unixSince)
+	}
+
+	testDateTime = time.Date(2024, time.February, 29, 15, 07, 0, 0, time.UTC)
+	unixSince = convertLmstatTimeToUnixTime("Thu 2/29 15:08", testDateTime, logger).Unix()
+
+	if unixSince != 1709219220 {
+		t.Logf("Unexpected resulting value: %d !~= 1709219220", unixSince)
+	}
+}
