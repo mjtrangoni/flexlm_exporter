@@ -33,7 +33,7 @@ var errorDescriptionString = map[string]string{
 	"exit status 238": "License server does not support this feature.",
 	"exit status 237": "Error in select system call.",
 	"exit status 235": "License file does not support this version.",
-	"exit status 234": "Feature checkin failure detected at license server.",
+	"exit status 234": "Feature checking failure detected at license server.",
 	"exit status 233": "License server temporarily busy (new server connecting).",
 	"exit status 232": "Users are queued for this feature.",
 	"exit status 231": "License server does not support this version of this feature.",
