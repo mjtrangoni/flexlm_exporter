@@ -112,4 +112,4 @@ issues:
         - wsl
     - text: "Error return value of"
       linters:
-        errcheck
+        - errcheck
