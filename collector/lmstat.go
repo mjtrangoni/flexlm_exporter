@@ -404,8 +404,6 @@ func (c *lmstatCollector) getLmstatInfo(ch chan<- prometheus.Metric) error {
 }
 
 // getLmstatLicensesInfo returns lmstat active licenses information.
-//
-//nolint:unparam
 func (c *lmstatCollector) getLmstatLicensesInfo(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
