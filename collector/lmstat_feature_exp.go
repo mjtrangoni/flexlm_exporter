@@ -155,8 +155,6 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[
 }
 
 // getLmstatFeatureExpDate returns lmstat active and inactive licenses expiration date.
-//
-//nolint:unparam
 func (c *lmstatFeatureExpCollector) getLmstatFeatureExpDate(ch chan<- prometheus.Metric) error {
 	wg := &sync.WaitGroup{}
 	defer wg.Wait()
