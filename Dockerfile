@@ -6,7 +6,8 @@ LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_expo
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial && \
     dnf -y update && \
     dnf -y install bash-completion redhat-lsb-core strace && \
-    dnf -y clean all
+    dnf -y clean all && \
+    rm -f /etc/pki/tls/private/postfix.key
 
 COPY flexlm_exporter /bin/flexlm_exporter
 
