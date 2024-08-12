@@ -100,13 +100,18 @@ jobs:
           else
             docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
           fi
+  trivy:
+    docker:
+    - image: docker:stable-git
+    steps:
+    - checkout
     - run:
         name: Install trivy
         command: |
           apk add --update-cache --upgrade curl
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
     - run:
-        name: Scan the local image with trivy
+        name: Scan published image with trivy
         command: |
           if [ -n "$CIRCLE_TAG" ]; then
             trivy image --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
@@ -140,6 +145,16 @@ workflows:
     - build:
         # This enable the environment variables
         context: org-global
+        filters:
+          branches:
+            only:
+            - main
+          tags:
+            only:
+            - /v[0-9]+(\.[0-9]+)*(-.*)*/
+    - trivy:
+        requires:
+          - build
         filters:
           branches:
             only:
