@@ -100,6 +100,19 @@ jobs:
           else
             docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
           fi
+    - run:
+        name: Install trivy
+        command: |
+          apk add --update-cache --upgrade curl
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    - run:
+        name: Scan the local image with trivy
+        command: |
+          if [ -n "$CIRCLE_TAG" ]; then
+            trivy image --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
+          else
+            trivy image --exit-code 0 --no-progress docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+          fi
 
   release:
     executor: golang
