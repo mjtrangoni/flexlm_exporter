@@ -120,9 +120,9 @@ jobs:
         name: Scan published image with trivy
         command: |
           if [ -n "$CIRCLE_TAG" ]; then
-            trivy image --debug --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
+            trivy image --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
           else
-            trivy image --debug --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+            trivy image --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
           fi
 
   release:
