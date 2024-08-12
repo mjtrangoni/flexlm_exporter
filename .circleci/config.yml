@@ -108,6 +108,9 @@ jobs:
     steps:
      # checkout the project
     - checkout
+    - setup_remote_docker:
+        version: edge
+        docker_layer_caching: true
     - run:
         name: Install trivy
         command: |
@@ -117,9 +120,9 @@ jobs:
         name: Scan published image with trivy
         command: |
           if [ -n "$CIRCLE_TAG" ]; then
-            trivy image --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
+            trivy image --debug --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:latest
           else
-            trivy image --exit-code 0 --no-progress docker push $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
+            trivy image --debug --exit-code 0 --no-progress $DOCKER_IMAGE_NAME:$CIRCLE_BRANCH
           fi
 
   release:
