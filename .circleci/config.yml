@@ -103,7 +103,10 @@ jobs:
   trivy:
     docker:
     - image: docker:stable-git
+    environment:
+    - DOCKER_IMAGE_NAME: "mjtrangoni/flexlm_exporter"
     steps:
+     # checkout the project
     - checkout
     - run:
         name: Install trivy
