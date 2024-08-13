@@ -135,7 +135,7 @@ jobs:
     - run:
         name: Release binaries
         command: |
-          go install github.com/prometheus/promu@v0.15.0
+          go install github.com/prometheus/promu@v0.17.0
           curl -sfL https://goreleaser.com/static/run | DISTRIBUTION=oss bash
 
 workflows:
