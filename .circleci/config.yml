@@ -6,7 +6,7 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: cimg/go:1.23.1
+    - image: cimg/go:1.23.2
 
 jobs:
   codespell:
