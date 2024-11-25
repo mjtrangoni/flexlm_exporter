@@ -16,8 +16,9 @@ package main
 
 import (
 	"fmt"
-	stdlog "log"
+	"log/slog"
 	"net/http"
+	"runtime"
 	"time"
 
 	//nolint:gosec
@@ -26,12 +27,10 @@ import (
 	"os/user"
 	"sort"
 
-	"github.com/prometheus/common/promlog"
-	"github.com/prometheus/common/promlog/flag"
+	"github.com/prometheus/common/promslog"
+	"github.com/prometheus/common/promslog/flag"
 
 	kingpin "github.com/alecthomas/kingpin/v2"
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/collector"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
@@ -58,10 +57,10 @@ type handler struct {
 	includeExporterMetrics  bool
 	configPath              string
 	maxRequests             int
-	logger                  log.Logger
+	logger                  *slog.Logger
 }
 
-func newHandler(includeExporterMetrics bool, configPath string, maxRequests int, logger log.Logger) *handler {
+func newHandler(includeExporterMetrics bool, configPath string, maxRequests int, logger *slog.Logger) *handler {
 	h := &handler{
 		exporterMetricsRegistry: prometheus.NewRegistry(),
 		includeExporterMetrics:  includeExporterMetrics,
@@ -89,7 +88,7 @@ func newHandler(includeExporterMetrics bool, configPath string, maxRequests int,
 // ServeHTTP implements http.Handler.
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	filters := r.URL.Query()["collect[]"]
-	level.Debug(h.logger).Log("msg", "collect query:", "filters", filters)
+	h.logger.Debug("collect query:", "filters", filters)
 
 	if len(filters) == 0 {
 		// No filters, use the prepared unfiltered handler.
@@ -99,7 +98,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// To serve filtered metrics, we create a filtering handler on the fly.
 	filteredHandler, err := h.innerHandler(filters...)
 	if err != nil {
-		level.Warn(h.logger).Log("msg", "Couldn't create filtered metrics handler:", "err", err)
+		h.logger.Warn("Couldn't create filtered metrics handler:", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "Couldn't create filtered metrics handler: %s", err)
 
@@ -123,7 +122,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	// Only log the creation of an unfiltered handler, which should happen
 	// only once upon startup.
 	if len(filters) == 0 {
-		level.Info(h.logger).Log("msg", "Enabled collectors")
+		h.logger.Info("Enabled collectors")
 
 		collectors := []string{}
 
@@ -134,14 +133,14 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 		sort.Strings(collectors)
 
 		for _, c := range collectors {
-			level.Info(h.logger).Log("collector", c)
+			h.logger.Info(c)
 		}
 	}
 
 	// Load LicenseConfig from a YAML file.
 	collector.LicenseConfig, err = config.Load(h.configPath, h.logger)
 	if err != nil {
-		level.Error(h.logger).Log("err", "couldn't", "load:", h.configPath, " config", "file")
+		h.logger.Error("couldn't", "load:", h.configPath, " config", "file")
 		os.Exit(1)
 	}
 
@@ -154,7 +153,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            stdlog.New(log.NewStdlibAdapter(level.Error(h.logger)), "", 0),
+			ErrorLog:            slog.NewLogLogger(h.logger.Handler(), slog.LevelError),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 			Registry:            h.exporterMetricsRegistry,
@@ -187,25 +186,30 @@ func main() {
 			"web.disable-exporter-metrics",
 			"Exclude metrics about the exporter itself (promhttp_*, process_*, go_*).",
 		).Bool()
+		maxProcs = kingpin.Flag(
+			"runtime.gomaxprocs", "The target number of CPUs Go will run on (GOMAXPROCS)",
+		).Envar("GOMAXPROCS").Default("1").Int()
 		toolkitFlags = kingpinflag.AddFlags(kingpin.CommandLine, ":9319")
 	)
 
-	promlogConfig := &promlog.Config{}
-	flag.AddFlags(kingpin.CommandLine, promlogConfig)
+	promslogConfig := &promslog.Config{}
+	flag.AddFlags(kingpin.CommandLine, promslogConfig)
 	kingpin.Version(version.Print("flexlm_exporter"))
 	kingpin.CommandLine.UsageWriter(os.Stdout)
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	logger := promlog.New(promlogConfig)
+	logger := promslog.New(promslogConfig)
 
-	level.Info(logger).Log("msg", "Starting flexlm_exporter", "version", version.Info())
-	level.Info(logger).Log("msg", "Build context", "build_context", version.BuildContext())
+	logger.Info("Starting flexlm_exporter", "version", version.Info())
+	logger.Info("Build context", "build_context", version.BuildContext())
 	if userCurrent, err := user.Current(); err == nil && userCurrent.Uid == "0" {
-		level.Warn(logger).Log("msg", `FLEXlm Exporter is running as root user. `+
+		logger.Warn(`FLEXlm Exporter is running as root user. ` +
 			`This exporter is designed to run as unprivileged user, root is not required.`)
 	}
 
+	runtime.GOMAXPROCS(*maxProcs)
+	logger.Debug("Go MAXPROCS", "procs", runtime.GOMAXPROCS(0))
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger))
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(`<html>
@@ -221,7 +225,7 @@ func main() {
 		ReadHeaderTimeout: serverReadHeaderTimeout * time.Second,
 	}
 	if err := web.ListenAndServe(server, toolkitFlags, logger); err != nil {
-		level.Error(logger).Log("err", err)
+		logger.Error(err.Error())
 		os.Exit(1)
 	}
 }

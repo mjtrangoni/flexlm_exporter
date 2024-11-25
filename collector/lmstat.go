@@ -17,6 +17,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"regexp"
@@ -25,8 +26,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -41,7 +40,7 @@ type lmstatCollector struct {
 	lmstatFeatureReservGroups      *prometheus.Desc
 	lmstatFeatureReservHost        *prometheus.Desc
 	lmstatFeatureIssued            *prometheus.Desc
-	logger                         log.Logger
+	logger                         *slog.Logger
 }
 
 // LicenseConfig is going to be read once in main, and then used here.
@@ -56,7 +55,7 @@ func init() {
 }
 
 // NewLmstatCollector returns a new Collector exposing lmstat license stats.
-func NewLmstatCollector(logger log.Logger) (Collector, error) {
+func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 	return &lmstatCollector{
 		lmstatInfo: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "lmstat", "info"),
@@ -138,10 +137,10 @@ func contains(slice []string, item string) bool {
 }
 
 // execute lmutil utility.
-func lmutilOutput(logger log.Logger, args ...string) ([]byte, error) {
+func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 	_, err := os.Stat(*lmutilPath)
 	if os.IsNotExist(err) {
-		level.Error(logger).Log("err", *lmutilPath, "missing")
+		logger.Error("err", *lmutilPath, "missing")
 		os.Exit(1)
 	}
 
@@ -273,7 +272,7 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 	return vendors
 }
 
-func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[string]*feature,
+func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[string]*feature,
 	map[string]map[string][]*featureUserUsed, map[string]map[string]float64, map[string]map[string]float64) {
 	features := make(map[string]*feature)
 	licUsersByFeature := make(map[string]map[string][]*featureUserUsed)
@@ -289,14 +288,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 
 			issued, err := strconv.Atoi(matches[2])
 			if err != nil {
-				level.Error(logger).Log("could not convert", matches[2], "to integer:", err)
+				logger.Error("err", "could not convert", matches[2], "to integer:", err)
 			}
 
 			featureName = matches[1]
 
 			used, err := strconv.Atoi(matches[3])
 			if err != nil {
-				level.Error(logger).Log("could not convert", matches[3], "to integer:", err)
+				logger.Error("err", "could not convert", matches[3], "to integer:", err)
 			}
 
 			features[featureName] = &feature{
@@ -312,7 +311,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			username := matches["user"]
 
 			if strings.TrimSpace(username) == "" {
-				level.Debug(logger).Log("username couldn't be found for '", lineJoined,
+				logger.Debug("username couldn't be found for '", lineJoined,
 					"', using lmutilLicenseFeatureUsageUser2Regex.")
 
 				matches = reSubMatchMap(lmutilLicenseFeatureUsageUser2Regex, lineJoined)
@@ -337,7 +336,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			if matches["licenses"] != "" {
 				licUsed, err := strconv.Atoi(matches["licenses"])
 				if err != nil {
-					level.Error(logger).Log("could not convert", matches["licenses"], "to integer:", err)
+					logger.Error("err", "could not convert", matches["licenses"], "to integer:", err)
 				}
 
 				for i := range licUsersByFeature[featureName][username] {
@@ -361,7 +360,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 
 			groupReserv, err := strconv.Atoi(matches[2])
 			if err != nil {
-				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
+				logger.Error("err", "could not convert", matches[1], "to integer:", err)
 			}
 
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
@@ -374,7 +373,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger log.Logger) (map[st
 			hostReserv, err := strconv.Atoi(matches[2])
 
 			if err != nil {
-				level.Error(logger).Log("could not convert", matches[1], "to integer:", err)
+				logger.Error("err", "could not convert", matches[1], "to integer:", err)
 			}
 
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
@@ -555,7 +554,7 @@ func reSubMatchMap(r *regexp.Regexp, str string) map[string]string {
 	return subMatchMap
 }
 
-func convertLmstatTimeToUnixTime(lmtime string, logger log.Logger) time.Time {
+func convertLmstatTimeToUnixTime(lmtime string, logger *slog.Logger) time.Time {
 	matches := reSubMatchMap(lmutilTimeRegex, lmtime)
 
 	// current time and offset (lmstat outputs the time for the current time zone of the server where it is executed)
@@ -574,7 +573,7 @@ func convertLmstatTimeToUnixTime(lmtime string, logger log.Logger) time.Time {
 		ltime = ltime.Add(-time.Duration(offset) * time.Second)
 
 		if err != nil {
-			level.Error(logger).Log("could not convert", ltime, "to unix time:", err)
+			logger.Error("err", "could not convert", ltime, "to unix time:", err)
 
 			// fallback, just return the current time in case of errors
 			return ctime

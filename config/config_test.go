@@ -18,7 +18,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/go-kit/log"
+	"github.com/prometheus/common/promslog"
+
 	"github.com/mjtrangoni/flexlm_exporter/config"
 )
 
@@ -29,7 +30,9 @@ const (
 func TestLoad(t *testing.T) {
 	t.Parallel()
 
-	testLicenseConfig, err := config.Load(testLoadYml, log.NewNopLogger())
+	logger := promslog.New(&promslog.Config{})
+
+	testLicenseConfig, err := config.Load(testLoadYml, logger)
 	if err != nil {
 		t.Fatal(err)
 	}

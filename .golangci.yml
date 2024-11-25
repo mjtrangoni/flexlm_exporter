@@ -28,8 +28,7 @@ linters-settings:
           - $gostd
           - github.com/mjtrangoni/flexlm_exporter
           - github.com/prometheus/client_golang
-          - github.com/go-kit/log
-          - github.com/prometheus/common/promlog
+          - github.com/prometheus/common/promslog
           - github.com/prometheus/common/version
           - github.com/prometheus/exporter-toolkit/web
           - github.com/alecthomas/kingpin/v2

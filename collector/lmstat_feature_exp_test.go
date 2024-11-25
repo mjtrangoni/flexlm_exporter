@@ -19,7 +19,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-kit/log"
+	"github.com/prometheus/common/promslog"
 )
 
 const (
@@ -43,7 +43,8 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr, log.NewNopLogger())
+	logger := promslog.New(&promslog.Config{})
+	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr, logger)
 	found := false
 
 	for index, feature := range featuresExp {
@@ -119,7 +120,8 @@ func TestParseLmstatLicenseFeatureExpDate2(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr, log.NewNopLogger())
+	logger := promslog.New(&promslog.Config{})
+	featuresExp := parseLmstatLicenseFeatureExpDate(dataStr, logger)
 	found := false
 
 	for index, feature := range featuresExp {
