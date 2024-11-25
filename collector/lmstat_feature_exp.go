@@ -15,6 +15,7 @@ package collector
 
 import (
 	"fmt"
+	"log/slog"
 	"math"
 	"sort"
 	"strconv"
@@ -22,8 +23,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/mjtrangoni/flexlm_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/text/cases"
@@ -39,7 +38,7 @@ const (
 type lmstatFeatureExpCollector struct {
 	lmstatFeatureExp     *prometheus.Desc
 	lmstatFeatureAggrExp *prometheus.Desc
-	logger               log.Logger
+	logger               *slog.Logger
 }
 
 func init() {
@@ -49,7 +48,7 @@ func init() {
 
 // NewLmstatFeatureExpCollector returns a new Collector exposing lmstat license
 // feature expiration date.
-func NewLmstatFeatureExpCollector(logger log.Logger) (Collector, error) {
+func NewLmstatFeatureExpCollector(logger *slog.Logger) (Collector, error) {
 	return &lmstatFeatureExpCollector{
 		lmstatFeatureExp: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature",
@@ -80,7 +79,7 @@ func (c *lmstatFeatureExpCollector) Update(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
-func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[int]*featureExp {
+func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) map[int]*featureExp {
 	var (
 		expires     float64
 		index       int
@@ -106,7 +105,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[
 			vendorIndex = 4
 		}
 
-		level.Debug(logger).Log(matches)
+		logger.Debug("debug", "matches", matches)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[expIndex], "-")
 		if len(slice) > lenghtOne {
@@ -126,7 +125,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger log.Logger) map[
 				fmt.Sprintf("%s-%s-%s", day,
 					cases.Title(language.English).String(month), year))
 			if err != nil {
-				level.Error(logger).Log("could not convert to date:", err)
+				logger.Error("err", "could not convert to date:", err)
 			}
 
 			if expireDate.Unix() <= 0 {

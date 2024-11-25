@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-kit/log"
+	"github.com/prometheus/common/promslog"
 )
 
 const (
@@ -210,7 +210,9 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
+	logger := promslog.New(&promslog.Config{})
+	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(dataStr, logger)
+
 	for name, info := range features {
 		if name == "feature11" {
 			if info.issued != 16384 || info.used != 80 {
@@ -358,7 +360,9 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, licUsersByFeature, _, _ := parseLmstatLicenseInfoFeature(dataStr, log.NewNopLogger())
+	logger := promslog.New(&promslog.Config{})
+	_, licUsersByFeature, _, _ := parseLmstatLicenseInfoFeature(dataStr,
+		logger)
 
 	// the year does not matter in this case, since lmstat omits the year information
 	ctime := time.Now()

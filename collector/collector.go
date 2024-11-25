@@ -16,14 +16,14 @@
 package collector
 
 import (
+	"errors"
 	"fmt"
+	"log/slog"
 	"strconv"
 	"sync"
 	"time"
 
 	kingpin "github.com/alecthomas/kingpin/v2"
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -57,14 +57,14 @@ const (
 )
 
 var (
-	factories              = make(map[string]func(logger log.Logger) (Collector, error))
+	factories              = make(map[string]func(logger *slog.Logger) (Collector, error))
 	initiatedCollectorsMtx = sync.Mutex{}
 	initiatedCollectors    = make(map[string]Collector)
 	collectorState         = make(map[string]*bool)
 	forcedCollectors       = map[string]bool{} // collectors which have been explicitly enabled or disabled
 )
 
-func registerCollector(collector string, isDefaultEnabled bool, factory func(logger log.Logger) (Collector, error)) {
+func registerCollector(collector string, isDefaultEnabled bool, factory func(logger *slog.Logger) (Collector, error)) {
 	var helpDefaultState string
 	if isDefaultEnabled {
 		helpDefaultState = "enabled"
@@ -85,7 +85,7 @@ func registerCollector(collector string, isDefaultEnabled bool, factory func(log
 // FlexlmCollector implements the prometheus.Collector interface.
 type FlexlmCollector struct {
 	Collectors map[string]Collector
-	logger     log.Logger
+	logger     *slog.Logger
 }
 
 // collectorFlagAction generates a new action function for the given collector
@@ -102,10 +102,10 @@ func collectorFlagAction(collector string) func(ctx *kingpin.ParseContext) error
 	}
 }
 
-//revive:enable:unused-parameter
-
 // NewFlexlmCollector creates a new FlexlmCollector.
-func NewFlexlmCollector(logger log.Logger, filters ...string) (*FlexlmCollector, error) {
+//
+//revive:enable:unused-parameter
+func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollector, error) {
 	f := make(map[string]bool)
 
 	for _, filter := range filters {
@@ -132,7 +132,7 @@ func NewFlexlmCollector(logger log.Logger, filters ...string) (*FlexlmCollector,
 		if collector, ok := initiatedCollectors[key]; ok {
 			collectors[key] = collector
 		} else {
-			collector, err := factories[key](log.With(logger, "collector", key))
+			collector, err := factories[key](logger.With("collector", key))
 			if err != nil {
 				return nil, err
 			}
@@ -168,7 +168,7 @@ func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
 	wg.Wait()
 }
 
-func execute(name string, c Collector, ch chan<- prometheus.Metric, logger log.Logger) {
+func execute(name string, c Collector, ch chan<- prometheus.Metric, logger *slog.Logger) {
 	var success float64
 
 	begin := time.Now()
@@ -176,11 +176,15 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger log.L
 	duration := time.Since(begin)
 
 	if err != nil {
-		level.Error(logger).Log(name, "collector failed after:", duration.Seconds(), ":", err)
+		if IsNoDataError(err) {
+			logger.Debug("collector returned no data", "name", name, "duration_seconds", duration.Seconds(), "err", err)
+		} else {
+			logger.Error("collector failed", "name", name, "duration_seconds", duration.Seconds(), "err", err)
+		}
 
 		success = 0
 	} else {
-		level.Debug(logger).Log("OK:", name, "collector succeeded after:", duration.Seconds())
+		logger.Debug("collector succeeded", "name", name, "duration_seconds", duration.Seconds())
 
 		success = 1
 	}
@@ -192,4 +196,11 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger log.L
 type Collector interface {
 	// Get new metrics and expose them via prometheus registry.
 	Update(ch chan<- prometheus.Metric) error
+}
+
+// ErrNoData indicates the collector found no data to collect, but had no other error.
+var ErrNoData = errors.New("collector returned no data")
+
+func IsNoDataError(err error) bool {
+	return err == ErrNoData
 }

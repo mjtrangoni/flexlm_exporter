@@ -16,11 +16,10 @@ package config
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	"gopkg.in/yaml.v3"
 )
 
@@ -44,9 +43,9 @@ type Configuration struct {
 }
 
 // Load parses the YAML file.
-func Load(filename string, logger log.Logger) (Configuration, error) {
-	level.Info(logger).Log("msg", "Loading license config file:")
-	level.Info(logger).Log(" - ", filename)
+func Load(filename string, logger *slog.Logger) (Configuration, error) {
+	logger.Info("Loading license config file:")
+	logger.Info(filename)
 
 	bytes, err := os.ReadFile(filepath.Clean(filename))
 	if err != nil {
@@ -58,7 +57,7 @@ func Load(filename string, logger log.Logger) (Configuration, error) {
 	err = yaml.Unmarshal(bytes, &c)
 
 	if err != nil {
-		level.Error(logger).Log("Couldn't load config file: ", err)
+		logger.Error(fmt.Sprintf("Couldn't load config file: %v", err))
 		return c, err
 	}
 
