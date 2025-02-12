@@ -12,6 +12,9 @@
 [Prometheus](https://prometheus.io/) exporter for FLEXlm License Manager
 `lmstat` license information.
 
+If you are looking for other License Managers metrics (like rlm,lmx, and mathlm),
+please check the [License Manager Exporter](https://codeberg.org/Zauberbutter/license_manager_exporter/).
+
 ## Install
 
 ```console

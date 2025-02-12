@@ -94,4 +94,4 @@ crossbuild: promu
 $(GOPATH)/bin/golangci-lint lint:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
+		$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.2
