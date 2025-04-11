@@ -116,7 +116,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	nc, err := collector.NewFlexlmCollector(h.logger, filters...)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't create collector: %s", err)
+		return nil, fmt.Errorf("couldn't create collector: %w", err)
 	}
 
 	// Only log the creation of an unfiltered handler, which should happen
@@ -147,7 +147,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	r := prometheus.NewRegistry()
 	r.MustRegister(promcollectorsversion.NewCollector("flexlm_exporter"))
 	if err := r.Register(nc); err != nil {
-		return nil, fmt.Errorf("couldn't register node collector: %s", err)
+		return nil, fmt.Errorf("couldn't register node collector: %w", err)
 	}
 
 	handler := promhttp.HandlerFor(

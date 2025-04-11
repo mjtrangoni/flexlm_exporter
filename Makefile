@@ -14,8 +14,10 @@
 GO                      ?= GO111MODULE=on go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
+PROMU_VERSION           ?= v0.17.0
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
-GO_VERSION              ?= 1.23
+GOLINTER_VERSION        ?= v2.0.2
+GO_VERSION              ?= 1.24
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
 DOCKER_IMAGE_NAME       ?= mjtrangoni/flexlm_exporter
@@ -78,7 +80,7 @@ docker:
 $(GOPATH)/bin/promu promu:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) install github.com/prometheus/promu@v0.17.0
+		$(GO) install github.com/prometheus/promu@$(PROMU_VERSION)
 
 .PHONY: tarball
 tarball: promu
@@ -94,4 +96,4 @@ crossbuild: promu
 $(GOPATH)/bin/golangci-lint lint:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.2
+		$(GO) install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLINTER_VERSION)

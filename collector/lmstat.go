@@ -153,11 +153,11 @@ func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 		// convert error to strings
 		errorToString := errorDescriptionString[err.Error()]
 		if errorToString != "" {
-			return nil, fmt.Errorf("error while calling '%s %s': %v:'%s'", *lmutilPath,
+			return nil, fmt.Errorf("error while calling '%s %s': %w:'%s'", *lmutilPath,
 				strings.Join(args, " "), err, errorToString)
 		}
 
-		return nil, fmt.Errorf("error while calling '%s %s': %v:'unknown error'",
+		return nil, fmt.Errorf("error while calling '%s %s': %w:'unknown error'",
 			*lmutilPath, strings.Join(args, " "), err)
 	}
 

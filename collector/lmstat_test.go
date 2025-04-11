@@ -104,13 +104,14 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 
 	servers := parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
-		if info.fqdn == "host-1.domain.net" || info.fqdn == "host3.domain.net" {
+		switch info.fqdn {
+		case "host-1.domain.net", "host3.domain.net":
 			if info.version != v117String || info.master ||
 				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
-		} else if info.fqdn == "host2.domain.net" {
+		case "host2.domain.net":
 			if info.version != v117String || !info.master ||
 				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
@@ -131,19 +132,20 @@ func TestParseLmstatLicenseInfoServer(t *testing.T) {
 
 	servers = parseLmstatLicenseInfoServer(dataStr)
 	for _, info := range servers {
-		if info.fqdn == "host1" {
+		switch info.fqdn {
+		case "host1":
 			if info.version != v11130String || info.master ||
 				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
-		} else if info.fqdn == "host2" {
+		case "host2":
 			if info.version != v11130String || !info.master ||
 				!info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
 			}
-		} else if info.fqdn == "host3" {
+		case "host3":
 			if info.version != "" || info.master || info.status {
 				t.Fatalf("Unexpected values for %s: %s, %t, %t",
 					info.fqdn, info.version, info.master, info.status)
@@ -235,18 +237,19 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {
-			if username == "user1" {
+			switch username {
+			case "user1":
 				if licused[i].num != licUsed16 {
 					t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
 						username, licused[i].num)
 				}
-			} else if username == "user11" {
+			case "user11":
 				foundUser11 = true
 				if licused[i].num != licUsed26 {
 					t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
 						username, licused[i].num)
 				}
-			} else if username == "user17" {
+			case "user17":
 				if licused[i].num != licUsed12 {
 					t.Fatalf("Unexpected values for feature34[%s]: %v!=12",
 						username, licused[i].num)
@@ -263,18 +266,19 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature31"] {
 		for i := range licused {
-			if username == "user33" {
+			switch username {
+			case "user33":
 				if licused[i].num != licUsed16 {
 					t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 						username, licused[i].num)
 				}
-			} else if username == "cmfy211" {
+			case "cmfy211":
 				foundCmfy211 = true
 				if licused[i].num != licUsed1 {
 					t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
 						username, licused[i].num)
 				}
-			} else if username == "cmfy212" {
+			case "cmfy212":
 				if licused[i].num != licUsed16 {
 					t.Fatalf("Unexpected values for feature31[%s]: %v!=16",
 						username, licused[i].num)
@@ -295,17 +299,18 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 
 	for username, licused := range licUsersByFeature["feature100"] {
 		for i := range licused {
-			if username == "user13" {
+			switch username {
+			case "user13":
 				if licused[i].num != licUsed1 {
 					t.Fatalf("Unexpected values for feature1[%s]: %v!=1",
 						username, licused[i].num)
 				}
-			} else if username == "Administrator" {
+			case "Administrator":
 				// There is 2 users, and this should always enter here.
 				found = true
-			} else if username == "John Doe" {
+			case "John Doe":
 				foundJohnDoe = true
-			} else if username == "Jane Doe Jr." {
+			case "Jane Doe Jr.":
 				foundJaneDoe = true
 			}
 		}
@@ -381,7 +386,8 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	// the lmstat output, so it must be used in the test as well
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {
-			if username == "user1" {
+			switch username {
+			case "user1":
 				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
 				if err != nil {
 					panic(err)
@@ -392,7 +398,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
 						username, since.String(), sinceUser1.String())
 				}
-			} else if username == "user17" {
+			case "user17":
 				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
 				if err != nil {
 					panic(err)

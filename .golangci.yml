@@ -1,76 +1,22 @@
-# options for analysis running
+version: "2"
 run:
   modules-download-mode: mod
-linters-settings:
-  dogsled:
-    # Checks assignments with too many blank identifiers.
-    # Default: 2
-    max-blank-identifiers: 3
-  funlen:
-    lines: 300
-    statements: 300
-  gocyclo:
-    min-complexity: 50
-  dupl:
-    threshold: 150
-  depguard:
-    # Rules to apply.
-    # Default: Only allow $gostd in all files.
-    rules:
-      # Name of a rule.
-      main:
-        # List of file globs that will match this list of settings to compare against.
-        # Default: $all
-        files:
-          - "!**/*_a _file.go"
-        # List of allowed packages.
-        allow:
-          - $gostd
-          - github.com/mjtrangoni/flexlm_exporter
-          - github.com/prometheus/client_golang
-          - github.com/prometheus/common/promslog
-          - github.com/prometheus/common/version
-          - github.com/prometheus/exporter-toolkit/web
-          - github.com/alecthomas/kingpin/v2
-        # Packages that are not allowed where the value is a suggestion.
-        deny:
-          - pkg: "github.com/sirupsen/logrus"
-            desc: not allowed
-          - pkg: "github.com/pkg/errors"
-            desc: Should be replaced by standard lib errors package
-  misspell:
-    locale: US
-  lll:
-    line-length: 140
-  goimports:
-    local-prefixes: github.com/golangci/golangci-lint
-  gocritic:
-    enabled-tags:
-      - performance
-      - style
-      - experimental
-    disabled-checks:
-      - whyNoLint
-      - wrapperFunc
-
 linters:
-  disable-all: true
+  default: none
   enable:
     - bodyclose
     - depguard
     - dogsled
     - dupl
     - errcheck
+    - errorlint
     - exhaustive
     - funlen
     - goconst
     - gocritic
     - gocyclo
-    - gofmt
-    - goimports
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - lll
@@ -80,34 +26,100 @@ linters:
     - noctx
     - nolintlint
     - perfsprint
+    - promlinter
     - revive
     - rowserrcheck
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
+    - usestdlibvars
     - whitespace
     - wsl
-
-issues:
-  exclude-rules:
-    - text: "type `typedDesc` is unused"
-      linters:
-        - unused
-    - text: "rewrite if-else to switch statement"
-      linters:
-        - gocritic
-    - text: "consider giving a name to these results"
-      linters:
-        - gocritic
-    - text: "Subprocess launched with a potential tainted input or cmd arguments"
-      linters:
-        - gosec
-    - text: "if statements should only be cuddled with assignments"
-      linters:
-        - wsl
-    - text: "Error return value of"
-      linters:
-        - errcheck
+  settings:
+    depguard:
+      rules:
+        main:
+          files:
+            - '!**/*_a _file.go'
+          allow:
+            - $gostd
+            - github.com/mjtrangoni/flexlm_exporter
+            - github.com/prometheus/client_golang
+            - github.com/prometheus/common/promslog
+            - github.com/prometheus/common/version
+            - github.com/prometheus/exporter-toolkit/web
+            - github.com/alecthomas/kingpin/v2
+            - gopkg.in/yaml.v3
+            - golang.org/x/text/cases
+            - golang.org/x/text/language
+          deny:
+            - pkg: github.com/sirupsen/logrus
+              desc: not allowed
+            - pkg: github.com/pkg/errors
+              desc: Should be replaced by standard lib errors package
+    dogsled:
+      max-blank-identifiers: 3
+    dupl:
+      threshold: 150
+    funlen:
+      lines: 300
+      statements: 300
+    gocritic:
+      disabled-checks:
+        - whyNoLint
+        - wrapperFunc
+      enabled-tags:
+        - performance
+        - style
+        - experimental
+    gocyclo:
+      min-complexity: 50
+    lll:
+      line-length: 140
+    misspell:
+      locale: US
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - unused
+        text: type `typedDesc` is unused
+      - linters:
+          - gocritic
+        text: rewrite if-else to switch statement
+      - linters:
+          - gocritic
+        text: consider giving a name to these results
+      - linters:
+          - gosec
+        text: Subprocess launched with a potential tainted input or cmd arguments
+      - linters:
+          - wsl
+        text: if statements should only be cuddled with assignments
+      - linters:
+          - errcheck
+        text: Error return value of
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/golangci/golangci-lint
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
