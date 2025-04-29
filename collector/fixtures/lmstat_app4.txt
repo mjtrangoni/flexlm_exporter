@@ -1,0 +1,164 @@
+lmutil - Copyright (c) 1989-2024 Flexera. All Rights Reserved.
+Flexible License Manager status on Tue 4/22/2025 11:08
+
+[Detecting lmgrd processes...]
+License server status: port@licensevm.domain.example
+    License file(s) on licensevm.domain.example: C:\_Licensesoftware\Comsol\COMSOL63\Multiphysics\license\license.dat:
+
+licensevm.domain.example: license server UP (MASTER) v11.19.6
+
+Vendor daemon status (on licensevm.domain.example):
+
+  LMCOMSOL: UP v11.19.6
+Feature usage info:
+
+Users of SERIAL:  (Uncounted, node-locked)
+
+
+"SERIAL" v6.3, vendor: LMCOMSOL, expiry: permanent(no expiration date)
+  vendor_string: REDACTED
+  uncounted nodelocked license locked to NOTHING (hostid=ANY)
+
+    matlab CLN-5CG3471WVY /dev/pts/0 (v5.6) (licensevm.domain.example/port 1090), start Tue 4/22 11:07
+
+Users of ACDC:  (Total of 2 licenses issued;  Total of 1 license in use)
+
+
+"ACDC" v6.3, vendor: LMCOMSOL, expiry: permanent(no expiration date)
+  floating license
+
+    matlab CLN-5CG3471WVY /dev/pts/0 (v5.6) (licensevm.domain.example/port 914), start Tue 4/22 11:07
+
+Users of ACDCBATCH:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of CADIMPORT:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of CADIMPORTBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of CFD:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of CFDBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of COMSOL:  (Total of 3 licenses issued;  Total of 1 license in use)
+
+
+"COMSOL" v6.3, vendor: LMCOMSOL, expiry: permanent(no expiration date)
+  floating license
+
+    matlab CLN-5CG3471WVY /dev/pts/0 (v5.6) (licensevm.domain.example/port 2280), start Tue 4/22 11:07
+
+Users of COMSOLBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of ELECTROCHEMISTRY:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of ELECTROCHEMISTRYBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of LLEXCEL:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of LLEXCELBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of LLMATLAB:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of LLMATLABBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of LLSOLIDWORKS:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MATLIB:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MATLIBBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MEMS:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MEMSBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MICROFLUIDICS:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of MICROFLUIDICSBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of NONLINEARSTRUCTMATERIALS:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of NONLINEARSTRUCTMATERIALSBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of PARTICLETRACING:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of PARTICLETRACINGBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of RF:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of RFBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of STRUCTURALMECHANICS:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of STRUCTURALMECHANICSBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of WAVEOPTICS:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of WAVEOPTICSBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of SUBSURFACEFLOW:  (Error: 1 licenses, unsupported by licensed server)
+
+Users of SUBSURFACEFLOWBATCH:  (Error: 1 licenses, unsupported by licensed server)
+
+Users of COMSOLGUI:  (Total of 3 licenses issued;  Total of 1 license in use)
+
+
+"COMSOLGUI" v6.3, vendor: LMCOMSOL, expiry: permanent(no expiration date)
+  floating license
+
+    matlab CLN-5CG3471WVY /dev/pts/0 (v5.6) (licensevm.domain.example/port 1408), start Tue 4/22 11:07
+
+Users of CHATBOT:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of CLIENTSERVER:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of CLUSTERNODE:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of COMSOLUSER:  (Total of 2 licenses issued;  Total of 1 license in use)
+
+
+"COMSOLUSER" v6.3, vendor: LMCOMSOL, expiry: permanent(no expiration date)
+  floating license
+
+    matlab CLN-5CG3471WVY /dev/pts/0 (v5.6) (licensevm.domain.example/port 693), start Tue 4/22 11:07
+
+Users of MODELMANAGER:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of MODELMANAGERBATCH:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of MODELMANAGERSERVER:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of MODELMANAGERSERVERBATCH:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of CADREADER:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of CADREADERBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of CADIMPORTUSER:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of CHEM:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of CHEMBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of ELECTRODEPOSITION:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of ELECTRODEPOSITIONBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MOLECULARFLOW:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MOLECULARFLOWBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MULTIBODYDYNAMICS:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of MULTIBODYDYNAMICSBATCH:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of ECADIMPORT:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of ECADIMPORTBATCH:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of ACOUSTICS:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of ACOUSTICSBATCH:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of SME:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of ACO:  (Total of 1 license issued;  Total of 0 licenses in use)
