@@ -14,8 +14,8 @@
 package collector
 
 import (
+	"bufio"
 	"bytes"
-	"encoding/csv"
 	"fmt"
 	"log/slog"
 	"os"
@@ -165,37 +165,23 @@ func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 }
 
 func splitOutput(lmutilOutput []byte) ([][]string, error) {
-	r := csv.NewReader(bytes.NewReader(lmutilOutput))
-	// It seems that some vendors used to encrypt the display, and contains
-	// pipes. That is why we have to use other special characters.
-	// r.Comma = '|'
-	r.Comma = 'Ž'
-	r.LazyQuotes = true
-	r.Comment = '#'
-
-	result, err := r.ReadAll()
-	if err != nil {
+	scanner := bufio.NewScanner(bytes.NewReader(lmutilOutput))
+	scanner.Split(bufio.ScanLines)
+	var result [][]string
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "#") {
+			continue
+		}
+		if strings.Contains(line, "|") {
+			line = strings.ReplaceAll(line, "|", "Ž")
+		}
+		result = append(result, strings.Split(line, "Ž"))
+	}
+	if err := scanner.Err(); err != nil {
 		return result, fmt.Errorf("could not parse lmutil output: %w", err)
 	}
-
-	keys := make(map[string]int)
-
-	res := make([][]string, len(result))
-
-	for _, v := range result {
-		key := v[0]
-		if _, ok := keys[key]; ok {
-			keys[key]++
-
-			v[0] = strings.TrimSpace(v[0]) + strconv.Itoa(keys[key])
-		} else {
-			keys[key] = 1
-		}
-
-		res = append(res, v)
-	}
-
-	return res, nil
+	return result, nil
 }
 
 func parseLmstatVersion(outStr [][]string) lmstatInformation {
@@ -378,6 +364,10 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
 		}
+		fmt.Println("features", features)
+		fmt.Println("licUsersByFeature", licUsersByFeature)
+		fmt.Println("reservGroupByFeature", reservGroupByFeature)
+		fmt.Println("reservHostByFeature", reservHostByFeature)
 	}
 
 	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
