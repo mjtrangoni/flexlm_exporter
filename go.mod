@@ -2,8 +2,6 @@ module github.com/mjtrangoni/flexlm_exporter
 
 go 1.23.0
 
-toolchain go1.24.2
-
 require (
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/prometheus/client_golang v1.22.0
