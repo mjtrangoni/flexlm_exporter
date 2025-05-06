@@ -16,7 +16,7 @@ GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
 PROMU_VERSION           ?= v0.17.0
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
-GOLINTER_VERSION        ?= v2.0.2
+GOLINTER_VERSION        ?= v2.1.6
 GO_VERSION              ?= 1.24
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter
@@ -65,7 +65,7 @@ build: $(PROMU)
 
 .PHONY: clean
 clean:
-	@echo ">> Cleaning up"
+	@echo ">> cleaning up"
 	@find . -type f -name '*~' -exec rm -fv {} \;
 	@$(RM) $(TARGET)
 	@$(RM) $(TARGET).exe
