@@ -364,12 +364,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
 		}
-		fmt.Println("features", features)
-		fmt.Println("licUsersByFeature", licUsersByFeature)
-		fmt.Println("reservGroupByFeature", reservGroupByFeature)
-		fmt.Println("reservHostByFeature", reservHostByFeature)
 	}
-
 	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
 }
 
