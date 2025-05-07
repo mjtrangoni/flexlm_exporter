@@ -167,7 +167,9 @@ func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	scanner := bufio.NewScanner(bytes.NewReader(lmutilOutput))
 	scanner.Split(bufio.ScanLines)
+
 	var result [][]string
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "#") {
@@ -176,11 +178,13 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 		if strings.Contains(line, "|") {
 			line = strings.ReplaceAll(line, "|", "Ž")
 		}
+
 		result = append(result, strings.Split(line, "Ž"))
 	}
 	if err := scanner.Err(); err != nil {
 		return result, fmt.Errorf("could not parse lmutil output: %w", err)
 	}
+
 	return result, nil
 }
 
@@ -365,6 +369,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
 		}
 	}
+
 	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
 }
 
