@@ -1,0 +1,463 @@
+lmutil - Copyright (c) 1989-2024 Flexera. All Rights Reserved.
+Flexible License Manager status on Mon 2/10/2025 11:26
+
+License server status: 27004@host.example.com
+    License file(s) on host.example.com: /usr/local/matlab/license.lic:
+
+host.example.com: license server UP (MASTER) v11.19.6
+
+Vendor daemon status (on host.example.com):
+
+       MLM: UP v11.19.6
+Feature usage info:
+
+Users of MATLAB:  (Total of 10000 licenses issued;  Total of 61 licenses in use)
+
+
+"MATLAB" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v50) (host.example.com/27004 401), start Mon 2/10 0:10, PID: 2924522
+    user2 host display (v50) (host.example.com/27004 501), start Mon 2/10 0:10, PID: 11432
+    user3 host display (v36) (host.example.com/27004 701), start Mon 2/10 0:10, PID: 10088
+    user4 host display (v42) (host.example.com/27004 801), start Mon 2/10 0:11, PID: 53864
+    user5 host display (v48) (host.example.com/27004 12101), start Mon 2/10 0:18, PID: 11296
+    user6 host display (v44) (host.example.com/27004 1001), start Mon 2/10 0:11, PID: 15820
+    user7 host display (v42) (host.example.com/27004 1501), start Mon 2/10 0:11, PID: 35760
+    user8 host display (v42) (host.example.com/27004 1701), start Mon 2/10 0:11, PID: 25580
+    user9 host display (v47) (host.example.com/27004 2801), start Mon 2/10 0:12, PID: 18852
+    user10 host display (v51) (host.example.com/27004 2901), start Mon 2/10 0:12, PID: 1719044
+    user11 host display (v47) (host.example.com/27004 3201), start Mon 2/10 0:12, PID: 3662860
+    user12 host display (v50) (host.example.com/27004 4201), start Mon 2/10 0:12, PID: 1353995
+    user13 host display (v36) (host.example.com/27004 4301), start Mon 2/10 0:12, PID: 4908
+    user14 host display (v42) (host.example.com/27004 4501), start Mon 2/10 0:12, PID: 13008
+    user15 host display (v49) (host.example.com/27004 4601), start Mon 2/10 0:12, PID: 7940
+    user16 host display (v41) (host.example.com/27004 4801), start Mon 2/10 0:12, PID: 7184
+    user17 host display (v51) (host.example.com/27004 5101), start Mon 2/10 0:13, PID: 11812
+    user18 host display (v50) (host.example.com/27004 5601), start Mon 2/10 0:13, PID: 23296
+    user19 host display (v34) (host.example.com/27004 5801), start Mon 2/10 0:13, PID: 39280
+    user20 host display (v50) (host.example.com/27004 6001), start Mon 2/10 0:13, PID: 1352365
+    user21 host display (v39) (host.example.com/27004 6101), start Mon 2/10 0:13, PID: 25752
+    user22 host display (v50) (host.example.com/27004 6201), start Mon 2/10 0:13, PID: 4105666
+    user23 host display (v50) (host.example.com/27004 6401), start Mon 2/10 0:13, PID: 28348
+    user24 host display (v48) (host.example.com/27004 7801), start Mon 2/10 0:14, PID: 5720
+    user25 host display (v44) (host.example.com/27004 7901), start Mon 2/10 0:14, PID: 8468
+    user26 host display (v41) (host.example.com/27004 9501), start Mon 2/10 0:16, PID: 2997
+    user27 host display (v47) (host.example.com/27004 10501), start Mon 2/10 0:17, PID: 28368
+    user28 host display (v38) (host.example.com/27004 10601), start Mon 2/10 0:17, PID: 8072
+    user29 host display (v48) (host.example.com/27004 10701), start Mon 2/10 0:17, PID: 18892
+    user30 host display (v49) (host.example.com/27004 11201), start Mon 2/10 0:18, PID: 3448
+    user31 host display (v43) (host.example.com/27004 11401), start Mon 2/10 0:18, PID: 7280
+    user32 host display (v43) (host.example.com/27004 11501), start Mon 2/10 0:18, PID: 16244
+    user33 host display (v41) (host.example.com/27004 11701), start Mon 2/10 0:18, PID: 19836
+    user34 host display (v51) (host.example.com/27004 12301), start Mon 2/10 0:19, PID: 2673
+    user35 host display (v49) (host.example.com/27004 13801), start Mon 2/10 0:19, PID: 14892
+    user36 host display (v46) (host.example.com/27004 14001), start Mon 2/10 0:20, PID: 17940
+    user37 host display (v50) (host.example.com/27004 12202), start Mon 2/10 7:30, PID: 9144
+
+Users of SIMULINK:  (Total of 10000 licenses issued;  Total of 10 licenses in use)
+
+
+"SIMULINK" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2001), start Mon 2/10 0:11, PID: 25580
+    user2 host display (v36) (host.example.com/27004 4401), start Mon 2/10 0:12, PID: 4908
+    user3 host display (v44) (host.example.com/27004 8001), start Mon 2/10 0:14, PID: 8468
+    user4 host display (v48) (host.example.com/27004 10801), start Mon 2/10 0:17, PID: 18892
+    user5 host display (v50) (host.example.com/27004 14201), start Mon 2/10 7:31, PID: 9144
+
+Users of MATLAB_5G_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of AUTOSAR_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Aerospace_Blockset:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Aerospace_Blockset" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2501), start Mon 2/10 0:11, PID: 25580
+
+Users of Aerospace_Toolbox:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Aerospace_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2601), start Mon 2/10 0:11, PID: 25580
+
+Users of Antenna_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Audio_System_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Automated_Driving_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Bioinformatics_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Bluetooth_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of C2000_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Communication_Toolbox:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Communication_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v51) (host.example.com/27004 16003), start Mon 2/10 10:37, PID: 11796
+
+Users of Video_and_Image_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Control_Toolbox:  (Total of 10000 licenses issued;  Total of 3 licenses in use)
+
+
+"Control_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v44) (host.example.com/27004 8301), start Mon 2/10 0:14, PID: 8468
+    user1 host display (v50) (host.example.com/27004 1302), start Mon 2/10 7:33, PID: 9144
+    user1 host display (v46) (host.example.com/27004 15202), start Mon 2/10 9:01, PID: 3128
+
+Users of Curve_Fitting_Toolbox:  (Total of 10000 licenses issued;  Total of 2 licenses in use)
+
+
+"Curve_Fitting_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v50) (host.example.com/27004 5701), start Mon 2/10 0:13, PID: 23296
+    user2 host display (v44) (host.example.com/27004 903), start Mon 2/10 9:38, PID: 13191
+
+Users of DDS_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of DSP_HDL_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Signal_Blocks:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Signal_Blocks" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v51) (host.example.com/27004 17001), start Mon 2/10 10:37, PID: 11796
+
+Users of Data_Acq_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Database_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Datafeed_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Deep_Learning_HDL_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Neural_Network_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Econometrics_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of RTW_Embedded_Coder:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Filter_Design_HDL_Coder:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Fin_Instruments_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Financial_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Fixed_Point_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Fuzzy_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of GPU_Coder:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of GADS_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_HDL_Coder:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of EDA_Simulator_Link:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Image_Acquisition_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Image_Toolbox:  (Total of 10000 licenses issued;  Total of 5 licenses in use)
+
+
+"Image_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v47) (host.example.com/27004 3301), start Mon 2/10 0:12, PID: 3662860
+    user2 host display (v49) (host.example.com/27004 4701), start Mon 2/10 0:12, PID: 7940
+    user3 host display (v41) (host.example.com/27004 5001), start Mon 2/10 0:12, PID: 7184
+    user4 host display (v49) (host.example.com/27004 11301), start Mon 2/10 0:18, PID: 3448
+    user5 host display (v44) (host.example.com/27004 1404), start Mon 2/10 9:38, PID: 13191
+
+Users of OPC_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Instr_Control_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of LTE_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Lidar_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Coder:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"MATLAB_Coder" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user host display (v42) (host.example.com/27004 2101), start Mon 2/10 0:11, PID: 25580
+
+Users of MATLAB_Builder_for_Java:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Compiler:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Report_Gen:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Test:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MAP_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Medical_Imaging_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Mixed_Signal_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MPC_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of MBC_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Motor_Control_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Navigation_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Optimization_Toolbox:  (Total of 10000 licenses issued;  Total of 5 licenses in use)
+
+
+"Optimization_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v47) (host.example.com/27004 3401), start Mon 2/10 0:12, PID: 3662860
+    user2 host display (v51) (host.example.com/27004 5501), start Mon 2/10 0:13, PID: 11812
+    user3 host display (v51) (host.example.com/27004 6901), start Mon 2/10 0:13, PID: 1352090
+    user4 host display (v46) (host.example.com/27004 14101), start Mon 2/10 0:20, PID: 17940
+    user5 host display (v45) (host.example.com/27004 1102), start Mon 2/10 7:51, PID: 5904
+
+Users of Distrib_Computing_Toolbox:  (Total of 10000 licenses issued;  Total of 4 licenses in use)
+
+
+"Distrib_Computing_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v41) (host.example.com/27004 4901), start Mon 2/10 0:12, PID: 7184
+    user2 host display (v51) (host.example.com/27004 6801), start Mon 2/10 0:13, PID: 1352090
+
+Users of PDE_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Phased_Array_System_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Powertrain_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Pred_Maintenance_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of RF_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of RF_PCB_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of RF_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of ROS_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Radar_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Reinforcement_Learn_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Requirements:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Risk_Management_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Robotics_System_Toolbox:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Robotics_System_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 1901), start Mon 2/10 0:11, PID: 25580
+
+Users of Robust_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Satellite_Comm_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Sensor_Fusion_and_Tracking:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SerDes_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Signal_Integrity_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Signal_Toolbox:  (Total of 10000 licenses issued;  Total of 2 licenses in use)
+
+
+"Signal_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v51) (host.example.com/27004 5201), start Mon 2/10 0:13, PID: 11812
+    user2 host display (v51) (host.example.com/27004 16901), start Mon 2/10 10:37, PID: 11796
+
+Users of SimBiology:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SimEvents:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simscape_Battery:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SimDriveline:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Power_System_Blocks:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Power_System_Blocks" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v44) (host.example.com/27004 8201), start Mon 2/10 0:14, PID: 8468
+
+Users of SimHydraulics:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SimMechanics:  (Total of 10000 licenses issued;  Total of 2 licenses in use)
+
+
+"SimMechanics" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2401), start Mon 2/10 0:11, PID: 25580
+    user2 host display (v52) (host.example.com/27004 17301), start Mon 2/10 10:42, PID: 9596
+
+Users of Simscape:  (Total of 10000 licenses issued;  Total of 3 licenses in use)
+
+
+"Simscape" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2301), start Mon 2/10 0:11, PID: 25580
+    user2 host display (v44) (host.example.com/27004 8101), start Mon 2/10 0:14, PID: 8468
+    user3 host display (v52) (host.example.com/27004 17401), start Mon 2/10 10:42, PID: 9596
+
+Users of Virtual_Reality_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SL_Verification_Validation:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Code_Inspector:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Real-Time_Workshop:  (Total of 10000 licenses issued;  Total of 1 license in use)
+
+
+"Real-Time_Workshop" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 2201), start Mon 2/10 0:11, PID: 25580
+
+Users of Simulink_Compiler:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Control_Design:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Coverage:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Design_Optim:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Design_Verifier:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Real-Time_Win_Target:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Fault_Analyzer:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_PLC_Coder:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of XPC_Target:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SIMULINK_Report_Gen:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Test:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of SoC_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Excel_Link:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Stateflow:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Statistics_Toolbox:  (Total of 10000 licenses issued;  Total of 7 licenses in use)
+
+
+"Statistics_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 1601), start Mon 2/10 0:11, PID: 35760
+    user2 host display (v51) (host.example.com/27004 5301), start Mon 2/10 0:13, PID: 11812
+    user3 host display (v34) (host.example.com/27004 5901), start Mon 2/10 0:13, PID: 39280
+    user4 host display (v51) (host.example.com/27004 6701), start Mon 2/10 0:13, PID: 1352090
+    user5 host display (v41) (host.example.com/27004 9701), start Mon 2/10 0:16, PID: 16063
+    user6 host display (v41) (host.example.com/27004 11801), start Mon 2/10 0:18, PID: 19836
+    user7 host display (v48) (host.example.com/27004 15002), start Mon 2/10 9:13, PID: 5400
+
+Users of Symbolic_Toolbox:  (Total of 10000 licenses issued;  Total of 4 licenses in use)
+
+
+"Symbolic_Toolbox" v52, vendor: MLM, expiry: 30-dec-2025
+  vendor_string: vendor string
+  floating license
+
+    user1 host display (v42) (host.example.com/27004 1801), start Mon 2/10 0:11, PID: 25580
+    user2 host display (v51) (host.example.com/27004 5401), start Mon 2/10 0:13, PID: 11812
+    user3 host display (v50) (host.example.com/27004 6301), start Mon 2/10 0:13, PID: 4105666
+    user4 host display (v50) (host.example.com/27004 15803), start Mon 2/10 11:15, PID: 27440
+
+Users of System_Composer:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Identification_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Text_Analytics_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of UAV_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Vehicle_Dynamics_Blockset:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Vehicle_Network_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Vision_HDL_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of WLAN_System_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Wavelet_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of LTE_HDL_Toolbox:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of Wireless_Testbench:  (Total of 10000 licenses issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Bug_Finder:  (Total of 110000 licenses issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Bug_Finder_Engine:  (Total of 110000 licenses issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Server_C_CPP:  (Total of 110000 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Distrib_Comp_Engine:  (Total of 100000 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Web_App_Server:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of RoadRunner:  (Uncounted, node-locked)
+
+Users of RoadRunner_Asset_Library:  (Uncounted, node-locked)
+
+Users of RoadRunner_Scenario:  (Uncounted, node-locked)
+
+Users of RoadRunner_HD_Scene_Builder:  (Uncounted, node-locked)
+
+

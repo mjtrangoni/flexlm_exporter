@@ -19,7 +19,8 @@ var (
 	lmutilLicenseFeatureUsageUserRegex = regexp.MustCompile(
 		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ [[:print:]]+ (?P<ver>\(v[\w\.]+\)) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\, start (?P<since>\w+ \d+\/\d+ \d+\:\d+)(\,\s(?P<licenses>\d+)\s\w+|)` +
-			`(\s+\(linger\:\s\d+\s\/\s\d+\))?$`)
+			`(\s+\(linger\:\s\d+\s\/\s\d+\))?` +
+			`(\,\s+PID\:\s+\d+)?$`)
 	lmutilLicenseFeatureUsageUser2Regex = regexp.MustCompile(
 		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ (?P<ver>\(v[\w\.]+\)) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\, start (?P<since>\w+ \d+\/\d+ \d+\:\d+)(\,\s(?P<licenses>\d+)\s\w+|)` +
