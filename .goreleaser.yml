@@ -1,3 +1,5 @@
+---
+version: 2
 project_name: flexlm_exporter
 
 before:
@@ -34,9 +36,10 @@ changelog:
       - Merge branch
       - go mod tidy
 
+
 archives:
   - name_template: >-
-      {{ .ProjectName }}_
+      {{ .ProjectName }}_{{ .Version }}_
       {{ .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
@@ -44,7 +47,7 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end -}}
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [ 'zip' ]
 
 snapshot:
-  name_template: "{{ .Tag }}-snapshot"
+  version_template: "{{ .Tag }}-snapshot"
