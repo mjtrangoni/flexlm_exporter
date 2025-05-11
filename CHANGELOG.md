@@ -1,3 +1,9 @@
+## v0.0.13 / 2025-05-11
+
+ * [CHORE] Update golang modules and actions.
+ * [ENHANCEMENT] Handle new FlexLM PID output.
+ * [ENHANCEMENT] Simplify the splitOutput function. Thanks @d-vogel.
+
 ## v0.0.12 / 2024-02-18
 
  * [ENHANCEMENT] Add "flexlm_feature_reserved_host" metrics for "RESERVATION for HOST".
