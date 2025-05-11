@@ -100,7 +100,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logger.Warn("Couldn't create filtered metrics handler:", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Couldn't create filtered metrics handler: %s", err)
+		_, _ = fmt.Fprintf(w, "Couldn't create filtered metrics handler: %s", err)
 
 		return
 	}
@@ -146,6 +146,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 	r := prometheus.NewRegistry()
 	r.MustRegister(promcollectorsversion.NewCollector("flexlm_exporter"))
+
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register node collector: %w", err)
 	}
@@ -203,6 +204,7 @@ func main() {
 
 	logger.Info("Starting flexlm_exporter", "version", version.Info())
 	logger.Info("Build context", "build_context", version.BuildContext())
+
 	if userCurrent, err := user.Current(); err == nil && userCurrent.Uid == "0" {
 		logger.Warn(`FLEXlm Exporter is running as root user. ` +
 			`This exporter is designed to run as unprivileged user, root is not required.`)
@@ -212,7 +214,7 @@ func main() {
 	logger.Debug("Go MAXPROCS", "procs", runtime.GOMAXPROCS(0))
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger))
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
-		w.Write([]byte(`<html>
+		_, _ = w.Write([]byte(`<html>
 			<head><title>FLEXlm Exporter</title></head>
 			<body>
 			<h1>FLEXlm Exporter</h1>

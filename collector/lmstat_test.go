@@ -246,6 +246,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 				}
 			case "user11":
 				foundUser11 = true
+
 				if licused[i].num != licUsed26 {
 					t.Fatalf("Unexpected values for feature34[%s]: %v!=26",
 						username, licused[i].num)
@@ -275,6 +276,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 				}
 			case "cmfy211":
 				foundCmfy211 = true
+
 				if licused[i].num != licUsed1 {
 					t.Fatalf("Unexpected values for feature31[%s]: %v!=1",
 						username, licused[i].num)
@@ -316,12 +318,15 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 			}
 		}
 	}
+
 	if !found {
 		t.Fatalf("Couldn't parse user Administrator from feature100")
 	}
+
 	if !foundJohnDoe {
 		t.Fatalf("Couldn't parse user \"John Doe\" from feature100")
 	}
+
 	if !foundJaneDoe {
 		t.Fatalf("Couldn't parse user \"Jane Doe Jr.\" from feature100")
 	}

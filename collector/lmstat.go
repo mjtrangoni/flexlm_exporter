@@ -164,6 +164,7 @@ func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 	return out, nil
 }
 
+// splitOutput splits the lmutil output into lines and removes comments.
 func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	scanner := bufio.NewScanner(bytes.NewReader(lmutilOutput))
 	scanner.Split(bufio.ScanLines)
@@ -175,12 +176,14 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 		if strings.HasPrefix(line, "#") {
 			continue
 		}
+
 		if strings.Contains(line, "|") {
 			line = strings.ReplaceAll(line, "|", "Ž")
 		}
 
 		result = append(result, strings.Split(line, "Ž"))
 	}
+
 	if err := scanner.Err(); err != nil {
 		return result, fmt.Errorf("could not parse lmutil output: %w", err)
 	}
@@ -188,6 +191,7 @@ func splitOutput(lmutilOutput []byte) ([][]string, error) {
 	return result, nil
 }
 
+// parseLmstatVersion parses the lmstat version information.
 func parseLmstatVersion(outStr [][]string) lmstatInformation {
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -231,6 +235,7 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 			if matches[2] == upString {
 				servers[strings.ToLower(strings.Split(matches[1], ".")[0])].status = true
 			}
+
 			if matches[3] == " (MASTER)" {
 				servers[strings.ToLower(strings.Split(matches[1], ".")[0])].master = true
 			}
@@ -307,6 +312,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 				matches = reSubMatchMap(lmutilLicenseFeatureUsageUser2Regex, lineJoined)
 				username = matches["user"]
 			}
+
 			if matches["ver"] != "" {
 				var found = -1
 
@@ -323,6 +329,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 						&featureUserUsed{num: 0, version: matches["ver"], since: sinceString})
 				}
 			}
+
 			if matches["licenses"] != "" {
 				licUsed, err := strconv.Atoi(matches["licenses"])
 				if err != nil {
@@ -492,6 +499,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 			prometheus.GaugeValue, info.used, licenses.Name, name)
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
 			prometheus.GaugeValue, info.issued, licenses.Name, name)
+
 		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
 			if licenses.MonitorVersions {
 				for username, licused := range licUsersByFeature[name] {
@@ -511,6 +519,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 				}
 			}
 		}
+
 		if licenses.MonitorReservations && (reservGroupByFeature[name] != nil) {
 			for group, licreserv := range reservGroupByFeature[name] {
 				ch <- prometheus.MustNewConstMetric(
@@ -518,6 +527,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 					licreserv, licenses.Name, name, group)
 			}
 		}
+
 		if licenses.MonitorReservations && (reservHostByFeature[name] != nil) {
 			for host, licreserv := range reservHostByFeature[name] {
 				ch <- prometheus.MustNewConstMetric(

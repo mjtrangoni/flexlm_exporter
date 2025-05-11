@@ -99,12 +99,6 @@ linters:
       - linters:
           - gosec
         text: Subprocess launched with a potential tainted input or cmd arguments
-      - linters:
-          - wsl
-        text: if statements should only be cuddled with assignments
-      - linters:
-          - errcheck
-        text: Error return value of
     paths:
       - third_party$
       - builtin$

@@ -102,6 +102,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 			found = true
 		}
 	}
+
 	if !found {
 		t.Fatalf("feature16 not found")
 	}
@@ -149,6 +150,7 @@ func TestParseLmstatLicenseFeatureExpDate2(t *testing.T) {
 			found = true
 		}
 	}
+
 	if !found {
 		t.Fatalf("feature_name_9 not found")
 	}

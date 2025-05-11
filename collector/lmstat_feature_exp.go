@@ -114,9 +114,11 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) ma
 				lenToRemove := len(year) - yearLength
 				year = year[:len(year)-lenToRemove]
 			}
+
 			if len(day) == lenghtOne {
 				day = "0" + day
 			}
+
 			if len(year) == lenghtOne {
 				year = "000" + year
 			}

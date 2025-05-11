@@ -113,6 +113,7 @@ func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollecto
 		if !exist {
 			return nil, fmt.Errorf("missing collector: %s", filter)
 		}
+
 		if !*enabled {
 			return nil, fmt.Errorf("disabled collector: %s", filter)
 		}
@@ -129,6 +130,7 @@ func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollecto
 		if !*enabled || (len(f) > 0 && !f[key]) {
 			continue
 		}
+
 		if collector, ok := initiatedCollectors[key]; ok {
 			collectors[key] = collector
 		} else {
