@@ -92,14 +92,16 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) ma
 	// iterate over output lines
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
-		if !lmutilLicenseFeatureExpRegex.MatchString(lineJoined) &&
-			!lmutilLicenseFeatureExpRegex2.MatchString(lineJoined) {
+
+		switch {
+		case (!lmutilLicenseFeatureExpRegex.MatchString(lineJoined) &&
+			!lmutilLicenseFeatureExpRegex2.MatchString(lineJoined)):
 			continue
-		} else if lmutilLicenseFeatureExpRegex.MatchString(lineJoined) {
+		case lmutilLicenseFeatureExpRegex.MatchString(lineJoined):
 			matches = lmutilLicenseFeatureExpRegex.FindStringSubmatch(lineJoined)
 			expIndex = 4
 			vendorIndex = 5
-		} else {
+		default:
 			matches = lmutilLicenseFeatureExpRegex2.FindStringSubmatch(lineJoined)
 			expIndex = 5
 			vendorIndex = 4
@@ -184,17 +186,19 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 	)
 	// Call lmstat with -i (lmstat -i does not give information from the server,
 	// but only reads the license file)
-	if licenses.LicenseFile != "" {
+
+	switch {
+	case licenses.LicenseFile != "":
 		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-i")
 		if err != nil {
 			return err
 		}
-	} else if licenses.LicenseServer != "" {
+	case licenses.LicenseServer != "":
 		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-i")
 		if err != nil {
 			return err
 		}
-	} else {
+	default:
 		return fmt.Errorf("couldn't find `license_file` or `license_server` for %v", licenses.Name)
 	}
 
@@ -209,12 +213,13 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 		featuresToInclude = []string{}
 	)
 
-	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
+	switch {
+	case licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "":
 		return fmt.Errorf("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-	} else if licenses.FeaturesToExclude != "" {
+	case licenses.FeaturesToExclude != "":
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
-	} else if licenses.FeaturesToInclude != "" {
+	case licenses.FeaturesToInclude != "":
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 

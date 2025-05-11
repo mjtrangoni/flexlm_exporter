@@ -48,7 +48,8 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 	found := false
 
 	for index, feature := range featuresExp {
-		if feature.name == "feature_11" {
+		switch {
+		case feature.name == "feature_11":
 			if feature.version != v201812String ||
 				feature.licenses != "150" ||
 				feature.expires != 1546214400 ||
@@ -58,7 +59,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
-		} else if feature.name == feature12String && index == 12 {
+		case feature.name == feature12String && index == 12:
 			if feature.version != v201812String ||
 				feature.licenses != "50" ||
 				feature.expires != 1546214400 ||
@@ -68,7 +69,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.version, feature.licenses,
 					feature.vendor, feature.expires)
 			}
-		} else if feature.name == feature12String && index == 13 {
+		case feature.name == feature12String && index == 13:
 			if feature.version != v201812String ||
 				feature.licenses != "2" ||
 				feature.expires != 1538265600 ||
@@ -78,7 +79,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.version, feature.licenses,
 					feature.vendor, feature.expires)
 			}
-		} else if feature.name == "feature15" {
+		case feature.name == "feature15":
 			if feature.version != "2018.09" ||
 				feature.licenses != "2" ||
 				feature.expires != math.Inf(posInfinity) ||
@@ -88,7 +89,7 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
-		} else if feature.name == "feature16" {
+		case feature.name == "feature16":
 			if feature.version != "0.1" ||
 				feature.licenses != "1" ||
 				feature.expires != math.Inf(posInfinity) ||

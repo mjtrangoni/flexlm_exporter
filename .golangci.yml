@@ -91,12 +91,6 @@ linters:
           - unused
         text: type `typedDesc` is unused
       - linters:
-          - gocritic
-        text: rewrite if-else to switch statement
-      - linters:
-          - gocritic
-        text: consider giving a name to these results
-      - linters:
           - gosec
         text: Subprocess launched with a potential tainted input or cmd arguments
     paths:

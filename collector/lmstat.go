@@ -267,18 +267,21 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 	return vendors
 }
 
-func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[string]*feature,
-	map[string]map[string][]*featureUserUsed, map[string]map[string]float64, map[string]map[string]float64) {
-	features := make(map[string]*feature)
-	licUsersByFeature := make(map[string]map[string][]*featureUserUsed)
-	reservGroupByFeature := make(map[string]map[string]float64)
-	reservHostByFeature := make(map[string]map[string]float64)
+func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (features map[string]*feature,
+	licUsersByFeature map[string]map[string][]*featureUserUsed, reservGroupByFeature map[string]map[string]float64,
+	reservHostByFeature map[string]map[string]float64) {
+	features = make(map[string]*feature)
+	licUsersByFeature = make(map[string]map[string][]*featureUserUsed)
+	reservGroupByFeature = make(map[string]map[string]float64)
+	reservHostByFeature = make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
 
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
-		if lmutilLicenseFeatureUsageRegex.MatchString(lineJoined) {
+
+		switch {
+		case lmutilLicenseFeatureUsageRegex.MatchString(lineJoined):
 			matches := lmutilLicenseFeatureUsageRegex.FindStringSubmatch(lineJoined)
 
 			issued, err := strconv.Atoi(matches[2])
@@ -297,7 +300,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 				issued: float64(issued),
 				used:   float64(used),
 			}
-		} else if lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined) {
+		case lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined):
 			if licUsersByFeature[featureName] == nil {
 				licUsersByFeature[featureName] = map[string][]*featureUserUsed{}
 			}
@@ -348,7 +351,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 					}
 				}
 			}
-		} else if lmutilLicenseFeatureGroupReservRegex.MatchString(lineJoined) {
+		case lmutilLicenseFeatureGroupReservRegex.MatchString(lineJoined):
 			if reservGroupByFeature[featureName] == nil {
 				reservGroupByFeature[featureName] = map[string]float64{}
 			}
@@ -361,7 +364,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (map[
 			}
 
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
-		} else if lmutilLicenseFeatureHostReservRegex.MatchString(lineJoined) {
+		case lmutilLicenseFeatureHostReservRegex.MatchString(lineJoined):
 			if reservHostByFeature[featureName] == nil {
 				reservHostByFeature[featureName] = map[string]float64{}
 			}
@@ -428,17 +431,18 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 	)
 
 	// Call lmstat with -a (display everything)
-	if licenses.LicenseFile != "" {
+	switch {
+	case licenses.LicenseFile != "":
 		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-a")
 		if err != nil {
 			return err
 		}
-	} else if licenses.LicenseServer != "" {
+	case licenses.LicenseServer != "":
 		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-a")
 		if err != nil {
 			return err
 		}
-	} else {
+	default:
 		return fmt.Errorf("couldn't find `license_file` or `license_server` for %v",
 			licenses.Name)
 	}
@@ -478,12 +482,13 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 		featuresToInclude = []string{}
 	)
 
-	if licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "" {
+	switch {
+	case licenses.FeaturesToExclude != "" && licenses.FeaturesToInclude != "":
 		return fmt.Errorf("%v: can not define `features_to_include` and "+
 			"`features_to_exclude` at the same time", licenses.Name)
-	} else if licenses.FeaturesToExclude != "" {
+	case licenses.FeaturesToExclude != "":
 		featuresToExclude = strings.Split(licenses.FeaturesToExclude, ",")
-	} else if licenses.FeaturesToInclude != "" {
+	case licenses.FeaturesToInclude != "":
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 
