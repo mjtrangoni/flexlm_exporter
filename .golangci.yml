@@ -35,7 +35,7 @@ linters:
     - unused
     - usestdlibvars
     - whitespace
-    - wsl
+    - wsl_v5
   settings:
     depguard:
       rules:
@@ -79,6 +79,10 @@ linters:
       line-length: 140
     misspell:
       locale: US
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
   exclusions:
     generated: lax
     presets:

@@ -16,6 +16,7 @@ package collector
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -144,7 +145,8 @@ func lmutilOutput(logger *slog.Logger, args ...string) ([]byte, error) {
 		os.Exit(1)
 	}
 
-	cmd := exec.Command(*lmutilPath, args...)
+	ctx := context.Background()
+	cmd := exec.CommandContext(ctx, *lmutilPath, args...)
 	// Disable localization for parsing.
 	cmd.Env = append(os.Environ(), "LANG=C")
 
@@ -370,8 +372,8 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			}
 
 			matches := lmutilLicenseFeatureHostReservRegex.FindStringSubmatch(lineJoined)
-			hostReserv, err := strconv.Atoi(matches[2])
 
+			hostReserv, err := strconv.Atoi(matches[2])
 			if err != nil {
 				logger.Error("err", "could not convert", matches[1], "to integer:", err)
 			}
@@ -500,8 +502,10 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 			!contains(featuresToInclude, name) {
 			continue
 		}
+
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
 			prometheus.GaugeValue, info.used, licenses.Name, name)
+
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
 			prometheus.GaugeValue, info.issued, licenses.Name, name)
 

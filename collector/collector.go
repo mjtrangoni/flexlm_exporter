@@ -150,7 +150,9 @@ func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollecto
 // Describe implements the prometheus.Collector interface.
 func (n FlexlmCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- scrapeDurationDesc
+
 	ch <- scrapeSuccessDesc
+
 	ch <- scrapeErrorDesc
 }
 
@@ -190,7 +192,9 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger *slog
 
 		success = 1
 	}
+
 	ch <- prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name)
+
 	ch <- prometheus.MustNewConstMetric(scrapeSuccessDesc, prometheus.GaugeValue, success, name)
 }
 

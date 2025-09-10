@@ -55,7 +55,6 @@ func Load(filename string, logger *slog.Logger) (Configuration, error) {
 	var c Configuration
 
 	err = yaml.Unmarshal(bytes, &c)
-
 	if err != nil {
 		logger.Error(fmt.Sprintf("Couldn't load config file: %v", err))
 		return c, err
