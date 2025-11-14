@@ -6,12 +6,12 @@ version: 2.1
 executors:
   golang:
     docker:
-    - image: cimg/go:1.25.2
+    - image: cimg/go:1.25
 
 jobs:
   codespell:
     docker:
-    - image: cimg/python:3.13.8
+    - image: cimg/python:3.14
     steps:
     - checkout
     - run: pip3 install codespell
