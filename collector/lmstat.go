@@ -435,12 +435,12 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 	// Call lmstat with -a (display everything)
 	switch {
 	case licenses.LicenseFile != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-a")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", strings.ReplaceAll(licenses.LicenseFile, ",", ":"), "-a")
 		if err != nil {
 			return err
 		}
 	case licenses.LicenseServer != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-a")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", strings.ReplaceAll(licenses.LicenseServer, ",", ":"), "-a")
 		if err != nil {
 			return err
 		}
