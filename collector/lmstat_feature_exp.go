@@ -189,12 +189,12 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 
 	switch {
 	case licenses.LicenseFile != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", strings.ReplaceAll(licenses.LicenseFile, ",", ":"), "-i")
 		if err != nil {
 			return err
 		}
 	case licenses.LicenseServer != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", strings.ReplaceAll(licenses.LicenseServer, ",", ":"), "-i")
 		if err != nil {
 			return err
 		}
