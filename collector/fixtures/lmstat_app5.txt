@@ -20,7 +20,7 @@ Users of MATLAB:  (Total of 10000 licenses issued;  Total of 61 licenses in use)
 
     user1 host display (v50) (host.example.com/27004 401), start Mon 2/10 0:10, PID: 2924522
     user2 host display (v50) (host.example.com/27004 501), start Mon 2/10 0:10, PID: 11432
-    user3 host display (v36) (host.example.com/27004 701), start Mon 2/10 0:10, PID: 10088
+    user3 host display (v36) (host.example.com/27004 701), start Mon 2/10 0:10, PID: 10088 
     user4 host display (v42) (host.example.com/27004 801), start Mon 2/10 0:11, PID: 53864
     user5 host display (v48) (host.example.com/27004 12101), start Mon 2/10 0:18, PID: 11296
     user6 host display (v44) (host.example.com/27004 1001), start Mon 2/10 0:11, PID: 15820
