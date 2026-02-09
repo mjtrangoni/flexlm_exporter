@@ -7,7 +7,7 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/prometheus/common v0.67.4
 	github.com/prometheus/exporter-toolkit v0.15.0
-	golang.org/x/text v0.32.0
+	golang.org/x/text v0.34.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
