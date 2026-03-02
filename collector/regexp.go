@@ -42,4 +42,14 @@ var (
 			`(?P<licenses>\d+)\s+(?P<vendor>\w+)\s+(?P<expires>[\w\-\s\(\)]+)$`)
 	lmutilTimeRegex = regexp.MustCompile(
 		`^\w+ (?P<month>\d+)/(?P<day>\d+) (?P<time>\d+:\d+)$`)
+	// Queued user line: "  user11 host123 32625 (v2.0) (server/27090 14571) queued for 1 license"
+	lmutilLicenseFeatureUsageQueuedRegex = regexp.MustCompile(
+		`^\s+(?P<user>[\w[:print:]]+)\s+[\w\-\.]+\s+[[:print:]]+\s+` +
+			`(?P<ver>\(v[\w\.]+\))\s+\([\w\-\.]+\/\d+\s+\d+\)\s+` +
+			`queued for\s+(?P<queued>\d+)\s+licen[sc]es?$`)
 )
+// Simple user extraction: "username host display..." → "username"
+var reSimpleUser = regexp.MustCompile(`^(\S+)\s.*$`)
+
+// User + host extraction: "username hostname display..." → ["", "username", "hostname"]
+var reUserHost = regexp.MustCompile(`^(\S+)\s+(\S+)\s`)

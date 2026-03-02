@@ -32,16 +32,21 @@ import (
 )
 
 type lmstatCollector struct {
-	lmstatInfo                     *prometheus.Desc
-	lmstatServerStatus             *prometheus.Desc
-	lmstatVendorStatus             *prometheus.Desc
-	lmstatFeatureUsed              *prometheus.Desc
-	lmstatFeatureUsedUsers         *prometheus.Desc
-	lmstatFeatureUsedUsersVersions *prometheus.Desc
+	lmstatInfo                            *prometheus.Desc
+	lmstatServerStatus                    *prometheus.Desc
+	lmstatVendorStatus                    *prometheus.Desc
+	lmstatFeatureUsed                     *prometheus.Desc
+	lmstatFeatureUsedUsers                *prometheus.Desc
+	lmstatFeatureUsedUsersVersions        *prometheus.Desc
+	lmstatFeatureUsedUsersSimple   *prometheus.Desc
+	lmstatFeatureUsedUsersHost     *prometheus.Desc
+	lmstatFeatureUtilizationRatio  *prometheus.Desc
 	lmstatFeatureReservGroups      *prometheus.Desc
-	lmstatFeatureReservHost        *prometheus.Desc
-	lmstatFeatureIssued            *prometheus.Desc
-	logger                         *slog.Logger
+	lmstatFeatureReservHost               *prometheus.Desc
+	lmstatFeatureIssued                   *prometheus.Desc
+	lmstatFeatureQueued      *prometheus.Desc
+	lmstatFeatureQueuedUsers *prometheus.Desc
+	logger                                *slog.Logger
 }
 
 // LicenseConfig is going to be read once in main, and then used here.
@@ -88,6 +93,22 @@ func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 			"License feature used by user labeled by app, feature name, "+
 				"username of the license and version.", []string{"app", "name", "user", "since", "version"}, nil,
 		),
+		lmstatFeatureUsedUsersSimple: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "used_users_simple"),
+			"License feature used by user (simplified username, aggregated across sessions) "+
+				"labeled by app, feature name and username.",
+			[]string{"app", "name", "user"}, nil,
+		),
+		lmstatFeatureUsedUsersHost: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "used_users_host"),
+			"License feature used by user with checkout hostname.",
+			[]string{"app", "name", "user", "host"}, nil,
+		),
+		lmstatFeatureUtilizationRatio: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "utilization_ratio"),
+			"License feature utilization ratio (used/issued, 0.0 to 1.0).",
+			[]string{"app", "name"}, nil,
+		),
 		lmstatFeatureReservGroups: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "reserved_groups"),
 			"License feature reserved by group labeled by app, feature name "+
@@ -104,6 +125,16 @@ func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 			prometheus.BuildFQName(namespace, "feature", "issued"),
 			"License feature issued labeled by app and feature name of the license.",
 			[]string{"app", "name"}, nil,
+		),
+		lmstatFeatureQueued: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "queued"),
+			"Total number of queued (pending) license requests per feature.",
+			[]string{"app", "name"}, nil,
+		),
+		lmstatFeatureQueuedUsers: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "queued_users"),
+			"Queued (pending) license requests per user per feature.",
+			[]string{"app", "name", "user"}, nil,
 		),
 		logger: logger,
 	}, nil
@@ -271,11 +302,12 @@ func parseLmstatLicenseInfoVendor(outStr [][]string) map[string]*vendor {
 
 func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (features map[string]*feature,
 	licUsersByFeature map[string]map[string][]*featureUserUsed, reservGroupByFeature map[string]map[string]float64,
-	reservHostByFeature map[string]map[string]float64) {
+	reservHostByFeature map[string]map[string]float64, queuedByFeature map[string]map[string]float64) {
 	features = make(map[string]*feature)
 	licUsersByFeature = make(map[string]map[string][]*featureUserUsed)
 	reservGroupByFeature = make(map[string]map[string]float64)
 	reservHostByFeature = make(map[string]map[string]float64)
+	queuedByFeature = make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
 
@@ -301,6 +333,24 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			features[featureName] = &feature{
 				issued: float64(issued),
 				used:   float64(used),
+			}
+		case lmutilLicenseFeatureUsageQueuedRegex.MatchString(lineJoined):
+			if queuedByFeature[featureName] == nil {
+				queuedByFeature[featureName] = map[string]float64{}
+			}
+
+			matches := reSubMatchMap(lmutilLicenseFeatureUsageQueuedRegex, lineJoined)
+			username := matches["user"]
+			// Extract just the username (first word) from the full string
+			if idx := strings.IndexByte(username, ' '); idx > 0 {
+				username = username[:idx]
+			}
+
+			queued, err := strconv.Atoi(matches["queued"])
+			if err != nil {
+				logger.Error("err", "could not convert", matches["queued"], "to integer:", err)
+			} else {
+				queuedByFeature[featureName][username] += float64(queued)
 			}
 		case lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined):
 			if licUsersByFeature[featureName] == nil {
@@ -382,7 +432,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 		}
 	}
 
-	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
+	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature, queuedByFeature
 }
 
 // getLmstatInfo returns lmstat binary information.
@@ -494,7 +544,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 		featuresToInclude = strings.Split(licenses.FeaturesToInclude, ",")
 	}
 
-	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(outStr, c.logger)
+	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature, queuedByFeature := parseLmstatLicenseInfoFeature(outStr, c.logger)
 	for name, info := range features {
 		if contains(featuresToExclude, name) {
 			continue
@@ -543,6 +593,77 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 					c.lmstatFeatureReservHost, prometheus.GaugeValue,
 					licreserv, licenses.Name, name, host)
 			}
+		}
+
+		// Simplified per-user aggregation: strip host/display from username, sum tokens
+		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
+			licUsersTrimmed := make(map[string]float64)
+
+			for username, licused := range licUsersByFeature[name] {
+				usernameSimple := reSimpleUser.ReplaceAllString(username, `$1`)
+				for i := range licused {
+					licUsersTrimmed[usernameSimple] += licused[i].num
+				}
+			}
+
+			for usernameSimple, totalUsed := range licUsersTrimmed {
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureUsedUsersSimple, prometheus.GaugeValue,
+					totalUsed, licenses.Name, name, usernameSimple)
+			}
+		}
+
+		// Per-user with hostname extracted
+		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
+			licUsersByHost := make(map[string]float64)
+
+			for username, licused := range licUsersByFeature[name] {
+				matches := reUserHost.FindStringSubmatch(username)
+				var user, host string
+				if len(matches) >= 3 {
+					user = matches[1]
+					host = matches[2]
+				} else {
+					user = strings.TrimSpace(username)
+					host = "unknown"
+				}
+				key := user + "|" + host
+				for i := range licused {
+					licUsersByHost[key] += licused[i].num
+				}
+			}
+
+			for key, totalUsed := range licUsersByHost {
+				parts := strings.SplitN(key, "|", 2)
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureUsedUsersHost, prometheus.GaugeValue,
+					totalUsed, licenses.Name, name, parts[0], parts[1])
+			}
+		}
+
+		// Utilization ratio
+		if info.issued > 0 {
+			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUtilizationRatio,
+				prometheus.GaugeValue, info.used/info.issued, licenses.Name, name)
+		}
+
+		// Queued/pending licenses
+		if queuedByFeature[name] != nil {
+			var totalQueued float64
+			for username, queued := range queuedByFeature[name] {
+				totalQueued += queued
+				ch <- prometheus.MustNewConstMetric(
+					c.lmstatFeatureQueuedUsers, prometheus.GaugeValue,
+					queued, licenses.Name, name, username)
+			}
+			ch <- prometheus.MustNewConstMetric(
+				c.lmstatFeatureQueued, prometheus.GaugeValue,
+				totalQueued, licenses.Name, name)
+		} else {
+			// Emit 0 so the metric always exists for every feature (useful for alerting)
+			ch <- prometheus.MustNewConstMetric(
+				c.lmstatFeatureQueued, prometheus.GaugeValue,
+				0, licenses.Name, name)
 		}
 	}
 

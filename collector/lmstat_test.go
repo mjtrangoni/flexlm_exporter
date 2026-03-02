@@ -214,7 +214,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	}
 
 	logger := promslog.New(&promslog.Config{})
-	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(dataStr, logger)
+	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature, _ := parseLmstatLicenseInfoFeature(dataStr, logger)
 
 	for name, info := range features {
 		if name == "feature11" {
@@ -372,7 +372,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	}
 
 	logger := promslog.New(&promslog.Config{})
-	_, licUsersByFeature, _, _ := parseLmstatLicenseInfoFeature(dataStr,
+	_, licUsersByFeature, _, _, _ := parseLmstatLicenseInfoFeature(dataStr,
 		logger)
 
 	// the year does not matter in this case, since lmstat omits the year information
@@ -431,7 +431,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	}
 
 	logger = promslog.New(&promslog.Config{})
-	_, licUsersByFeature, _, _ = parseLmstatLicenseInfoFeature(dataStr,
+	_, licUsersByFeature, _, _, _ = parseLmstatLicenseInfoFeature(dataStr,
 		logger)
 
 	// the year does not matter in this case, since lmstat omits the year information

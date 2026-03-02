@@ -36,9 +36,10 @@ const (
 )
 
 type lmstatFeatureExpCollector struct {
-	lmstatFeatureExp     *prometheus.Desc
-	lmstatFeatureAggrExp *prometheus.Desc
-	logger               *slog.Logger
+	lmstatFeatureExp                     *prometheus.Desc
+	lmstatFeatureAggrExp                 *prometheus.Desc
+	lmstatFeatureExpirationDaysRemaining *prometheus.Desc
+	logger                               *slog.Logger
 }
 
 func init() {
@@ -63,6 +64,12 @@ func NewLmstatFeatureExpCollector(logger *slog.Logger) (Collector, error) {
 			prometheus.BuildFQName(namespace, "feature", "aggregate_expiration_seconds"),
 			"Aggregate by license features expiration day in seconds. Labeled by app, licenses, features.",
 			[]string{"app", "index", "licenses", "features"}, nil,
+		),
+		lmstatFeatureExpirationDaysRemaining: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, "feature", "expiration_days_remaining"),
+			"Days remaining until license feature expires. Negative means expired. "+
+				"Inf means permanent.",
+			[]string{"app", "name", "index", "vendor", "version"}, nil,
 		),
 		logger: logger,
 	}, nil
@@ -251,6 +258,15 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 			licenses.Name, feature.name, strconv.Itoa(idx),
 			feature.licenses, feature.vendor,
 			feature.version)
+
+		// Days remaining (skip for permanent licenses: +Inf)
+		if feature.expires != math.Inf(1) {
+			daysRemaining := (feature.expires - float64(time.Now().Unix())) / 86400
+			ch <- prometheus.MustNewConstMetric(
+				c.lmstatFeatureExpirationDaysRemaining, prometheus.GaugeValue,
+				daysRemaining, licenses.Name, feature.name, strconv.Itoa(idx),
+				feature.vendor, feature.version)
+		}
 	}
 
 	aggrFeaturesKeys := make([]float64, 0, len(aggrFeaturesExpMap))
