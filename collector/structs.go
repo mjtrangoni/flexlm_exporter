@@ -42,6 +42,7 @@ type featureUserUsed struct {
 	num     float64
 	version string
 	since   string
+	host    string
 }
 
 type featureExp struct {

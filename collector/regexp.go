@@ -51,5 +51,5 @@ var (
 // Simple user extraction: "username host display..." → "username"
 var reSimpleUser = regexp.MustCompile(`^(\S+)\s.*$`)
 
-// User + host extraction: "username hostname display..." → ["", "username", "hostname"]
-var reUserHost = regexp.MustCompile(`^(\S+)\s+(\S+)\s`)
+// Extract hostname (2nd token) from lmstat user line: "  username hostname display..."
+var reHostFromUserLine = regexp.MustCompile(`^\s+\S+\s+([\w\-\.]+)\s`)

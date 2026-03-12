@@ -368,6 +368,12 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 				username = matches["user"]
 			}
 
+			// Extract checkout hostname (2nd token) from the raw lmstat line
+			checkoutHost := ""
+			if hostMatch := reHostFromUserLine.FindStringSubmatch(lineJoined); len(hostMatch) >= 2 {
+				checkoutHost = hostMatch[1]
+			}
+
 			if matches["ver"] != "" {
 				var found = -1
 
@@ -381,7 +387,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 					unixSince := convertLmstatTimeToUnixTime(matches["since"], logger).Unix()
 					sinceString := strconv.FormatInt(unixSince, 10)
 					licUsersByFeature[featureName][username] = append(licUsersByFeature[featureName][username],
-						&featureUserUsed{num: 0, version: matches["ver"], since: sinceString})
+						&featureUserUsed{num: 0, version: matches["ver"], since: sinceString, host: checkoutHost})
 				}
 			}
 
@@ -618,17 +624,13 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 			licUsersByHost := make(map[string]float64)
 
 			for username, licused := range licUsersByFeature[name] {
-				matches := reUserHost.FindStringSubmatch(username)
-				var user, host string
-				if len(matches) >= 3 {
-					user = matches[1]
-					host = matches[2]
-				} else {
-					user = strings.TrimSpace(username)
-					host = "unknown"
-				}
-				key := user + "|" + host
+				usernameSimple := reSimpleUser.ReplaceAllString(username, `$1`)
 				for i := range licused {
+					host := licused[i].host
+					if host == "" {
+						host = "unknown"
+					}
+					key := usernameSimple + "|" + host
 					licUsersByHost[key] += licused[i].num
 				}
 			}
