@@ -75,8 +75,8 @@ func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 		),
 		lmstatFeatureUsed: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used"),
-			"License feature used labeled by app and feature name of the license.",
-			[]string{"app", "name"}, nil,
+			"License feature used labeled by app, feature name and license type of the license.",
+			[]string{"app", "name", "type"}, nil,
 		),
 		lmstatFeatureUsedUsers: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
@@ -102,8 +102,8 @@ func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 		),
 		lmstatFeatureIssued: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "issued"),
-			"License feature issued labeled by app and feature name of the license.",
-			[]string{"app", "name"}, nil,
+			"License feature issued labeled by app, feature name and license type of the license.",
+			[]string{"app", "name", "type"}, nil,
 		),
 		logger: logger,
 	}, nil
@@ -299,8 +299,24 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			}
 
 			features[featureName] = &feature{
-				issued: float64(issued),
-				used:   float64(used),
+				issued:      float64(issued),
+				used:        float64(used),
+				licenseType: licenseTypeFloating,
+			}
+		case lmutilLicenseFeatureUsageNodeLockedRegex.MatchString(lineJoined):
+			matches := lmutilLicenseFeatureUsageNodeLockedRegex.FindStringSubmatch(lineJoined)
+			featureName = matches[1]
+			features[featureName] = &feature{
+				licenseType: licenseTypeNodeLocked,
+			}
+		case lmutilLicenseFeatureTypeRegex.MatchString(lineJoined):
+			if featureName != "" && features[featureName] != nil {
+				matches := reSubMatchMap(lmutilLicenseFeatureTypeRegex, lineJoined)
+				if matches["type"] == "uncounted nodelocked" {
+					features[featureName].licenseType = licenseTypeNodeLocked
+				} else {
+					features[featureName].licenseType = matches["type"]
+				}
 			}
 		case lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined):
 			if licUsersByFeature[featureName] == nil {
@@ -504,10 +520,10 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 		}
 
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
-			prometheus.GaugeValue, info.used, licenses.Name, name)
+			prometheus.GaugeValue, info.used, licenses.Name, name, info.licenseType)
 
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
-			prometheus.GaugeValue, info.issued, licenses.Name, name)
+			prometheus.GaugeValue, info.issued, licenses.Name, name, info.licenseType)
 
 		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
 			if licenses.MonitorVersions {

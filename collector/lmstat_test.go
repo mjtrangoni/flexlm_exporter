@@ -29,7 +29,9 @@ const (
 	testParseLmstatVersionNew   = "fixtures/lmstat_new.txt"
 	testParseLmstatVersionOld   = "fixtures/lmstat_old.txt"
 	testParseLmstatLicenseInfo1 = "fixtures/lmstat_app1.txt"
+	testParseLmstatLicenseInfo4 = "fixtures/lmstat_app4.txt"
 	testParseLmstatLicenseInfo5 = "fixtures/lmstat_app5.txt"
+	testParseLmstatLicenseInfo6 = "fixtures/lmstat_app6.txt"
 	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
 	testParseLmstatServerUp     = "fixtures/lmstat_server_up_win.txt"
 )
@@ -221,6 +223,10 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 			if info.issued != 16384 || info.used != 80 {
 				t.Fatalf("Unexpected values for %s: %v!=16384 %v!=80", name,
 					info.issued, info.used)
+			}
+
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
 			}
 		}
 	}
@@ -474,6 +480,115 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 					t.Fatalf("Unexpected values for start time (day, month, hour, minute) [%s]: %s !~= %s",
 						username, since.String(), sinceUser1.String())
 				}
+			}
+		}
+	}
+}
+
+func TestParseLmstatLicenseInfoFeatureType(t *testing.T) {
+	t.Parallel()
+
+	logger := promslog.New(&promslog.Config{})
+
+	// app4: SERIAL is uncounted node-locked (body line), ACDC is floating (body line),
+	// ACDCBATCH is floating (counted, no users → default).
+	dataByte, err := os.ReadFile(testParseLmstatLicenseInfo4)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	features, _, _, _ := parseLmstatLicenseInfoFeature(dataStr, logger)
+
+	for name, info := range features {
+		switch name {
+		case "SERIAL":
+			if info.licenseType != licenseTypeNodeLocked {
+				t.Fatalf("Unexpected licenseType for %s: %q != node-locked", name, info.licenseType)
+			}
+		case "ACDC", "COMSOL":
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+		case "ACDCBATCH", "COMSOLBATCH":
+			// counted, 0 in use → no body block → default "floating"
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+		}
+	}
+
+	// app5: RoadRunner* features are (Uncounted, node-locked) with no users.
+	dataByte, err = os.ReadFile(testParseLmstatLicenseInfo5)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err = splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	features, _, _, _ = parseLmstatLicenseInfoFeature(dataStr, logger)
+
+	for name, info := range features {
+		switch name {
+		case "RoadRunner", "RoadRunner_Asset_Library", "RoadRunner_Scenario", "RoadRunner_HD_Scene_Builder":
+			if info.licenseType != licenseTypeNodeLocked {
+				t.Fatalf("Unexpected licenseType for %s: %q != node-locked", name, info.licenseType)
+			}
+		}
+	}
+
+	// app6: MATLAB/SIMULINK are counted features with mixed nodelocked+floating
+	// sub-blocks; the last type line ("floating license") wins → floating.
+	// TMW_Archive is (Uncounted, node-locked) with no users → node-locked.
+	// Communication_Toolbox is counted with 0 in use and no sub-block → floating.
+	dataByte, err = os.ReadFile(testParseLmstatLicenseInfo6)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err = splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	features, _, _, _ = parseLmstatLicenseInfoFeature(dataStr, logger)
+
+	for name, info := range features {
+		switch name {
+		case "MATLAB":
+			if info.issued != 420 || info.used != 60 {
+				t.Fatalf("Unexpected issued/used for %s: %v!=420 %v!=60", name, info.issued, info.used)
+			}
+
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+		case "SIMULINK":
+			if info.issued != 320 || info.used != 35 {
+				t.Fatalf("Unexpected issued/used for %s: %v!=320 %v!=35", name, info.issued, info.used)
+			}
+
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+		case "TMW_Archive":
+			if info.licenseType != licenseTypeNodeLocked {
+				t.Fatalf("Unexpected licenseType for %s: %q != node-locked", name, info.licenseType)
+			}
+		case "Communication_Toolbox":
+			if info.issued != 2 || info.used != 0 {
+				t.Fatalf("Unexpected issued/used for %s: %v!=2 %v!=0", name, info.issued, info.used)
+			}
+
+			if info.licenseType != licenseTypeFloating {
+				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
 			}
 		}
 	}
