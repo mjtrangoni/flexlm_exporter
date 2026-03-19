@@ -1,0 +1,450 @@
+lmutil - Copyright (c) 1989-2022 Flexera. All Rights Reserved.
+
+Flexible License Manager status on Mon 3/16/2026 12:16
+
+[Detecting lmgrd processes...]
+
+License server status: 1713@SERVER1
+
+    License file(s) on SERVER1: /opt/licenses/FlexLM/VENDORS/MLM/DATA/license.dat:
+
+  SERVER1: license server UP (MASTER) v11.19.7
+
+Vendor daemon status (on SERVER1):
+
+       MLM: UP v11.19.7
+
+Feature usage info:
+
+Users of MATLAB:  (Total of 420 licenses issued;  Total of 60 licenses in use)
+
+  "MATLAB" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
+  "MATLAB" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER1 F1UXXXX F1UXXXX (v44) (SERVER1/1713 104), start Mon 3/16 8:13
+
+    USER2 F1UXXXX F1UXXXX (v44) (SERVER1/1713 501), start Mon 3/16 8:16
+
+    USER3 F1UXXXX F1UXXXX (v40) (SERVER1/1713 1101), start Mon 3/16 8:36
+
+    USER4 F1UXXXX F1UXXXX (v48) (SERVER1/1713 1301), start Mon 3/16 8:39
+
+    USER5 F1UXXXX F1UXXXX (v48) (SERVER1/1713 2201), start Mon 3/16 8:47
+
+    USER6 F1UXXXX F1UXXXX (v44) (SERVER1/1713 3102), start Mon 3/16 9:07
+
+    USER7 F1UXXXX F1UXXXX (v40) (SERVER1/1713 3501), start Mon 3/16 9:08
+
+    USER8 F1UXXXX F1UXXXX (v48) (SERVER1/1713 3601), start Mon 3/16 9:09
+
+    USER9 F1UXXXX F1UXXXX (v44) (SERVER1/1713 703), start Mon 3/16 9:10
+
+    USER10 F1UXXXX F1UXXXX (v44) (SERVER1/1713 7701), start Mon 3/16 9:58
+
+    USER11 F1UXXXX F1UXXXX (v48) (SERVER1/1713 3404), start Mon 3/16 9:14
+
+    USER12 F1UXXXX F1UXXXX (v44) (SERVER1/1713 4001), start Mon 3/16 9:17
+
+    USER13 F1UXXXX F1UXXXX (v44) (SERVER1/1713 3902), start Mon 3/16 9:19
+
+    USER14 F1UXXXX F1UXXXX (v44) (SERVER1/1713 4601), start Mon 3/16 9:21
+
+    USER15 F1UXXXX F1UXXXX (v44) (SERVER1/1713 3303), start Mon 3/16 9:24
+
+    USER16 F1UXXXX F1UXXXX (v48) (SERVER1/1713 2802), start Mon 3/16 9:25
+
+    USER17 F1UXXXX F1UXXXX (v48) (SERVER1/1713 5701), start Mon 3/16 9:30
+
+    USER18 F1UXXXX F1UXXXX (v40) (SERVER1/1713 11601), start Mon 3/16 11:14
+
+    USER19 F1UXXXX DAT00004 (v48) (SERVER1/1713 5901), start Mon 3/16 9:37
+
+    USER20 F1UXXXX F1UXXXX (v48) (SERVER1/1713 10601), start Mon 3/16 10:41
+
+    USER21 F1UXXXX F1UXXXX (v48) (SERVER1/1713 6501), start Mon 3/16 9:39
+
+    USER22 F1UXXXX F1UXXXX (v44) (SERVER1/1713 6601), start Mon 3/16 9:40
+
+    USER23 F1UXXXX F1UXXXX (v48) (SERVER1/1713 6802), start Mon 3/16 9:42
+
+    USER24 F1UXXXX F1UXXXX (v40) (SERVER1/1713 7301), start Mon 3/16 9:49
+
+    USER25 F1UXXXX F1UXXXX (v48) (SERVER1/1713 7401), start Mon 3/16 9:50
+
+    USER26 F1UXXXX DAT00004 (v48) (SERVER1/1713 4402), start Mon 3/16 9:57
+
+    USER27 F1UXXXX F1UXXXX (v40) (SERVER1/1713 7602), start Mon 3/16 9:58
+
+    USER28 F1UXXXX F1UXXXX (v48) (SERVER1/1713 8702), start Mon 3/16 10:46
+
+    USER29 F1UXXXX F1UXXXX (v30) (SERVER1/1713 7802), start Mon 3/16 10:00
+
+    USER30 F1UXXXX F1UXXXX (v40) (SERVER1/1713 8501), start Mon 3/16 10:02
+
+    USER31 F1UXXXX F1UXXXX (v48) (SERVER1/1713 9501), start Mon 3/16 10:15
+
+    USER32 F1UXXXX F1UXXXX (v44) (SERVER1/1713 9601), start Mon 3/16 10:17
+
+    USER33 F1UXXXX F1UXXXX (v52) (SERVER1/1713 9701), start Mon 3/16 10:20
+
+    USER34 F1UXXXX F1UXXXX (v40) (SERVER1/1713 8902), start Mon 3/16 10:24
+
+    USER35 F1UXXXX F1UXXXX (v48) (SERVER1/1713 7503), start Mon 3/16 10:24
+
+    USER36 F1UXXXX F1UXXXX (v44) (SERVER1/1713 10201), start Mon 3/16 10:38
+
+    USER37 F1UXXXX F1UXXXX (v44) (SERVER1/1713 1002), start Mon 3/16 10:48
+
+    USER38 F1UXXXX F1UXXXX (v48) (SERVER1/1713 10801), start Mon 3/16 10:50
+
+    USER39 F1UXXXX F1UXXXX (v22) (SERVER1/1713 6102), start Mon 3/16 10:54
+
+    USER40 F1UXXXX F1UXXXX (v48) (SERVER1/1713 11101), start Mon 3/16 11:01
+
+    USER41 F1UXXXX F1UXXXX (v44) (SERVER1/1713 6404), start Mon 3/16 11:07
+
+    USER42 F1UXXXX F1UXXXX (v40) (SERVER1/1713 11401), start Mon 3/16 11:11
+
+    USER43 F1UXXXX F1UXXXX (v40) (SERVER1/1713 7202), start Mon 3/16 11:16
+
+    USER44 F1UXXXX F1UXXXX (v44) (SERVER1/1713 7002), start Mon 3/16 11:20
+
+    USER45 F1UXXXX F1UXXXX (v44) (SERVER1/1713 4102), start Mon 3/16 11:22
+
+    USER46 F1UXXXX F1UXXXX (v48) (SERVER1/1713 4502), start Mon 3/16 11:46
+
+    USER47 F1UXXXX F1UXXXX (v44) (SERVER1/1713 6202), start Mon 3/16 11:54
+
+    USER48 F1UXXXX F1UXXXX (v40) (SERVER1/1713 12101), start Mon 3/16 11:57
+
+    USER49 F1UXXXX DAP117810 (v40) (SERVER1/1713 12401), start Mon 3/16 12:05
+
+  "MATLAB" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER50 F1UXXXX F1UXXXX (v48) (SERVER1/1713 901), start Mon 3/16 8:34
+
+    USER51 F1UXXXX F1UXXXX (v44) (SERVER1/1713 1901), start Mon 3/16 8:46
+
+    USER52 F1UXXXX F1UXXXX (v40) (SERVER1/1713 2602), start Mon 3/16 8:56
+
+    USER53 F1UXXXX F1UXXXX (v44) (SERVER1/1713 2901), start Mon 3/16 9:00
+
+    USER54 F1UXXXX F1UXXXX (v40) (SERVER1/1713 4201), start Mon 3/16 9:18
+
+    USER55 F1UXXXX F1UXXXX (v40) (SERVER1/1713 6301), start Mon 3/16 9:38
+
+    USER56 F1UXXXX F1UXXXX (v40) (SERVER1/1713 6901), start Mon 3/16 9:43
+
+    USER57 F1UXXXX F1UXXXX (v40) (SERVER1/1713 9101), start Mon 3/16 10:09
+
+    USER58 F1UXXXX F1UXXXX (v40) (SERVER1/1713 8002), start Mon 3/16 11:50
+
+    USER59 F1UXXXX F1UXXXX (v40) (SERVER1/1713 12201), start Mon 3/16 12:04
+
+Users of SIMULINK:  (Total of 320 licenses issued;  Total of 35 licenses in use)
+
+  "SIMULINK" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
+  "SIMULINK" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER1 F1UXXXX F1UXXXX (v44) (SERVER1/1713 401), start Mon 3/16 8:15
+
+    USER3 F1UXXXX F1UXXXX (v40) (SERVER1/1713 1201), start Mon 3/16 8:36
+
+    USER4 F1UXXXX F1UXXXX (v48) (SERVER1/1713 1701), start Mon 3/16 8:44
+
+    USER13 F1UXXXX F1UXXXX (v44) (SERVER1/1713 3802), start Mon 3/16 9:19
+
+    USER14 F1UXXXX F1UXXXX (v44) (SERVER1/1713 4701), start Mon 3/16 9:21
+
+    USER15 F1UXXXX F1UXXXX (v44) (SERVER1/1713 4901), start Mon 3/16 9:26
+
+    USER12 F1UXXXX F1UXXXX (v44) (SERVER1/1713 5001), start Mon 3/16 9:27
+
+    USER10 F1UXXXX F1UXXXX (v44) (SERVER1/1713 8102), start Mon 3/16 9:59
+
+    USER9 F1UXXXX F1UXXXX (v44) (SERVER1/1713 6001), start Mon 3/16 9:37
+
+    USER5 F1UXXXX F1UXXXX (v48) (SERVER1/1713 7101), start Mon 3/16 9:44
+
+    USER26 F1UXXXX DAT00004 (v48) (SERVER1/1713 5403), start Mon 3/16 9:57
+
+    USER29 F1UXXXX F1UXXXX (v30) (SERVER1/1713 8201), start Mon 3/16 10:00
+
+    USER28 F1UXXXX F1UXXXX (v48) (SERVER1/1713 7903), start Mon 3/16 10:47
+
+    USER25 F1UXXXX F1UXXXX (v48) (SERVER1/1713 8602), start Mon 3/16 10:02
+
+    USER8 F1UXXXX F1UXXXX (v48) (SERVER1/1713 8403), start Mon 3/16 10:05
+
+    USER7 F1UXXXX F1UXXXX (v40) (SERVER1/1713 9001), start Mon 3/16 10:07
+
+    USER31 F1UXXXX F1UXXXX (v48) (SERVER1/1713 3203), start Mon 3/16 10:16
+
+    USER35 F1UXXXX F1UXXXX (v48) (SERVER1/1713 9302), start Mon 3/16 10:24
+
+    USER19 F1UXXXX DAT00004 (v48) (SERVER1/1713 9901), start Mon 3/16 10:28
+
+    USER37 F1UXXXX F1UXXXX (v44) (SERVER1/1713 10702), start Mon 3/16 10:49
+
+    USER38 F1UXXXX F1UXXXX (v48) (SERVER1/1713 10901), start Mon 3/16 10:51
+
+    USER39 F1UXXXX F1UXXXX (v22) (SERVER1/1713 603), start Mon 3/16 10:55
+
+    USER40 F1UXXXX F1UXXXX (v48) (SERVER1/1713 11201), start Mon 3/16 11:01
+
+    USER41 F1UXXXX F1UXXXX (v44) (SERVER1/1713 3006), start Mon 3/16 11:08
+
+    USER36 F1UXXXX F1UXXXX (v44) (SERVER1/1713 11501), start Mon 3/16 11:12
+
+    USER45 F1UXXXX F1UXXXX (v44) (SERVER1/1713 11902), start Mon 3/16 11:34
+
+    USER20 F1UXXXX F1UXXXX (v48) (SERVER1/1713 8302), start Mon 3/16 11:50
+
+    USER18 F1UXXXX F1UXXXX (v40) (SERVER1/1713 10502), start Mon 3/16 11:54
+
+    USER48 F1UXXXX F1UXXXX (v40) (SERVER1/1713 9403), start Mon 3/16 11:59
+
+    USER49 F1UXXXX DAP117810 (v40) (SERVER1/1713 12301), start Mon 3/16 12:05
+
+  "SIMULINK" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER50 F1UXXXX F1UXXXX (v48) (SERVER1/1713 1601), start Mon 3/16 8:44
+
+    USER51 F1UXXXX F1UXXXX (v44) (SERVER1/1713 2001), start Mon 3/16 8:46
+
+    USER54 F1UXXXX F1UXXXX (v40) (SERVER1/1713 4302), start Mon 3/16 9:21
+
+    USER55 F1UXXXX F1UXXXX (v40) (SERVER1/1713 6701), start Mon 3/16 9:41
+
+Users of Communication_Toolbox:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Video_and_Image_Blockset:  (Total of 4 licenses issued;  Total of 0 licenses in use)
+
+Users of Control_Toolbox:  (Total of 159 licenses issued;  Total of 7 licenses in use)
+
+  "Control_Toolbox" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
+  "Control_Toolbox" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER4 F1UXXXX F1UXXXX (v48) (SERVER1/1713 1502), start Mon 3/16 8:41
+
+    USER5 F1UXXXX F1UXXXX (v48) (SERVER1/1713 2301), start Mon 3/16 8:48
+
+    USER3 F1UXXXX F1UXXXX (v40) (SERVER1/1713 5601), start Mon 3/16 9:30
+
+    USER6 F1UXXXX F1UXXXX (v44) (SERVER1/1713 8802), start Mon 3/16 10:04
+
+  "Control_Toolbox" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER29 F1UXXXX F1UXXXX (v30) (SERVER1/1713 9202), start Mon 3/16 10:26
+
+    USER1 F1UXXXX F1UXXXX (v44) (SERVER1/1713 11001), start Mon 3/16 11:01
+
+Users of Qual_Kit_DO:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Signal_Blocks:  (Total of 5 licenses issued;  Total of 0 licenses in use)
+
+Users of Database_Toolbox:  (Total of 4 licenses issued;  Total of 0 licenses in use)
+
+Users of Neural_Network_Toolbox:  (Total of 12 licenses issued;  Total of 0 licenses in use)
+
+Users of RTW_Embedded_Coder:  (Total of 17 licenses issued;  Total of 0 licenses in use)
+
+Users of Fixed_Point_Toolbox:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of GADS_Toolbox:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Image_Toolbox:  (Total of 13 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Coder:  (Total of 19 licenses issued;  Total of 0 licenses in use)
+
+Users of Optimization_Toolbox:  (Total of 17 licenses issued;  Total of 2 licenses in use)
+
+  "Optimization_Toolbox" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
+  "Optimization_Toolbox" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER43 F1UXXXX F1UXXXX (v40) (SERVER1/1713 12001), start Mon 3/16 11:29
+
+Users of Distrib_Computing_Toolbox:  (Total of 22 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Requirements:  (Total of 24 licenses issued;  Total of 0 licenses in use)
+
+Users of Robust_Toolbox:  (Total of 10 licenses issued;  Total of 0 licenses in use)
+
+Users of Signal_Toolbox:  (Total of 21 licenses issued;  Total of 2 licenses in use)
+
+  "Signal_Toolbox" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER5 F1UXXXX F1UXXXX (v48) (SERVER1/1713 2401), start Mon 3/16 8:48
+
+  "Signal_Toolbox" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER34 F1UXXXX F1UXXXX (v40) (SERVER1/1713 10001), start Mon 3/16 10:29
+
+Users of Power_System_Blocks:  (Total of 5 licenses issued;  Total of 1 license in use)
+
+  "Power_System_Blocks" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
+Users of Simscape:  (Total of 4 licenses issued;  Total of 0 licenses in use)
+
+Users of SL_Verification_Validation:  (Total of 22 licenses issued;  Total of 2 licenses in use)
+
+  "SL_Verification_Validation" v53, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=276:ae=1:lu=300:lo=NNU:ei=XXXXXX:lr=1:ep=15:
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+    USER18 F1UXXXX F1UXXXX (v40) (SERVER1/1713 10302), start Mon 3/16 11:57
+
+  "SL_Verification_Validation" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER41 F1UXXXX F1UXXXX (v44) (SERVER1/1713 10405), start Mon 3/16 11:08
+
+Users of Simulink_Code_Inspector:  (Total of 4 licenses issued;  Total of 0 licenses in use)
+
+Users of Real-Time_Workshop:  (Total of 19 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Control_Design:  (Total of 60 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Coverage:  (Total of 15 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Design_Verifier:  (Total of 8 licenses issued;  Total of 0 licenses in use)
+
+Users of XPC_Target:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Test:  (Total of 5 licenses issued;  Total of 0 licenses in use)
+
+Users of Excel_Link:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Stateflow:  (Total of 20 licenses issued;  Total of 0 licenses in use)
+
+Users of Statistics_Toolbox:  (Total of 6 licenses issued;  Total of 0 licenses in use)
+
+Users of Symbolic_Toolbox:  (Total of 4 licenses issued;  Total of 1 license in use)
+
+  "Symbolic_Toolbox" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER5 F1UXXXX F1UXXXX (v48) (SERVER1/1713 2501), start Mon 3/16 8:48
+
+Users of Identification_Toolbox:  (Total of 6 licenses issued;  Total of 0 licenses in use)
+
+Users of Wavelet_Toolbox:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Fuzzy_Toolbox:  (Total of 8 licenses issued;  Total of 0 licenses in use)
+
+Users of Simulink_Design_Optim:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of Stateflow_Coder:  (Total of 10 licenses issued;  Total of 0 licenses in use)
+
+Users of Aerospace_Blockset:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of Aerospace_Toolbox:  (Total of 1 license issued;  Total of 1 license in use)
+
+  "Aerospace_Toolbox" v52, vendor: MLM, expiry: 01-jan-2099
+
+  vendor_string: vi=0:at=200:ae=1:lu=300:lo=CN:ei=XXXXXX:lr=1:ep=15:
+
+  floating license
+
+    USER33 F1UXXXX F1UXXXX (v52) (SERVER1/1713 9801), start Mon 3/16 10:26
+
+Users of Curve_Fitting_Toolbox:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Builder_for_Java:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of Compiler:  (Total of 2 licenses issued;  Total of 0 licenses in use)
+
+Users of MATLAB_Report_Gen:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of SIMULINK_Report_Gen:  (Total of 3 licenses issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Bug_Finder:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Bug_Finder_Engine:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of PolySpace_Server_C_CPP:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of Polyspace_BF_Server:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of Polyspace_CP_Server:  (Total of 1 license issued;  Total of 0 licenses in use)
+
+Users of Polyspace_BF_Access:  (Total of 6 licenses issued;  Total of 0 licenses in use)
+
+Users of TMW_Archive:  (Uncounted, node-locked)
+
+Users of SIMULINK_Perf_Tools:  (Total of 1 license issued;  Total of 1 license in use)
+
+  "SIMULINK_Perf_Tools" v12, vendor: MLM, expiry: 01-jan-0000
+
+  nodelocked license, locked to "ID=XXXXXX"
+
+        1 RESERVATION for GROUP DED (SERVER1/1713)
+
