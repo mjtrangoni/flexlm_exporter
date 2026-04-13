@@ -8,7 +8,7 @@ require (
 	github.com/prometheus/common v0.67.5
 	github.com/prometheus/exporter-toolkit v0.15.1
 	go.yaml.in/yaml/v4 v4.0.0-rc.4
-	golang.org/x/text v0.35.0
+	golang.org/x/text v0.36.0
 )
 
 require (
