@@ -353,6 +353,64 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 					}
 				}
 			}
+		case lmutilLicenseFeatureUsageUserQueuedRegex.MatchString(lineJoined):
+			// Queued license lines look like regular user lines but end with
+			// "queued for N license" instead of a "start" timestamp. We only
+			// care about the username, feature version and queued count here.
+			//
+			// Assumptions for simplicity:
+			//   * Every feature with queued licenses also has at least one
+			//     non-queued "used" license line.
+			//   * At least one such "used" line appears before any queued line
+			//     for that feature.
+			//
+			// This means the summary case above has already initialised
+			// features[featureName] with the "in use" count, so we only need to
+			// add the queued licenses on top of that here.
+			if licUsersByFeature[featureName] == nil {
+				licUsersByFeature[featureName] = map[string][]*featureUserUsed{}
+			}
+
+			matches := reSubMatchMap(lmutilLicenseFeatureUsageUserQueuedRegex, lineJoined)
+			username := matches["user"]
+
+			if matches["ver"] != "" {
+				var found = -1
+
+				for i := range licUsersByFeature[featureName][username] {
+					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
+						found = i
+					}
+				}
+
+				if found < 0 {
+					// Queued entries do not provide a start time; use a synthetic
+					// "since" value so queued licenses are still visible in
+					// flexlm_feature_used_users while keeping the label set stable.
+					sinceString := strconv.FormatInt(time.Now().Unix(), 10)
+					licUsersByFeature[featureName][username] = append(
+						licUsersByFeature[featureName][username],
+						&featureUserUsed{num: 0, version: matches["ver"], since: sinceString})
+				}
+			}
+
+			if matches["licenses"] != "" {
+				licQueued, err := strconv.Atoi(matches["licenses"])
+				if err != nil {
+					logger.Error("err", "could not convert", matches["licenses"], "to integer:", err)
+				}
+
+				for i := range licUsersByFeature[featureName][username] {
+					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
+						licUsersByFeature[featureName][username][i].num += float64(licQueued)
+					}
+				}
+
+				// Add queued licenses on top of the "in use" count so that
+				// flexlm_feature_used can exceed flexlm_feature_issued when the
+				// server is overloaded.
+				features[featureName].used += float64(licQueued)
+			}
 		case lmutilLicenseFeatureGroupReservRegex.MatchString(lineJoined):
 			if reservGroupByFeature[featureName] == nil {
 				reservGroupByFeature[featureName] = map[string]float64{}
