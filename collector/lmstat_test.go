@@ -222,6 +222,15 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 				t.Fatalf("Unexpected values for %s: %v!=16384 %v!=80", name,
 					info.issued, info.used)
 			}
+		} else if name == "feature5" {
+			// feature5 in the fixture has 2 licenses in use and 2 queued. The
+			// queued licenses are added on top of the "in use" count so that
+			// flexlm_feature_used can exceed flexlm_feature_issued when the
+			// server is overloaded. Therefore we expect used == 4 here.
+			if info.issued != 2 || info.used != 4 {
+				t.Fatalf("Unexpected values for %s: %v!=2 %v!=4", name,
+					info.issued, info.used)
+			}
 		}
 	}
 
@@ -235,6 +244,21 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 		licUsed16 = 16
 		licUsed26 = 26
 	)
+
+	// For feature5 in the fixture, user3 has 2 active checkouts and 2 queued
+	// requests, each for a single license. The parser adds queued licenses to
+	// the same per-user counters that back flexlm_feature_used_users, so we
+	// expect user3's total usage to be 4 licenses.
+	for username, licused := range licUsersByFeature["feature5"] {
+		for i := range licused {
+			if username == "user3" {
+				if licused[i].num != 4 {
+					t.Fatalf("Unexpected values for feature5[%s]: %v!=4",
+						username, licused[i].num)
+				}
+			}
+		}
+	}
 
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {

@@ -102,7 +102,15 @@ Users of feature3:  (Total of 10 licenses issued;  Total of 0 licenses in use)
 
 Users of feature4:  (Total of 10 licenses issued;  Total of 0 licenses in use)
 
-Users of feature5:  (Total of 10 licenses issued;  Total of 0 licenses in use)
+Users of feature5:  (Total of 2 licenses issued;  Total of 2 licenses in use)
+
+  "feature5" v2017.12, vendor: vendor1
+  floating license
+
+    user3 server6u065 serverrrr (v2017.06) (host3.domain.net/27002 11101), start Mon 10/16 15:04
+    user3 server6u065 f2jf4_f2_ (v2017.06) (host3.domain.net/27002 14603), start Mon 10/16 15:52
+    user3 server6u065 fj209fj0 2017.06 (v2017.06) (host3.domain.net/27002 15480) queued for 1 license
+    user3 server6u065 f2jf4_f2_ 2017.06 (v2017.06) (host3.domain.net/27002 15480) queued for 1 license
 
 Users of feature6:  (Total of 1814 licenses issued;  Total of 0 licenses in use)
 
