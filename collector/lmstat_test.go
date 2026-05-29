@@ -217,12 +217,13 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	features, licUsersByFeature, reservGroupByFeature, reservHostByFeature := parseLmstatLicenseInfoFeature(dataStr, logger)
 
 	for name, info := range features {
-		if name == "feature11" {
+		switch name {
+		case "feature11":
 			if info.issued != 16384 || info.used != 80 {
 				t.Fatalf("Unexpected values for %s: %v!=16384 %v!=80", name,
 					info.issued, info.used)
 			}
-		} else if name == "feature5" {
+		case "feature5":
 			// feature5 in the fixture has 2 licenses in use and 2 queued. The
 			// queued licenses are added on top of the "in use" count so that
 			// flexlm_feature_used can exceed flexlm_feature_issued when the

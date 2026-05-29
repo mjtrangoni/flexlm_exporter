@@ -364,7 +364,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			//   * At least one such "used" line appears before any queued line
 			//     for that feature.
 			//
-			// This means the summary case above has already initialised
+			// This means the summary case above has already initialized
 			// features[featureName] with the "in use" count, so we only need to
 			// add the queued licenses on top of that here.
 			if licUsersByFeature[featureName] == nil {
