@@ -61,49 +61,49 @@ func NewLmstatCollector(logger *slog.Logger) (Collector, error) {
 		lmstatInfo: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "lmstat", "info"),
 			"A metric with a constant '1' value labeled by arch, build and version of the lmstat tool.",
-			[]string{"arch", "build", "version"}, nil,
+			[]string{"arch", "build", versionString}, nil,
 		),
 		lmstatServerStatus: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "server", "status"),
 			"License server status labeled by app, fqdn, master, port and version of the license.",
-			[]string{"app", "fqdn", "master", "port", "version"}, nil,
+			[]string{appString, "fqdn", "master", "port", versionString}, nil,
 		),
 		lmstatVendorStatus: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "vendor", "status"),
 			"License vendor status labeled by app, name and version of the license.",
-			[]string{"app", "name", "version"}, nil,
+			[]string{appString, nameString, versionString}, nil,
 		),
 		lmstatFeatureUsed: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used"),
 			"License feature used labeled by app and feature name of the license.",
-			[]string{"app", "name"}, nil,
+			[]string{appString, nameString}, nil,
 		),
 		lmstatFeatureUsedUsers: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
 			"License feature used by user labeled by app, feature name and "+
-				"username of the license.", []string{"app", "name", "user", "since"}, nil,
+				"username of the license.", []string{appString, nameString, "user", "since"}, nil,
 		),
 		lmstatFeatureUsedUsersVersions: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "used_users"),
 			"License feature used by user labeled by app, feature name, "+
-				"username of the license and version.", []string{"app", "name", "user", "since", "version"}, nil,
+				"username of the license and version.", []string{appString, nameString, "user", "since", versionString}, nil,
 		),
 		lmstatFeatureReservGroups: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "reserved_groups"),
 			"License feature reserved by group labeled by app, feature name "+
-				"and group name of the license.", []string{"app", "name", "group"},
+				"and group name of the license.", []string{appString, nameString, "group"},
 			nil,
 		),
 		lmstatFeatureReservHost: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "reserved_host"),
 			"License feature reserved by host labeled by app, feature name "+
-				"and host name of the license.", []string{"app", "name", "host"},
+				"and host name of the license.", []string{appString, nameString, "host"},
 			nil,
 		),
 		lmstatFeatureIssued: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "feature", "issued"),
 			"License feature issued labeled by app and feature name of the license.",
-			[]string{"app", "name"}, nil,
+			[]string{appString, nameString}, nil,
 		),
 		logger: logger,
 	}, nil
@@ -209,7 +209,7 @@ func parseLmstatVersion(outStr [][]string) lmstatInformation {
 			return lmstatInformation{
 				arch:    md["arch"],
 				build:   md["build"],
-				version: md["version"],
+				version: md[versionString],
 			}
 		}
 	}

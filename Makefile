@@ -14,9 +14,9 @@
 GO                      ?= GO111MODULE=on go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
-PROMU_VERSION           ?= v0.18.0
+PROMU_VERSION           ?= v0.18.1
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
-GOLINTER_VERSION        ?= v2.11.3
+GOLINTER_VERSION        ?= v2.12.2
 GO_VERSION              ?= 1.26
 pkgs                    = $(shell $(GO) list ./... | grep -v /vendor/)
 TARGET                  ?= flexlm_exporter

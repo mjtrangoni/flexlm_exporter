@@ -27,33 +27,36 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// Namespace defines the common namespace to be used by all metrics.
-const namespace = "flexlm"
+const (
+	// Namespace defines the common namespace to be used by all metrics.
+	namespace       = "flexlm"
+	defaultEnabled  = true
+	appString       = "app"
+	collectorString = "collector"
+	nameString      = "name"
+	upString        = "UP"
+	versionString   = "version"
+)
 
 var (
 	scrapeDurationDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "scrape", "collector_duration_seconds"),
 		"flexlm_exporter: Duration of a collector scrape.",
-		[]string{"collector"},
+		[]string{collectorString},
 		nil,
 	)
 	scrapeSuccessDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "scrape", "collector_success"),
 		"flexlm_exporter: Whether a collector succeeded.",
-		[]string{"collector"},
+		[]string{collectorString},
 		nil,
 	)
 	scrapeErrorDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "scrape", "error"),
 		"flexlm_exporter: Whether a license scrape had an error.",
-		[]string{"collector", "name"},
+		[]string{collectorString, nameString},
 		nil,
 	)
-)
-
-const (
-	defaultEnabled = true
-	upString       = "UP"
 )
 
 var (
@@ -181,14 +184,14 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger *slog
 
 	if err != nil {
 		if IsNoDataError(err) {
-			logger.Debug("collector returned no data", "name", name, "duration_seconds", duration.Seconds(), "err", err)
+			logger.Debug("collector returned no data", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
 		} else {
-			logger.Error("collector failed", "name", name, "duration_seconds", duration.Seconds(), "err", err)
+			logger.Error("collector failed", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
 		}
 
 		success = 0
 	} else {
-		logger.Debug("collector succeeded", "name", name, "duration_seconds", duration.Seconds())
+		logger.Debug("collector succeeded", nameString, name, "duration_seconds", duration.Seconds())
 
 		success = 1
 	}
