@@ -14,6 +14,11 @@
 
 package collector
 
+const (
+	licenseTypeFloating   = "floating"
+	licenseTypeNodeLocked = "node-locked"
+)
+
 type lmstatInformation struct {
 	arch    string
 	build   string
@@ -34,8 +39,9 @@ type vendor struct {
 }
 
 type feature struct {
-	issued float64
-	used   float64
+	issued      float64
+	used        float64
+	licenseType string
 }
 
 type featureUserUsed struct {

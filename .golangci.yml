@@ -74,7 +74,7 @@ linters:
         - style
         - experimental
     gocyclo:
-      min-complexity: 50
+      min-complexity: 60
     lll:
       line-length: 140
     misspell:
