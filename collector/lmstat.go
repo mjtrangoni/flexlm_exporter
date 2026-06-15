@@ -278,6 +278,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 	reservHostByFeature = make(map[string]map[string]float64)
 	// featureName saved here as index for the user and reservation information.
 	var featureName string
+	var currentLicenseType string = licenseTypeFloating
 
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -292,6 +293,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			}
 
 			featureName = matches[1]
+			currentLicenseType = licenseTypeFloating
 
 			used, err := strconv.Atoi(matches[3])
 			if err != nil {
@@ -302,21 +304,26 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 				issued:      float64(issued),
 				used:        float64(used),
 				licenseType: licenseTypeFloating,
+				usedByType:  map[string]float64{},
 			}
 		case lmutilLicenseFeatureUsageNodeLockedRegex.MatchString(lineJoined):
 			matches := lmutilLicenseFeatureUsageNodeLockedRegex.FindStringSubmatch(lineJoined)
 			featureName = matches[1]
+			currentLicenseType = licenseTypeNodeLocked
 			features[featureName] = &feature{
 				licenseType: licenseTypeNodeLocked,
+				usedByType:  map[string]float64{},
 			}
 		case lmutilLicenseFeatureTypeRegex.MatchString(lineJoined):
 			if featureName != "" && features[featureName] != nil {
 				matches := reSubMatchMap(lmutilLicenseFeatureTypeRegex, lineJoined)
-				if matches["type"] == "uncounted nodelocked" {
-					features[featureName].licenseType = licenseTypeNodeLocked
+				if matches["type"] == "uncounted nodelocked" || matches["type"] == "nodelocked" {
+					currentLicenseType = licenseTypeNodeLocked
 				} else {
-					features[featureName].licenseType = matches["type"]
+					currentLicenseType = matches["type"]
 				}
+				// We keep info.licenseType as the last seen type for defaults, but usedByType handles metrics
+				features[featureName].licenseType = currentLicenseType
 			}
 		case lmutilLicenseFeatureUsageUserRegex.MatchString(lineJoined):
 			if licUsersByFeature[featureName] == nil {
@@ -362,11 +369,17 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 						licUsersByFeature[featureName][username][i].num += float64(licUsed)
 					}
 				}
+				if features[featureName] != nil {
+					features[featureName].usedByType[currentLicenseType] += float64(licUsed)
+				}
 			} else {
 				for i := range licUsersByFeature[featureName][username] {
 					if licUsersByFeature[featureName][username][i].version == matches["ver"] {
 						licUsersByFeature[featureName][username][i].num += 1.0
 					}
+				}
+				if features[featureName] != nil {
+					features[featureName].usedByType[currentLicenseType] += 1.0
 				}
 			}
 		case lmutilLicenseFeatureUsageUserQueuedRegex.MatchString(lineJoined):
@@ -426,6 +439,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 				// flexlm_feature_used can exceed flexlm_feature_issued when the
 				// server is overloaded.
 				features[featureName].used += float64(licQueued)
+				features[featureName].usedByType[currentLicenseType] += float64(licQueued)
 			}
 		case lmutilLicenseFeatureGroupReservRegex.MatchString(lineJoined):
 			if reservGroupByFeature[featureName] == nil {
@@ -440,6 +454,9 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			}
 
 			reservGroupByFeature[featureName][matches[4]] = float64(groupReserv)
+			if features[featureName] != nil {
+				features[featureName].usedByType[currentLicenseType] += float64(groupReserv)
+			}
 		case lmutilLicenseFeatureHostReservRegex.MatchString(lineJoined):
 			if reservHostByFeature[featureName] == nil {
 				reservHostByFeature[featureName] = map[string]float64{}
@@ -453,8 +470,14 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 			}
 
 			reservHostByFeature[featureName][matches[4]] = float64(hostReserv)
+			if features[featureName] != nil {
+				features[featureName].usedByType[currentLicenseType] += float64(hostReserv)
+			}
 		}
 	}
+
+	// Removed the recalculation logic, as we now dynamically populate usedByType 
+	// for each license block while iterating!
 
 	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
 }
@@ -577,11 +600,28 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 			continue
 		}
 
-		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
-			prometheus.GaugeValue, info.used, licenses.Name, name, info.licenseType)
-
 		ch <- prometheus.MustNewConstMetric(c.lmstatFeatureIssued,
 			prometheus.GaugeValue, info.issued, licenses.Name, name, info.licenseType)
+
+		var sumByType float64
+		for _, typeUsed := range info.usedByType {
+			sumByType += typeUsed
+		}
+
+		if len(info.usedByType) > 0 {
+			for lType, typeUsed := range info.usedByType {
+				ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
+					prometheus.GaugeValue, typeUsed, licenses.Name, name, lType)
+			}
+			
+			if info.used > sumByType {
+				ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
+					prometheus.GaugeValue, info.used-sumByType, licenses.Name, name, info.licenseType)
+			}
+		} else {
+			ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
+				prometheus.GaugeValue, info.used, licenses.Name, name, info.licenseType)
+		}
 
 		if licenses.MonitorUsers && (licUsersByFeature[name] != nil) {
 			if licenses.MonitorVersions {
