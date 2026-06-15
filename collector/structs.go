@@ -42,6 +42,7 @@ type feature struct {
 	issued      float64
 	used        float64
 	licenseType string
+	usedByType  map[string]float64
 }
 
 type featureUserUsed struct {

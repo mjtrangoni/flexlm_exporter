@@ -37,7 +37,7 @@ var (
 	lmutilLicenseFeatureUsageNodeLockedRegex = regexp.MustCompile(
 		`^Users of (?P<name>.*):\s+\(Uncounted, node-locked\)$`)
 	lmutilLicenseFeatureTypeRegex = regexp.MustCompile(
-		`^\s+(?P<type>floating|uncounted nodelocked) license`)
+		`^\s+(?P<type>floating|uncounted nodelocked|nodelocked) license`)
 	// lmutil lmstat -c port@hostname -i.
 	lmutilLicenseFeatureExpRegex = regexp.MustCompile(
 		`^(?P<feature>[[:graph:]]+)\s+(?P<version>[\d\.]+)\s+` +
