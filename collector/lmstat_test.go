@@ -595,6 +595,14 @@ func TestParseLmstatLicenseInfoFeatureType(t *testing.T) {
 			if info.licenseType != licenseTypeFloating {
 				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
 			}
+
+			if info.usedByType[licenseTypeNodeLocked] != 50 {
+				t.Fatalf("Unexpected node-locked usage for %s: %v != 50", name, info.usedByType[licenseTypeNodeLocked])
+			}
+
+			if info.usedByType[licenseTypeFloating] != 10 {
+				t.Fatalf("Unexpected floating usage for %s: %v != 10", name, info.usedByType[licenseTypeFloating])
+			}
 		case "SIMULINK":
 			if info.issued != 320 || info.used != 35 {
 				t.Fatalf("Unexpected issued/used for %s: %v!=320 %v!=35", name, info.issued, info.used)
@@ -602,6 +610,14 @@ func TestParseLmstatLicenseInfoFeatureType(t *testing.T) {
 
 			if info.licenseType != licenseTypeFloating {
 				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+
+			if info.usedByType[licenseTypeNodeLocked] != 31 {
+				t.Fatalf("Unexpected node-locked usage for %s: %v != 31", name, info.usedByType[licenseTypeNodeLocked])
+			}
+
+			if info.usedByType[licenseTypeFloating] != 4 {
+				t.Fatalf("Unexpected floating usage for %s: %v != 4", name, info.usedByType[licenseTypeFloating])
 			}
 		case "TMW_Archive":
 			if info.licenseType != licenseTypeNodeLocked {
@@ -614,6 +630,14 @@ func TestParseLmstatLicenseInfoFeatureType(t *testing.T) {
 
 			if info.licenseType != licenseTypeFloating {
 				t.Fatalf("Unexpected licenseType for %s: %q != floating", name, info.licenseType)
+			}
+		case "Control_Toolbox":
+			if info.usedByType[licenseTypeNodeLocked] != 5 {
+				t.Fatalf("Unexpected node-locked usage for %s: %v != 5", name, info.usedByType[licenseTypeNodeLocked])
+			}
+
+			if info.usedByType[licenseTypeFloating] != 2 {
+				t.Fatalf("Unexpected floating usage for %s: %v != 2", name, info.usedByType[licenseTypeFloating])
 			}
 		}
 	}

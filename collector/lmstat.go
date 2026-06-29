@@ -276,9 +276,12 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 	licUsersByFeature = make(map[string]map[string][]*featureUserUsed)
 	reservGroupByFeature = make(map[string]map[string]float64)
 	reservHostByFeature = make(map[string]map[string]float64)
-	// featureName saved here as index for the user and reservation information.
-	var featureName string
-	var currentLicenseType string = licenseTypeFloating
+
+	var (
+		// featureName saved here as index for the user and reservation information.
+		featureName        string
+		currentLicenseType string
+	)
 
 	for _, line := range outStr {
 		lineJoined := strings.Join(line, "")
@@ -369,6 +372,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 						licUsersByFeature[featureName][username][i].num += float64(licUsed)
 					}
 				}
+
 				if features[featureName] != nil {
 					features[featureName].usedByType[currentLicenseType] += float64(licUsed)
 				}
@@ -378,6 +382,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 						licUsersByFeature[featureName][username][i].num += 1.0
 					}
 				}
+
 				if features[featureName] != nil {
 					features[featureName].usedByType[currentLicenseType] += 1.0
 				}
@@ -476,7 +481,7 @@ func parseLmstatLicenseInfoFeature(outStr [][]string, logger *slog.Logger) (feat
 		}
 	}
 
-	// Removed the recalculation logic, as we now dynamically populate usedByType 
+	// Removed the recalculation logic, as we now dynamically populate usedByType
 	// for each license block while iterating!
 
 	return features, licUsersByFeature, reservGroupByFeature, reservHostByFeature
@@ -613,7 +618,7 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 				ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
 					prometheus.GaugeValue, typeUsed, licenses.Name, name, lType)
 			}
-			
+
 			if info.used > sumByType {
 				ch <- prometheus.MustNewConstMetric(c.lmstatFeatureUsed,
 					prometheus.GaugeValue, info.used-sumByType, licenses.Name, name, info.licenseType)
