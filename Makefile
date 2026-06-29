@@ -14,7 +14,7 @@
 GO                      ?= GO111MODULE=on go
 GOPATH                  := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU                   ?= $(GOPATH)/bin/promu
-PROMU_VERSION           ?= v0.18.1
+PROMU_VERSION           ?= v0.20.0
 GOLINTER                ?= $(GOPATH)/bin/golangci-lint
 GOLINTER_VERSION        ?= v2.12.2
 GO_VERSION              ?= 1.26
