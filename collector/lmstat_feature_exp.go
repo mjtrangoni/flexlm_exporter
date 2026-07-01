@@ -30,9 +30,10 @@ import (
 )
 
 const (
-	lenghtOne   = 1
-	posInfinity = 1
-	yearLength  = 4
+	lenghtOne       = 1
+	posInfinity     = 1
+	datePartsLength = 3
+	yearLength      = 4
 )
 
 type lmstatFeatureExpCollector struct {
@@ -109,7 +110,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) ma
 		logger.Debug("debug", "matches", matches)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[expIndex], "-")
-		if len(slice) >= 3 {
+		if len(slice) >= datePartsLength {
 			day, month, year := slice[0], slice[1], slice[2]
 			if len(year) > yearLength {
 				lenToRemove := len(year) - yearLength
