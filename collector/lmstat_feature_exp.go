@@ -109,7 +109,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) ma
 		logger.Debug("debug", "matches", matches)
 		// Parse date, month has to be capitalized.
 		slice := strings.Split(matches[expIndex], "-")
-		if len(slice) > lenghtOne {
+		if len(slice) >= 3 {
 			day, month, year := slice[0], slice[1], slice[2]
 			if len(year) > yearLength {
 				lenToRemove := len(year) - yearLength
@@ -131,7 +131,7 @@ func parseLmstatLicenseFeatureExpDate(outStr [][]string, logger *slog.Logger) ma
 				logger.Error("err", "could not convert to date:", err)
 			}
 
-			if expireDate.Unix() <= 0 {
+			if expireDate.Unix() <= 0 || year == "2099" {
 				expires = math.Inf(posInfinity)
 			} else {
 				expires = float64(expireDate.Unix())
