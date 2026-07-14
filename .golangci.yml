@@ -21,6 +21,7 @@ linters:
     - ineffassign
     - lll
     - misspell
+    - modernize
     - mnd
     - nakedret
     - noctx

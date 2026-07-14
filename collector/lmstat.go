@@ -224,7 +224,7 @@ func parseLmstatLicenseInfoServer(outStr [][]string) map[string]*server {
 		lineJoined := strings.Join(line, "")
 		if lmutilLicenseServersRegex.MatchString(lineJoined) {
 			matches := lmutilLicenseServersRegex.FindStringSubmatch(lineJoined)[1]
-			for _, portServer := range strings.Split(matches, ",") {
+			for portServer := range strings.SplitSeq(matches, ",") {
 				fqdn := strings.ToLower(strings.Split(portServer, "@")[1])
 				servers[strings.Split(fqdn, ".")[0]] = &server{
 					fqdn: fqdn, port: strings.Split(portServer, "@")[0],
