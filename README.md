@@ -96,10 +96,10 @@ Metrics will now be reachable at <http://localhost:9319/metrics>.
 ## What's exported?
 
  1. `lmutil lmstat -v` information.
- 1. `lmutil lmstat -c license_file -a` or `lmutil lmstat -c license_server -a`
-   license information.
- 1. `lmutil lmstat -c license_file -i` or `lmutil lmstat -c license_server -i`
-   license features expiration date.
+ 2. `lmutil lmstat -c license_file -a` or `lmutil lmstat -c license_server -a`
+   license information. This includes the `licenseType` label to distinguish between `floating` and `node-locked` licenses.
+ 3. `lmutil lmstat -c license_file -i` or `lmutil lmstat -c license_server -i`
+   license features expiration date. Permanent licenses (e.g. `01-jan-0000`, `01-jan-2099` or `permanent`) are exported as `+Inf`.
 
 ## Dashboards
 

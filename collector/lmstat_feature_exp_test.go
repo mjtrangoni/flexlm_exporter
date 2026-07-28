@@ -99,13 +99,23 @@ func TestParseLmstatLicenseFeatureExpDate1(t *testing.T) {
 					feature.licenses, feature.vendor,
 					feature.expires)
 			}
+		case feature.name == "feature17":
+			if feature.version != "0.1" ||
+				feature.licenses != "1" ||
+				feature.expires != math.Inf(posInfinity) ||
+				feature.vendor != vendor2String {
+				t.Fatalf("Unexpected values %s, %s, %s, %s, != %f",
+					feature.name, feature.version,
+					feature.licenses, feature.vendor,
+					feature.expires)
+			}
 
 			found = true
 		}
 	}
 
 	if !found {
-		t.Fatalf("feature16 not found")
+		t.Fatalf("feature17 not found")
 	}
 }
 

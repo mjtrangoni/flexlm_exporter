@@ -1,28 +1,24 @@
-FROM docker.io/rockylinux/rockylinux:8
-LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
+FROM docker.io/rockylinux/rockylinux:9.3-minimal
+
+LABEL maintainer="Mario Trangoni mjtrangoni@gmail.com"
 LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_exporter"
 
-# Install dependencies and clean cache
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial && \
-    dnf -y update && \
-    dnf -y install bash-completion redhat-lsb-core strace && \
-    dnf -y clean all && \
-    rm -f /etc/pki/tls/private/postfix.key
+ENV HOME=/home/exporter
+
+RUN microdnf -y update &&
+microdnf -y install shadow-utils bash-completion strace glibc &&
+microdnf -y clean all &&
+ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3 &&
+groupadd -g 30001 exporter &&
+useradd --no-log-init -m -d /home/exporter -u 30001 -g 30001 exporter &&
+mkdir -p /home/exporter/config &&
+chown -R exporter:exporter /home/exporter/config
 
 COPY flexlm_exporter /bin/flexlm_exporter
 
-# Add exporter user and group
-RUN groupadd -g 30001 exporter && \
-  useradd --no-log-init -m -d /home/exporter -u 30001 -g 30001 exporter
+WORKDIR /home/exporter
+USER exporter
 
-EXPOSE      9319
-USER        exporter
-WORKDIR     /home/exporter
+EXPOSE 9319
 
-RUN mkdir -p /home/exporter/config &&\
-  chown -R 30001:30001 /home/exporter/config
-
-# Default home dir
-ENV HOME=/home/exporter
-
-ENTRYPOINT  [ "/bin/flexlm_exporter" ]
+ENTRYPOINT [ "/bin/flexlm_exporter" ]

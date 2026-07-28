@@ -21,3 +21,4 @@ feature13                       2018.09      2           30-sep-2018  vendor2
 feature14                       2018.09      2           30-sep-2018  vendor2
 feature15                       2018.09      2           1-jan-0      vendor2
 feature16                       0.1          1           01-jan-0000  vendor2
+feature17                       0.1          1           01-jan-2099  vendor2
