@@ -1,13 +1,12 @@
-FROM docker.io/rockylinux/rockylinux:8
+FROM quay.io/rockylinux/rockylinux:9.8-minimal
 LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_exporter"
 
 # Install dependencies and clean cache
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial && \
-    dnf -y update && \
-    dnf -y install bash-completion redhat-lsb-core strace && \
-    dnf -y clean all && \
-    rm -f /etc/pki/tls/private/postfix.key
+RUN microdnf -y update && \
+    microdnf -y install bash-completion strace && \
+    microdnf -y clean all && \
+    ln -s /lib64/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
 
 COPY flexlm_exporter /bin/flexlm_exporter
 
