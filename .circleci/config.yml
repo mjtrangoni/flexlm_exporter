@@ -15,7 +15,7 @@ jobs:
     steps:
     - checkout
     - run: pip3 install codespell
-    - run: codespell --skip=".git,./vendor" --ignore-words-list="DED,SME"
+    - run: codespell --skip=".git,./vendor,go.sum,go.mod" --ignore-words-list="DED,SME"
 
   build:
     executor: golang
@@ -135,7 +135,7 @@ jobs:
     - run:
         name: Release binaries
         command: |
-          go install github.com/prometheus/promu@v0.18.0
+          go install github.com/prometheus/promu@v0.20.0
           curl -sfL https://goreleaser.com/static/run | DISTRIBUTION=oss bash
 
 workflows:
