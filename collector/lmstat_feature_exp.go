@@ -184,16 +184,15 @@ func (c *lmstatFeatureExpCollector) collect(licenses *config.License, ch chan<- 
 		err      error
 	)
 	// Call lmstat with -i (lmstat -i does not give information from the server,
-	// but only reads the license file)
-
+	// but only reads the license file) (actually -a is needed)
 	switch {
 	case licenses.LicenseFile != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseFile, "-a", "-i")
 		if err != nil {
 			return err
 		}
 	case licenses.LicenseServer != "":
-		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-i")
+		outBytes, err = lmutilOutput(c.logger, "lmstat", "-c", licenses.LicenseServer, "-a", "-i")
 		if err != nil {
 			return err
 		}
