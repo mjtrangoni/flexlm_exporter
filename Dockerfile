@@ -1,4 +1,4 @@
-FROM quay.io/rockylinux/rockylinux:9.8-minimal
+FROM quay.io/rockylinux/rockylinux:10.2-minimal
 LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_exporter"
 
