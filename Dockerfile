@@ -3,6 +3,8 @@ LABEL maintainer="Mario Trangoni <mjtrangoni@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/mjtrangoni/flexlm_exporter"
 
 # Install dependencies and clean cache
+# Keep package selection compatible with the Rocky Linux repositories.
+# hadolint ignore=DL3041
 RUN microdnf -y update && \
     microdnf -y install bash-completion strace && \
     microdnf -y clean all && \
