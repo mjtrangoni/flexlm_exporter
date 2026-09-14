@@ -3,7 +3,6 @@ name: Build
 on: [push, pull_request]
 permissions:
   contents: read
-  issues: write
 
 jobs:
   build:
@@ -12,11 +11,13 @@ jobs:
         go-version: [1.26.x, 1.27.x]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-go@v7
+    - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
       with:
         go-version: ${{ matrix.go-version}}
     - name: Checkout code
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      with:
+        persist-credentials: false
     - name: Install yamllint
       shell: sh
       run: |
@@ -30,11 +31,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install go
-      uses: actions/setup-go@v7
+      uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
       with:
         go-version: 1.27.x
     - name: Checkout code
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      with:
+        persist-credentials: false
     - name: Install goveralls
       env:
         GO111MODULE: on
