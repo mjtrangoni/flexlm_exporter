@@ -15,17 +15,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"os/user"
 	"runtime"
+	"sort"
+	"syscall"
 	"time"
 
 	//nolint:gosec
 	_ "net/http/pprof"
-	"os"
-	"os/user"
-	"sort"
 
 	"github.com/prometheus/common/promslog"
 	"github.com/prometheus/common/promslog/flag"
@@ -50,14 +53,13 @@ const (
 // created on the fly, if filtering is requested. Create instances with
 // newHandler.
 type handler struct {
-	unfilteredHandler http.Handler
-	// exporterMetricsRegistry is a separate registry for the metrics about
-	// the exporter itself.
+	unfilteredHandler       http.Handler
 	exporterMetricsRegistry *prometheus.Registry
 	includeExporterMetrics  bool
 	configPath              string
 	maxRequests             int
 	logger                  *slog.Logger
+	flexlmCollector         *collector.FlexlmCollector
 }
 
 func newHandler(includeExporterMetrics bool, configPath string, maxRequests int, logger *slog.Logger) *handler {
@@ -119,9 +121,9 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 		return nil, fmt.Errorf("couldn't create collector: %w", err)
 	}
 
-	// Only log the creation of an unfiltered handler, which should happen
-	// only once upon startup.
+	// Save the reference to the main collector for a subsequent graceful shutdown.
 	if len(filters) == 0 {
+		h.flexlmCollector = nc
 		h.logger.Info("Enabled collectors")
 
 		collectors := []string{}
@@ -140,8 +142,10 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	// Load LicenseConfig from a YAML file.
 	collector.LicenseConfig, err = config.Load(h.configPath, h.logger)
 	if err != nil {
-		h.logger.Error("couldn't", "load:", h.configPath, " config", "file")
-		os.Exit(1)
+		h.logger.Error("couldn't load config file", "path", h.configPath, "err", err)
+		if len(filters) == 0 {
+			return nil, err
+		}
 	}
 
 	r := prometheus.NewRegistry()
@@ -212,7 +216,9 @@ func main() {
 
 	runtime.GOMAXPROCS(*maxProcs)
 	logger.Debug("Go MAXPROCS", "procs", runtime.GOMAXPROCS(0))
-	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger))
+
+	h := newHandler(!*disableExporterMetrics, *configPath, *maxRequests, logger)
+	http.Handle(*metricsPath, h)
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(`<html>
 			<head><title>FLEXlm Exporter</title></head>
@@ -226,8 +232,41 @@ func main() {
 	server := &http.Server{
 		ReadHeaderTimeout: serverReadHeaderTimeout * time.Second,
 	}
-	if err := web.ListenAndServe(server, toolkitFlags, logger); err != nil {
-		logger.Error(err.Error())
-		os.Exit(1)
+
+	// Configuring the context for intercepting OS signals (SIGINT, SIGTERM)
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
+
+	serverErrors := make(chan error, 1)
+	go func() {
+		if err := web.ListenAndServe(server, toolkitFlags, logger); err != nil {
+			serverErrors <- err
+		}
+	}()
+
+	select {
+	case err := <-serverErrors:
+		if err != nil {
+			logger.Error("HTTP server error", "err", err)
+			os.Exit(1)
+		}
+	case <-ctx.Done():
+		logger.Info("Shutting down flexlm_exporter...")
+
+		// Gracefully stop the collector's background timer goroutines.
+		if h.flexlmCollector != nil {
+			h.flexlmCollector.Close()
+		}
+
+		// Perform a graceful shutdown of the web server (10-second timeout).
+		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer shutdownCancel()
+
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			logger.Error("Graceful shutdown failed", "err", err)
+			_ = server.Close()
+		}
+
+		logger.Info("Server successfully stopped")
 	}
 }
