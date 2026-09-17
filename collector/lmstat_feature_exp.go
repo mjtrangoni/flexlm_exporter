@@ -40,11 +40,16 @@ type lmstatFeatureExpCollector struct {
 	lmstatFeatureExp     *prometheus.Desc
 	lmstatFeatureAggrExp *prometheus.Desc
 	logger               *slog.Logger
+	scrapeInterval       time.Duration
 }
 
 func init() {
 	registerCollector("lmstat_feature_exp", defaultEnabled,
 		NewLmstatFeatureExpCollector)
+}
+
+func (c *lmstatFeatureExpCollector) GetInterval() time.Duration {
+	return c.scrapeInterval
 }
 
 // NewLmstatFeatureExpCollector returns a new Collector exposing lmstat license

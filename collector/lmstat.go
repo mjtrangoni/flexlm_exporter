@@ -42,6 +42,7 @@ type lmstatCollector struct {
 	lmstatFeatureReservHost        *prometheus.Desc
 	lmstatFeatureIssued            *prometheus.Desc
 	logger                         *slog.Logger
+	scrapeInterval                 time.Duration
 }
 
 // LicenseConfig is going to be read once in main, and then used here.
@@ -53,6 +54,10 @@ const (
 
 func init() {
 	registerCollector("lmstat", defaultEnabled, NewLmstatCollector)
+}
+
+func (c *lmstatCollector) GetInterval() time.Duration {
+	return c.scrapeInterval
 }
 
 // NewLmstatCollector returns a new Collector exposing lmstat license stats.
