@@ -16,6 +16,7 @@
 package collector
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -87,8 +88,13 @@ func registerCollector(collector string, isDefaultEnabled bool, factory func(log
 
 // FlexlmCollector implements the prometheus.Collector interface.
 type FlexlmCollector struct {
-	Collectors map[string]Collector
-	logger     *slog.Logger
+	Collectors    map[string]Collector
+	logger        *slog.Logger
+	cacheMu       sync.RWMutex
+	cachedMetrics map[string][]prometheus.Metric
+	ctx           context.Context
+	cancel        context.CancelFunc
+	wg            sync.WaitGroup // Tracks active background goroutines for graceful shutdown.
 }
 
 // collectorFlagAction generates a new action function for the given collector
@@ -105,7 +111,7 @@ func collectorFlagAction(collector string) func(ctx *kingpin.ParseContext) error
 	}
 }
 
-// NewFlexlmCollector creates a new FlexlmCollector.
+// NewFlexlmCollector creates a new FlexlmCollector and starts background asynchronous scrapers.
 //
 //revive:enable:unused-parameter
 func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollector, error) {
@@ -147,58 +153,130 @@ func NewFlexlmCollector(logger *slog.Logger, filters ...string) (*FlexlmCollecto
 		}
 	}
 
-	return &FlexlmCollector{Collectors: collectors, logger: logger}, nil
-}
-
-// Describe implements the prometheus.Collector interface.
-func (n FlexlmCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- scrapeDurationDesc
-
-	ch <- scrapeSuccessDesc
-
-	ch <- scrapeErrorDesc
-}
-
-// Collect implements the prometheus.Collector interface.
-func (n FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
-	wg := sync.WaitGroup{}
-
-	wg.Add(len(n.Collectors))
-
-	for name, c := range n.Collectors {
-		go func(name string, c Collector) {
-			execute(name, c, ch, n.logger)
-			wg.Done()
-		}(name, c)
+	ctx, cancel := context.WithCancel(context.Background())
+	fc := &FlexlmCollector{
+		Collectors:    collectors,
+		logger:        logger,
+		cachedMetrics: make(map[string][]prometheus.Metric),
+		ctx:           ctx,
+		cancel:        cancel,
 	}
 
-	wg.Wait()
+	// Launching background workers for asynchronous metric collection on a timer
+	fc.startBackgroundScrapers()
+
+	return fc, nil
 }
 
-func execute(name string, c Collector, ch chan<- prometheus.Metric, logger *slog.Logger) {
-	var success float64
+// startBackgroundScrapers starts individual timers for each active collector.
+func (n *FlexlmCollector) startBackgroundScrapers() {
+	for name, c := range n.Collectors {
+		n.wg.Add(1)
+		go func(name string, c Collector) {
+			defer n.wg.Done()
 
+			// Determine the timer interval. If the collector implements an interface with a GetInterval() method, use it;
+			// otherwise, apply the default value (30 seconds).
+			interval := 30 * time.Second
+			if timedCollector, ok := c.(interface{ GetInterval() time.Duration }); ok {
+				if d := timedCollector.GetInterval(); d > 0 {
+					interval = d
+				}
+			}
+
+			ticker := time.NewTicker(interval)
+			defer ticker.Stop()
+
+			n.logger.Info("Starting background asynchronous scraper", "collector", name, "interval", interval)
+
+			// Perform the initial data collection immediately upon startup.
+			n.runAndCache(name, c)
+
+			for {
+				select {
+				case <-n.ctx.Done():
+					n.logger.Info("Stopping background asynchronous scraper", "collector", name)
+					return
+				case <-ticker.C:
+					n.runAndCache(name, c)
+				}
+			}
+		}(name, c)
+	}
+}
+
+// Close stops all background workers and waits for them to complete fully (graceful shutdown).
+func (n *FlexlmCollector) Close() {
+	n.cancel()
+	n.wg.Wait()
+	n.logger.Info("All background scrapers have been stopped cleanly")
+}
+
+// runAndCache collects metrics in the background, measures execution time, handles errors, and saves the result to the cache.
+func (n *FlexlmCollector) runAndCache(name string, c Collector) {
+	var success float64
 	begin := time.Now()
+
+	ch := make(chan prometheus.Metric, 100)
+	var metrics []prometheus.Metric
+
+	// Asynchronous collection of metrics from the channel returned by the collector
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for m := range ch {
+			metrics = append(metrics, m)
+		}
+	}()
+
 	err := c.Update(ch)
+	close(ch)
+	wg.Wait()
+
 	duration := time.Since(begin)
 
 	if err != nil {
 		if IsNoDataError(err) {
-			logger.Debug("collector returned no data", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
+			n.logger.Debug("collector returned no data", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
 		} else {
-			logger.Error("collector failed", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
+			n.logger.Error("collector failed", nameString, name, "duration_seconds", duration.Seconds(), "err", err)
 		}
-
 		success = 0
 	} else {
-		logger.Debug("collector succeeded", nameString, name, "duration_seconds", duration.Seconds())
-
+		n.logger.Debug("collector succeeded", nameString, name, "duration_seconds", duration.Seconds())
 		success = 1
 	}
 
-	ch <- prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name)
+	// Adding service metrics (duration and collection success status) to the cache
+	metrics = append(metrics,
+		prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name),
+		prometheus.MustNewConstMetric(scrapeSuccessDesc, prometheus.GaugeValue, success, name),
+	)
 
-	ch <- prometheus.MustNewConstMetric(scrapeSuccessDesc, prometheus.GaugeValue, success, name)
+	n.cacheMu.Lock()
+	n.cachedMetrics[name] = metrics
+	n.cacheMu.Unlock()
+}
+
+// Describe implements the prometheus.Collector interface.
+func (n *FlexlmCollector) Describe(ch chan<- *prometheus.Desc) {
+	ch <- scrapeDurationDesc
+	ch <- scrapeSuccessDesc
+	ch <- scrapeErrorDesc
+}
+
+// Collect implements the prometheus.Collector interface.
+// It now serves cached data instantly, without blocking or waiting for external utilities.
+func (n *FlexlmCollector) Collect(ch chan<- prometheus.Metric) {
+	n.cacheMu.RLock()
+	defer n.cacheMu.RUnlock()
+
+	for _, metrics := range n.cachedMetrics {
+		for _, m := range metrics {
+			ch <- m
+		}
+	}
 }
 
 // Collector is the interface a collector has to implement.
