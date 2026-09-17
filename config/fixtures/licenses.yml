@@ -9,11 +9,13 @@ licenses:
     features_to_exclude: feature1,feature2
     monitor_users: True
     monitor_reservations: True
+    scrape_interval: 1m
   - name: app2
     license_server: 28000@host1,28000@host2,28000@host3
     features_to_include: feature5,feature30
     monitor_users: True
     monitor_reservations: True
+    scrape_interval: 1m
   - name: app3_domain1
     license_file: /usr/local/flexlm/licenses/license.dat.app3
     monitor_users: False
@@ -24,3 +26,4 @@ licenses:
     features_to_include:
     monitor_users: True
     monitor_reservations: False
+    scrape_interval: 1m

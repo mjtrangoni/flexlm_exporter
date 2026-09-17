@@ -42,6 +42,7 @@ licenses:
     monitor_users: True
     monitor_reservations: True
     monitor_versions: False
+    scrape_interval: 5m
   - name: app2
     license_server: 28000@host1,28000@host2,28000@host3
     features_to_include: feature5,feature30
@@ -57,6 +58,7 @@ Notes:
  `port@host` combination format.
  2. You can exclude some features from exporting with `features_to_exclude`,
  **or** export some defined and exclude the rest with `feature_to_include`.
+ 3. Default value of `scrape_interval` is  `30s`.
 
 ## Running
 

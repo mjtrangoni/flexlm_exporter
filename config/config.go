@@ -19,22 +19,24 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"time"
 
-	"go.yaml.in/yaml/v4"
+	"gopkg.in/yaml.v3"
 )
 
 // YAML Type definitions
 
 // License individual configuration type.
 type License struct {
-	Name                string `yaml:"name"`
-	LicenseFile         string `yaml:"license_file,omitempty"`
-	LicenseServer       string `yaml:"license_server,omitempty"`
-	FeaturesToExclude   string `yaml:"features_to_exclude,omitempty"`
-	FeaturesToInclude   string `yaml:"features_to_include,omitempty"`
-	MonitorUsers        bool   `yaml:"monitor_users"`
-	MonitorReservations bool   `yaml:"monitor_reservations"`
-	MonitorVersions     bool   `yaml:"monitor_versions,omitempty"`
+	Name                string        `yaml:"name"`
+	LicenseFile         string        `yaml:"license_file,omitempty"`
+	LicenseServer       string        `yaml:"license_server,omitempty"`
+	FeaturesToExclude   string        `yaml:"features_to_exclude,omitempty"`
+	FeaturesToInclude   string        `yaml:"features_to_include,omitempty"`
+	MonitorUsers        bool          `yaml:"monitor_users"`
+	MonitorReservations bool          `yaml:"monitor_reservations"`
+	MonitorVersions     bool          `yaml:"monitor_versions,omitempty"`
+	ScrapeInterval      time.Duration `yaml:"scrape_interval"`
 }
 
 // Configuration type for all licenses.
@@ -55,6 +57,7 @@ func Load(filename string, logger *slog.Logger) (Configuration, error) {
 	var c Configuration
 
 	err = yaml.Unmarshal(bytes, &c)
+
 	if err != nil {
 		logger.Error(fmt.Sprintf("Couldn't load config file: %v", err))
 		return c, err
