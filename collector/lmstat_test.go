@@ -32,6 +32,7 @@ const (
 	testParseLmstatLicenseInfo4 = "fixtures/lmstat_app4.txt"
 	testParseLmstatLicenseInfo5 = "fixtures/lmstat_app5.txt"
 	testParseLmstatLicenseInfo6 = "fixtures/lmstat_app6.txt"
+	testParseLmstatLicenseInfo7 = "fixtures/lmstat_app7.txt"
 	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
 	testParseLmstatServerUp     = "fixtures/lmstat_server_up_win.txt"
 )
@@ -640,5 +641,64 @@ func TestParseLmstatLicenseInfoFeatureType(t *testing.T) {
 				t.Fatalf("Unexpected floating usage for %s: %v != 2", name, info.usedByType[licenseTypeFloating])
 			}
 		}
+	}
+}
+
+// TestParseLmstatLicenseInfoFeatureNoDisplay covers user lines that carry no
+// display field, e.g. "user host (v1.0) (SERVER/27020 123), start Fri 9/25
+// 11:44, PID: 456". lmutilLicenseFeatureUsageUserRegex still matches those, but
+// captures a blank user, so parsing falls back to
+// lmutilLicenseFeatureUsageUser2Regex. That regex used to reject the trailing
+// ", PID: N" suffix, which made reSubMatchMap index a nil match and panic.
+func TestParseLmstatLicenseInfoFeatureNoDisplay(t *testing.T) {
+	t.Parallel()
+
+	logger := promslog.New(&promslog.Config{})
+
+	dataByte, err := os.ReadFile(testParseLmstatLicenseInfo7)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataStr, err := splitOutput(dataByte)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	features, licUsersByFeature, _, _ := parseLmstatLicenseInfoFeature(dataStr, logger)
+
+	for _, name := range []string{"TCM-1-Apex-Pkg", "refocus"} {
+		info, ok := features[name]
+		if !ok {
+			t.Fatalf("feature %s was not parsed", name)
+		}
+
+		if info.issued != 4 || info.used != 2 {
+			t.Fatalf("Unexpected issued/used for %s: %v!=4 %v!=2", name, info.issued, info.used)
+		}
+
+		if info.usedByType[licenseTypeFloating] != 2 {
+			t.Fatalf("Unexpected floating usage for %s: %v!=2", name,
+				info.usedByType[licenseTypeFloating])
+		}
+
+		users := licUsersByFeature[name]
+		if len(users) != 1 {
+			t.Fatalf("Unexpected user count for %s: %v!=1", name, len(users))
+		}
+
+		used, ok := users["user2"]
+		if !ok {
+			t.Fatalf("user2 was not attributed any %s license", name)
+		}
+
+		if len(used) != 1 || used[0].num != 2 {
+			t.Fatalf("Unexpected usage for user2 on %s: %+v", name, used)
+		}
+	}
+
+	// A user line that does have a display field must keep working.
+	if used := licUsersByFeature["DC-Expert"]["user1"]; len(used) != 1 || used[0].num != 1 {
+		t.Fatalf("Unexpected usage for user1 on DC-Expert: %+v", used)
 	}
 }
