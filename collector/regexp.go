@@ -24,7 +24,8 @@ var (
 	lmutilLicenseFeatureUsageUser2Regex = regexp.MustCompile(
 		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ (?P<ver>\(v[\w\.]+\)) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\, start (?P<since>\w+ \d+\/\d+ \d+\:\d+)(\,\s(?P<licenses>\d+)\s\w+|)` +
-			`(\s+\(linger\:\s\d+\s\/\s\d+\))?$`)
+			`(\s+\(linger\:\s\d+\s\/\s\d+\))?` +
+			`(\,\s+PID\:\s+\d+\s?)?$`)
 	lmutilLicenseFeatureUsageUserQueuedRegex = regexp.MustCompile(
 		`^\s+(?P<user>[\w[:print:]]+) [\w\-\.]+ [[:print:]]+ [0-9.]+ (?P<ver>\(v[\w\.]+\)) \([\w\-\.]+\/\d+ ` +
 			`\d+\)\s+queued for (?P<licenses>\d+) license[s]?$`)

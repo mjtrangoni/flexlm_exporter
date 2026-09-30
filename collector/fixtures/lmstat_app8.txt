@@ -1,0 +1,23 @@
+lmutil - Copyright (c) 1989-2024 Flexera. All Rights Reserved.
+Flexible License Manager status on Fri 9/25/2026 11:44
+
+License server status: 1717@SERVER1
+    License file(s) on SERVER1: /opt/licenses/vendor.lic:
+
+ SERVER1: license server UP (MASTER) v11.19.7
+
+Vendor daemon status (on SERVER1):
+
+   saltd: UP v11.19.7
+Feature usage info:
+
+Users of msimhdlsim:  (Total of 125 licenses issued;  Total of 4 licenses in use)
+
+  
+"msimhdlsim" v2029.01, vendor: saltd, expiry: 29-sep-2026
+  floating license
+
+    user1 host-01 host-01:0894483_1 (v2026.02) (SERVER1/1717 28050), start Fri 9/25 11:44, PID: 894483 
+    user1 host-01 host-01:0895184_3 2029.01 (v2029.01) (SERVER1/1717 87554), start Fri 9/25 11:44, PID: 895184 
+    user1 host-02 host-02:02570346_1 (v2026.02) (SERVER1/1717 19861), start Fri 9/25 11:44, PID: 2570346 
+    user2 host-03 host-03:02594785_3 2029.01 (v2029.01) (SERVER1/1717 11539), start Fri 9/25 11:44, PID: 2594785 
