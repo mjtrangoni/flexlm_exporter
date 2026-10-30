@@ -36,6 +36,7 @@ const (
 	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
 	testParseLmstatServerUp     = "fixtures/lmstat_server_up_win.txt"
 	testUser1                   = "user1"
+	testUser2                   = "user2"
 )
 
 func TestContains(t *testing.T) {
@@ -485,7 +486,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	for username, licused := range licUsersByFeature["MATLAB"] {
 		for i := range licused {
 			switch username {
-			case "user2":
+			case testUser2:
 				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
 				if err != nil {
 					panic(err)
@@ -688,7 +689,7 @@ func TestParseLmstatLicenseInfoFeatureNoDisplay(t *testing.T) {
 			t.Fatalf("Unexpected user count for %s: %v!=1", name, len(users))
 		}
 
-		used, ok := users["user2"]
+		used, ok := users[testUser2]
 		if !ok {
 			t.Fatalf("user2 was not attributed any %s license", name)
 		}
