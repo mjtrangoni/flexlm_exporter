@@ -35,6 +35,7 @@ const (
 	testParseLmstatLicenseInfo7 = "fixtures/lmstat_app7.txt"
 	testParseLmstatServerDown   = "fixtures/lmstat_server_down.txt"
 	testParseLmstatServerUp     = "fixtures/lmstat_server_up_win.txt"
+	testUser1                   = "user1"
 )
 
 func TestContains(t *testing.T) {
@@ -271,7 +272,7 @@ func TestParseLmstatLicenseInfoFeature(t *testing.T) {
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {
 			switch username {
-			case "user1":
+			case testUser1:
 				if licused[i].num != licUsed16 {
 					t.Fatalf("Unexpected values for feature34[%s]: %v!=16",
 						username, licused[i].num)
@@ -425,7 +426,7 @@ func TestParseLmstatLicenseInfoUserSince(t *testing.T) {
 	for username, licused := range licUsersByFeature["feature34"] {
 		for i := range licused {
 			switch username {
-			case "user1":
+			case testUser1:
 				utime, err := strconv.ParseInt(licused[i].since, 10, 64)
 				if err != nil {
 					panic(err)
@@ -698,7 +699,7 @@ func TestParseLmstatLicenseInfoFeatureNoDisplay(t *testing.T) {
 	}
 
 	// A user line that does have a display field must keep working.
-	if used := licUsersByFeature["DC-Expert"]["user1"]; len(used) != 1 || used[0].num != 1 {
+	if used := licUsersByFeature["DC-Expert"][testUser1]; len(used) != 1 || used[0].num != 1 {
 		t.Fatalf("Unexpected usage for user1 on DC-Expert: %+v", used)
 	}
 }

@@ -91,7 +91,7 @@ func TestGatherDuplicateUserLabels(t *testing.T) {
 
 	// user1 holds 3 licenses across two versions, user2 holds 1. Without the
 	// per-start-time aggregation user1 would appear twice.
-	want := map[string]float64{"user1": 3, "user2": 1}
+	want := map[string]float64{testUser1: 3, "user2": 1}
 	got := map[string]float64{}
 
 	for _, mf := range families {
