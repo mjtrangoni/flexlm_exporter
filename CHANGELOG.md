@@ -1,3 +1,15 @@
+## v0.0.14 / 2026-11-15
+
+ * [ENHANCEMENT] Add a `type` label (`floating` or `node-locked`) to the
+   `flexlm_feature_used` and `flexlm_feature_issued` metrics.
+ * [ENHANCEMENT] Include queued license requests in used-license and per-user
+   usage metrics.
+ * [BUGFIX] Correct usage accounting for node-locked licenses and parse
+   SolidWorks output for per-user usage metrics.
+ * [BUGFIX] Export permanent license expiration dates as `+Inf`.
+ * [CHORE] Require Go 1.26 and update dependencies, CI tooling, and the
+   container base to Rocky Linux 10.
+
 ## v0.0.13 / 2025-05-11
 
  * [CHORE] Update golang modules and actions.
