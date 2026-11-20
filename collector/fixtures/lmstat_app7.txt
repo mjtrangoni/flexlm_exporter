@@ -1,0 +1,41 @@
+lmutil - Copyright (c) 1989-2024 Flexera. All Rights Reserved.
+Flexible License Manager status on Fri 9/25/2026 12:15
+
+License server status: 27020@SERVER1
+    License file(s) on SERVER1: /opt/eda/vendor/lic/vendor.lic:
+
+ SERVER1: license server UP (MASTER) v11.19.7
+
+Vendor daemon status (on SERVER1):
+
+   snpslmd: UP v11.19.7
+Feature usage info:
+
+Users of DC-Expert:  (Total of 5 licenses issued;  Total of 1 license in use)
+
+  
+"DC-Expert" v2026.03, vendor: snpslmd, expiry: 24-nov-2028
+  vendor_string: ^1+S
+  floating license
+
+    user1 host-01 host-01:0.0 lc80a28012593569_1 (v2022.09) (SERVER1/27020 24464), start Thu 9/24 22:16, PID: 2593569 
+
+Users of TCM-1-Apex-Pkg:  (Total of 4 licenses issued;  Total of 2 licenses in use)
+
+  
+"TCM-1-Apex-Pkg" v2026.03, vendor: snpslmd, expiry: 30-jun-2028
+  vendor_string: ^1+S
+  floating license
+
+    user2 host-01 (v2026.03) (SERVER1/27020 19210), start Fri 9/25 11:44, PID: 310056 
+    user2 host-01 (v2026.03) (SERVER1/27020 31793), start Fri 9/25 12:11, PID: 447183 
+
+Users of refocus:  (Total of 4 licenses issued;  Total of 2 licenses in use)
+
+  
+"refocus" v1.0, vendor: snpslmd, expiry: 30-jun-2028
+  vendor_string: ^1+S
+  floating license
+
+    user2 host-01 (v1.0) (SERVER1/27020 60604), start Fri 9/25 11:44, PID: 310056
+    user2 host-01 (v1.0) (SERVER1/27020 43909), start Fri 9/25 12:11, PID: 447183

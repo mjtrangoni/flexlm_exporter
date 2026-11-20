@@ -639,10 +639,19 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 				}
 			} else {
 				for username, licused := range licUsersByFeature[name] {
+					// licused holds one entry per client version. This metric
+					// carries no version label, so entries that share a start
+					// time would otherwise be emitted with identical labels and
+					// make the whole gather fail. Sum them per start time.
+					numBySince := make(map[string]float64, len(licused))
 					for i := range licused {
+						numBySince[licused[i].since] += licused[i].num
+					}
+
+					for since, num := range numBySince {
 						ch <- prometheus.MustNewConstMetric(
 							c.lmstatFeatureUsedUsers, prometheus.GaugeValue,
-							licused[i].num, licenses.Name, name, username, licused[i].since)
+							num, licenses.Name, name, username, since)
 					}
 				}
 			}
@@ -672,6 +681,12 @@ func (c *lmstatCollector) collect(licenses *config.License, ch chan<- prometheus
 func reSubMatchMap(r *regexp.Regexp, str string) map[string]string {
 	match := r.FindStringSubmatch(str)
 	subMatchMap := make(map[string]string)
+
+	// str may not match r at all; callers fall back between regexes and
+	// would otherwise panic here on an index out of range.
+	if match == nil {
+		return subMatchMap
+	}
 
 	for i, name := range r.SubexpNames() {
 		if i != 0 {
